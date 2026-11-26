@@ -313,6 +313,7 @@ background:#fff linear-gradient(#0000 calc(50% - 1px),#2b214022 calc(50% - 1px) 
 .toast{color:#fff;border:3px solid #2b2140;box-shadow:0 4px 0 #2b2140;border-radius:18px;padding:10px 16px;font-weight:900;text-align:center;animation:pop .3s}
 @keyframes pop{from{transform:scale(.7);opacity:0}}
 .rs{width:100%;min-height:64px;margin:6px 0;border-radius:12px;border:2px solid var(--line);font:14px/1.4 monospace;padding:8px;background:var(--card);color:var(--ink)}
+.wmk{position:absolute;top:8px;right:8px;width:44px;height:44px;border-radius:50%;border:3px solid #2b2140;display:grid;place-items:center;font:900 24px/1 "Zen Maru Gothic",sans-serif;color:#2b2140;pointer-events:none;z-index:2}.wmk.t1{color:#fff}
 </style>
 </head>
 <body>
@@ -1910,8 +1911,8 @@ function zwView(){const q=S.zw,z=q.list[q.i],tr=q.mode=='trace',last=q.i+1>=q.li
  return top(tr?'なぞり書き':'手書きテスト','zhu')+`<div class="prog"><i style="width:${(tr?q.i+1:q.i)/q.list.length*100}%"></i></div>
 <div class="card" style="padding-bottom:14px"><div class="meta"><span>${q.i+1} / ${q.list.length}</span><span>${tr?esc(z.g):'正解 '+q.sc}</span></div>
 <div class="winfo"><b>${esc(z.p)}</b><span class="hz">${z.h}</span>${tr||q.res?`<span class="zy">${zy(z.b,z.t)}</span>`:''}<button class="pb alt" data-a="zwsay" aria-label="例の音">${ic.spk}</button></div>
-<div class="wpad"><canvas id="wg"></canvas><canvas id="wc" aria-label="ここに書く"></canvas></div>
-${q.res?`<div id="wfb" class="fb ${q.res==3?'t3':q.res==2?'t2':'t1'}" style="margin:12px 0 0;color:${q.res==1?'#fff':'#2b2140'}">${msg[q.res]}${!tr?`　正解は <span class="zy" style="color:inherit">${z.s}</span>`:''}</div>`:''}
+<div class="wpad"><canvas id="wg"></canvas><canvas id="wc" aria-label="ここに書く"></canvas>${q.res?`<span id="wfb" class="wmk ${q.res==3?'t3':q.res==2?'t2':'t1'}" aria-label="${msg[q.res]}">${['','×','○','◎'][q.res]}</span>`:''}</div>
+
 <div class="wbtn">${tr?`<button class="btn" data-a="zwguide">お手本 ${q.guide?'ON':'OFF'}</button>`:''}<button class="btn" data-a="zwclear" ${q.mode=='test'&&q.res?'disabled':''}>消す</button><button class="btn hintb" id="whint" ${q.res?'disabled':''}>ヒント<small>押している間</small></button></div></div>
 <div class="row" style="padding-top:0">${tr?`<button class="btn" data-a="zwmove" data-d="-1" ${q.i?'':'disabled'}>◀ 前</button><button class="btn go" style="background:var(--t4)" data-a="zwmove" data-d="1" ${last?'disabled':''}>次 ▶</button>`:
  q.res?`<button class="btn go" style="background:var(--t4)" data-a="zwmove" data-d="1">${last?'結果を見る ▶':'次へ ▶'}</button>`:''}</div>
