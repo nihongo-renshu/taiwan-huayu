@@ -1998,7 +1998,7 @@ function zwMove(d){const q=S.zw;if(q.mode=='test'&&q.i+1>=q.list.length&&d>0){co
 
 function zres(){const q=S.zq,r=q.sc/q.items.length,st=r>=.9?3:r>=.7?2:r>=.5?1:0;
  return top('結果','zhu')+`<div class="card"><div style="font-weight:900">${q.t}</div><div class="big">${q.sc}<span style="font-size:28px"> / ${q.items.length}</span></div><div class="stars" style="font-size:34px;margin:0">${stars(st)}</div></div>
-<div class="row"><button class="btn" data-a="nav" data-v="zhu">もどる</button><button class="btn go" style="background:var(--t4)" data-a="zstart" data-k="${q.k}">もう一度 ▶</button></div>`}
+<div class="row"><button class="btn" data-a="nav" data-v="zhu">もどる</button><button class="btn go" style="background:var(--t4)" ${q.k=='write'?'data-a="zwstart" data-k="test"':`data-a="zstart" data-k="${q.k}"`}>もう一度 ▶</button></div>`}
 function znext(){const q=S.zq;if(q.i+1<q.items.length){Object.assign(q,{i:q.i+1,sel:null,inp:[],cur:'',done:false});render();if(q.k!='zy2hz')setTimeout(zplay,200)}
  else{const r=q.sc/q.items.length,st=r>=.9?3:r>=.7?2:r>=.5?1:0,k='zq_'+q.k;ST.best=ST.best||{};const b=ST.best[k]||{s:0,sc:0};ST.best[k]={s:Math.max(b.s,st),sc:Math.max(b.sc,q.sc)};if(st==3)s3add(k);save();go('zres')}}
 
