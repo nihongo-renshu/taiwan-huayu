@@ -1,0 +1,17 @@
+{
+  "name": "台湾華語 練習帳",
+  "short_name": "台湾華語",
+  "description": "注音・発音・単語・文・会話を練習する台湾華語アプリ",
+  "lang": "ja",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffd23f",
+  "theme_color": "#ffd23f",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"},
+    {"src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable"}
+  ]
+}

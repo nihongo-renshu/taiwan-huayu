@@ -1,0 +1,2135 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#ffd23f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="台湾華語">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
+<title>台湾華語 練習帳</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mochiy+Pop+One&family=Zen+Maru+Gothic:wght@500;700;900&family=Noto+Sans+TC:wght@500;700;900&display=swap" rel="stylesheet">
+<style>
+/* VOICE: 明るく元気、ゲームのように軽快な練習帳
+   IDEA: 夜市の屋台の色札とシールが貼られた単語カード
+   PICTURE: 声調ごとに色分けされた漢字と、音の高さの軌跡
+   COLOUR and TYPE: 1聲ピンク・2聲イエロー・3聲ミント・4聲ブルー / Zen Maru Gothic + Noto Sans TC
+   LAYOUT: スマホ1カラム、上にカード、下に大きな声調ボタン */
+:root{color-scheme:light dark;
+--bg:light-dark(#fff8ec,#1c1826);--card:light-dark(#ffffff,#2a2537);--ink:light-dark(#2b2140,#f6f1ff);--sub:light-dark(#7a6f8e,#b9b0cc);
+--line:light-dark(#2b2140,#0d0b12);--sun:#ffd23f;
+--t1:#ff4d7d;--t2:#ffae00;--t3:#18c29c;--t4:#4c7dff;
+--t5:#a59bbb;
+--k1:light-dark(#e8215c,#ff6f97);--k2:light-dark(#e08a00,#ffc23d);--k3:light-dark(#079a79,#3fe0b8);--k4:light-dark(#2f62e8,#86a8ff);--k5:light-dark(#8a809e,#b9b0cc)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Zen Maru Gothic",system-ui,sans-serif;overflow-x:clip;-webkit-tap-highlight-color:transparent}
+.hz,.zy,[lang|=zh]{font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif}
+#app{max-width:540px;margin:0 auto;min-height:100dvh;padding:env(safe-area-inset-top) 0 calc(env(safe-area-inset-bottom) + 24px)}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+button:focus-visible{outline:3px solid var(--t4);outline-offset:3px}
+.top{display:flex;align-items:center;gap:10px;padding:14px 16px}
+.top h1{font-size:20px;margin:0;flex:1;font-weight:900;line-height:1.2}
+.ib{flex:none;width:44px;height:44px;border-radius:14px;background:var(--card);border:2.5px solid var(--line);display:grid;place-items:center;box-shadow:0 3px 0 var(--line)}
+.ib:active,.btn:active,.tb:active,.mn:active,.cell:active{transform:translateY(3px);box-shadow:0 0 0 var(--line)}
+.hero{margin:4px 16px 18px;border-radius:28px;background:var(--sun);border:3px solid var(--line);box-shadow:0 6px 0 var(--line);padding:22px 20px 18px;color:#2b2140;position:relative;overflow:hidden}
+.hero h2{font-size:clamp(32px,9vw,44px);line-height:1.05;margin:0 0 6px;font-weight:900;text-wrap:balance;position:relative}
+.hero p{margin:0 0 14px;font-weight:700;position:relative}
+.dots{position:absolute;inset:0;background:radial-gradient(#fff6 2px,transparent 2.5px) 0 0/18px 18px;pointer-events:none}
+.ma{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;position:relative}
+.ma button{background:#fff;border:2.5px solid #2b2140;border-radius:18px;padding:8px 2px 6px;text-align:center;box-shadow:0 3px 0 #2b2140;color:#2b2140}
+.ma .hz{font-size:30px;font-weight:900;line-height:1.1;display:block}
+.ma small{font-size:13px;font-weight:700;display:block}
+.ma svg{display:block;margin:2px auto 0}
+.sec{padding:0 16px;margin:18px 0 8px;font-size:15px;color:var(--sub);font-weight:700}
+.mn{display:flex;align-items:center;gap:14px;width:calc(100% - 32px);margin:0 16px 12px;background:var(--card);border:3px solid var(--line);border-radius:24px;box-shadow:0 5px 0 var(--line);padding:14px 16px;text-align:left}
+.mn b{display:block;font-size:18px;line-height:1.25}
+.mn span.s{font-size:14px;color:var(--sub);display:block}
+.mn .tag{font-size:12px;font-weight:900;background:var(--sun);color:#2b2140;border:2px solid var(--line);border-radius:10px;padding:0 6px;margin-left:6px;vertical-align:2px}
+.ico{flex:none;width:58px;height:58px;border-radius:18px;border:2.5px solid var(--line);display:grid;place-items:center;font-size:28px;font-weight:900;color:#fff}
+.ico.hz{font-size:30px}
+.chev{margin-left:auto;flex:none;font-weight:900;font-size:20px;color:var(--sub)}
+.lv{margin:0 16px 14px;background:var(--card);border:3px solid var(--line);border-radius:24px;box-shadow:0 5px 0 var(--line);overflow:hidden}
+.lvh{display:flex;align-items:center;gap:12px;padding:14px 16px 10px}
+.badge{flex:none;width:54px;height:54px;border-radius:18px;display:grid;place-items:center;color:#fff;font-weight:900;font-size:22px;border:2.5px solid var(--line)}
+.lvh b{display:block;font-size:18px;line-height:1.2}
+.lvh span{font-size:14px;color:var(--sub)}
+.stars{margin-left:auto;font-size:18px;letter-spacing:1px;white-space:nowrap;color:var(--t2)}
+.stars i{font-style:normal;color:light-dark(#e6ddcf,#4a4258)}
+.lvb{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:10px;padding:0 16px 16px}
+.btn{min-height:48px;border-radius:16px;border:2.5px solid var(--line);box-shadow:0 4px 0 var(--line);font-weight:900;font-size:16px;padding:8px 14px;background:var(--card)}
+.btn.go{color:#fff}
+.btn[disabled]{opacity:.5}
+.grid{display:grid;grid-template-columns:34px repeat(4,minmax(0,1fr));gap:8px;padding:0 16px;align-items:center}
+.gh{font-weight:900;text-align:center;font-size:14px}
+.cell{aspect-ratio:1/1.05;border-radius:18px;border:2.5px solid var(--line);box-shadow:0 3px 0 var(--line);display:flex;flex-direction:column;overflow:hidden;background:var(--card);padding:0}
+.cell .bar{display:flex;height:42%}
+.cell .bar i{flex:1}
+.cell .nm{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;line-height:1.15}
+.cell .nm b{font-size:clamp(14px,4.2vw,18px)}
+.cell .nm small{font-size:13px;color:var(--sub);font-weight:700}
+.card{margin:6px 16px 16px;background:var(--card);border:3px solid var(--line);border-radius:28px;box-shadow:0 6px 0 var(--line);padding:16px 12px 18px;text-align:center;position:relative}
+.prog{height:12px;margin:0 16px 12px;border-radius:9px;background:light-dark(#efe5d4,#3a3348);overflow:hidden;border:2px solid var(--line)}
+.prog i{display:block;height:100%;background:var(--t3);transition:width .3s}
+.meta{display:flex;justify-content:space-between;font-size:14px;color:var(--sub);font-weight:700;padding:0 6px 6px}
+.word{display:flex;justify-content:center;gap:clamp(6px,3vw,16px);flex-wrap:wrap;margin:6px 0 10px}
+.syl{display:flex;flex-direction:column;align-items:center;gap:6px;width:clamp(62px,19vw,88px)}
+.syl .hz{font-size:clamp(40px,12vw,56px);font-weight:900;line-height:1}
+.syl .hz.q{color:light-dark(#d9cfbf,#544b65)}
+.slot{width:100%;height:54px;border-radius:16px;border:3px dashed light-dark(#cfc3b0,#5a5170);display:grid;place-items:center;font-weight:900;color:#fff;font-size:15px;position:relative}
+.slot.cur{border-color:var(--ink);border-style:solid;animation:pulse 1s infinite}
+.slot[data-t]{border:3px solid var(--line)}
+.slot.t2,.slot.t3{color:#2b2140}
+.slot svg{position:absolute;inset:6px;width:calc(100% - 12px);height:calc(100% - 12px);opacity:.35}
+.slot em{font-style:normal;position:relative}
+.mk{position:absolute;top:-12px;right:-10px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:16px;color:#fff;border:2.5px solid var(--line)}
+.ok{background:var(--t3)}.ng{background:var(--t1)}
+.py{font-size:18px;font-weight:700}
+.zy{font-size:17px;font-weight:700;color:var(--sub)}
+.fix{font-size:13px;font-weight:700}
+.mean{font-size:17px;font-weight:700;margin:4px 0 6px}
+.dn{font-size:13px;color:var(--sub);margin:0 0 10px}
+.plays{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.pb{min-height:48px;border-radius:24px;padding:6px 18px;font-weight:900;border:2.5px solid var(--line);box-shadow:0 3px 0 var(--line);background:var(--sun);color:#2b2140;display:inline-flex;align-items:center;gap:6px}
+.pb.alt{background:var(--card);color:var(--ink)}
+.pad{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;padding:0 16px}
+.tb{min-height:84px;border-radius:20px;color:#fff;border:3px solid var(--line);box-shadow:0 5px 0 var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;font-weight:900;font-size:16px}
+.tb small{font-size:13px;opacity:.95}
+.tb.t2,.tb.t3{color:#2b2140}
+.row{display:flex;gap:10px;padding:14px 16px 0}
+.row .btn{flex:1}
+.fb{margin:0 16px 12px;padding:12px 16px;border-radius:18px;font-weight:900;text-align:center;border:3px solid var(--line);font-size:18px}
+.t1{background:var(--t1)}.t2{background:var(--t2)}.t3{background:var(--t3)}.t4{background:var(--t4)}
+.c1{color:var(--k1)}.c2{color:var(--k2)}.c3{color:var(--k3)}.c4{color:var(--k4)}.c5{color:var(--k5)}
+.t5{background:var(--t5)}
+.pad.five{grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.cover{min-height:100dvh;background:var(--sun);color:#2b2140;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;padding:calc(env(safe-area-inset-top) + 28px) 22px calc(env(safe-area-inset-bottom) + 28px)}
+.cover .chips{display:flex;gap:6px;flex-wrap:wrap;position:relative}
+.cover .chips span{background:#fff;border:2.5px solid #2b2140;border-radius:14px;padding:2px 10px;font-size:13px;font-weight:900}
+.cover h1{font:400 clamp(46px,14vw,68px)/1.05 "Mochiy Pop One","Zen Maru Gothic",sans-serif;margin:18px 0 8px;position:relative;letter-spacing:1px}
+.cover h1 span{display:inline-block;-webkit-text-stroke:7px #2b2140;paint-order:stroke fill;text-shadow:0 5px 0 #2b2140}
+.cover h1 span:nth-child(odd){transform:rotate(-4deg)}.cover h1 span:nth-child(even){transform:rotate(3deg) translateY(4px)}
+.cover .lead{font:400 17px/1.5 "Mochiy Pop One","Zen Maru Gothic",sans-serif;margin:0 0 18px;position:relative}
+.cover .chips span{font-family:"Mochiy Pop One","Zen Maru Gothic",sans-serif;font-weight:400}
+.pitch{position:relative;background:#fff;border:3px solid #2b2140;border-radius:28px;box-shadow:0 6px 0 #2b2140;padding:12px 10px 12px;margin-bottom:24px}
+.pitch svg{display:block;width:100%;height:auto}
+.pills4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;margin-top:6px}
+.pills4 button{min-height:52px;border-radius:16px;border:2.5px solid #2b2140;background:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.2;font-weight:900;font-size:16px;color:#2b2140}
+.pills4 .zy{font-size:14px}
+.pills4 .p1{color:#e8215c}.pills4 .p2{color:#e08a00}.pills4 .p3{color:#079a79}.pills4 .p4{color:#2f62e8}
+.zrib{position:absolute;right:-30px;bottom:40px;transform:rotate(-8deg);font:900 28px/1 "Noto Sans TC",sans-serif;color:#2b214022;white-space:nowrap;letter-spacing:6px}
+.start{margin-top:4px;position:relative;min-height:60px;border-radius:30px;border:3px solid #2b2140;box-shadow:0 6px 0 #2b2140;background:#2b2140;color:#fff;font-size:20px;font-weight:900}
+.toc{padding:0 16px}
+.ch{display:flex;gap:12px;align-items:center;width:100%;text-align:left;background:var(--card);border:3px solid var(--line);border-radius:22px;box-shadow:0 4px 0 var(--line);padding:12px 14px;margin-bottom:8px}
+.ch .no{flex:none;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:900;font-size:20px;border:2.5px solid var(--line)}
+.ch b{display:block;font-size:18px;line-height:1.25}.ch span.s{display:block;font-size:14px;color:var(--sub)}
+.subs{display:grid;gap:6px;margin:0 0 14px 28px;padding-left:14px;border-left:3px dotted var(--sub)}
+.sb{display:flex;align-items:center;gap:10px;min-height:48px;width:100%;text-align:left;background:var(--card);border:2.5px solid var(--line);border-radius:16px;padding:6px 12px;font-weight:900}
+.sb .hz{flex:none;width:32px;height:32px;border-radius:10px;display:grid;place-items:center;color:#fff;font-size:17px;border:2px solid var(--line)}
+.sb small{margin-left:auto;color:var(--sub);font-weight:700;font-size:13px;white-space:nowrap}
+.word.cmp{gap:8px 6px}
+.word.cmp .syl{width:46px;gap:4px}
+.word.cmp .syl .hz{font-size:30px}
+.word.cmp .slot{height:40px;border-radius:12px;font-size:12px}
+.word.cmp .py{font-size:13px}.word.cmp .zy{font-size:12px}.word.cmp .fix{font-size:11px}
+.word.cmp .mk{width:20px;height:20px;font-size:11px;top:-8px;right:-6px}
+.li.sent .hz{font-size:23px;flex:1 1 100%;letter-spacing:0}
+.li.sent{flex-wrap:wrap;gap:4px 12px}
+.li.sent .tx{flex:1 1 100%}
+.legend{display:flex;gap:6px;flex-wrap:wrap;padding:0 16px 10px}
+.legend span{font-size:13px;font-weight:900;border:2px solid var(--line);border-radius:12px;padding:2px 10px}
+.legend .t1,.legend .t4,.legend .t5{color:#fff}.legend .t2,.legend .t3{color:#2b2140}
+.list{display:grid;gap:10px;padding:0 16px}
+.li{display:flex;align-items:center;gap:12px;background:var(--card);border:2.5px solid var(--line);border-radius:20px;padding:10px 12px;box-shadow:0 3px 0 var(--line);text-align:left;width:100%}
+.li .hz{font-size:32px;font-weight:900;line-height:1.1;flex:none;letter-spacing:1px}
+.li .tx{flex:1}
+.li .tx div{font-weight:700;line-height:1.35}
+.li .tx .zy{font-size:15px}
+.li .tx small{color:var(--sub);font-size:14px;display:block}
+.li .tx small.n{font-size:12.5px}
+.tone{display:flex;gap:14px;align-items:center;background:var(--card);border:2.5px solid var(--line);border-radius:22px;padding:12px 14px;box-shadow:0 3px 0 var(--line);margin:0 16px 12px;width:calc(100% - 32px);text-align:left}
+.tone .sw{flex:none;width:76px;height:64px;border-radius:16px;border:2.5px solid var(--line);display:grid;place-items:center}
+.tone b{font-size:18px}
+.tone p{margin:2px 0 0;font-size:15px;color:var(--sub)}
+.note{margin:4px 16px 16px;padding:14px 16px;border-radius:20px;background:var(--card);border:2.5px dashed var(--sub);font-size:15px}
+.sheet{position:fixed;inset:0;background:#0007;display:flex;align-items:flex-end;justify-content:center;z-index:9}
+.sheet>div{width:100%;max-width:540px;background:var(--bg);border-radius:28px 28px 0 0;border:3px solid var(--line);padding:18px 16px calc(24px + env(safe-area-inset-bottom))}
+.sheet h3{margin:0 0 12px;font-size:20px}
+.opt{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:52px;border-bottom:2px dashed light-dark(#e6dccb,#3d3550);font-weight:700}
+.sw2{width:58px;height:34px;border-radius:20px;background:light-dark(#ddd2c0,#4a4258);border:2.5px solid var(--line);position:relative;flex:none}
+.sw2::after{content:"";position:absolute;top:2px;left:2px;width:24px;height:24px;border-radius:50%;background:#fff;border:2px solid var(--line);transition:left .2s}
+.sw2[aria-checked=true]{background:var(--t3)}.sw2[aria-checked=true]::after{left:26px}
+.vinfo{font-size:14px;color:var(--sub);margin:10px 0 0}
+.big{font-size:clamp(56px,18vw,84px);font-weight:900;line-height:1;margin:6px 0}
+.conf{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:8}
+.conf i{position:absolute;top:-20px;width:12px;height:12px;border-radius:3px;animation:fall 1.2s ease-in forwards}
+@keyframes fall{to{transform:translateY(105vh) rotate(540deg)}}
+@keyframes pulse{50%{transform:scale(1.04)}}
+@media (prefers-reduced-motion:reduce){.slot.cur{animation:none}.conf{display:none}}
+.twl{position:relative;align-self:flex-start;margin-top:18px;font:400 clamp(24px,7vw,32px)/1 "Mochiy Pop One","Zen Maru Gothic",sans-serif;background:#2b2140;color:#fff;border-radius:16px;padding:8px 14px 9px;transform:rotate(-3deg);letter-spacing:2px}
+.tag{font-size:12px;font-weight:900;background:var(--sun);color:#2b2140;border:2px solid var(--line);border-radius:10px;padding:0 6px;margin-left:8px;vertical-align:2px}
+.chat{display:flex;flex-direction:column;gap:12px;padding:0 16px}
+.bub{align-self:flex-start;max-width:86%;text-align:left;background:var(--card);border:2.5px solid var(--line);border-radius:6px 22px 22px 22px;box-shadow:0 3px 0 var(--line);padding:10px 14px;display:flex;flex-direction:column;gap:2px}
+.bub.r{align-self:flex-end;border-radius:22px 6px 22px 22px;background:light-dark(#fff3c4,#3a3348)}
+.bub .sp{font-size:12px;font-weight:900;color:var(--sub)}
+.bub .hz{font-size:24px;font-weight:900;line-height:1.3}
+.bub .py{font-size:15px}.bub .zy{font-size:14px}.bub .ja{font-size:14px;color:var(--sub)}
+.zgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:8px;padding:0 16px}
+.zt{border:2.5px solid var(--line);border-radius:18px;background:var(--card);box-shadow:0 3px 0 var(--line);padding:8px 4px;display:flex;flex-direction:column;align-items:center;line-height:1.2;border-top:8px solid var(--g)}
+.zt .zy{font-size:30px;color:var(--ink);font-weight:900}
+.zt b{font-size:15px}.zt small{font-size:12px;color:var(--sub)}
+.zbig{font-size:84px;font-weight:900;line-height:1.1;margin:6px 0;display:flex;justify-content:center}
+.zbig.zy{color:var(--ink)}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:0 16px 14px}
+.opts.one{grid-template-columns:1fr}
+.op{min-height:60px;border-radius:18px;border:2.5px solid var(--line);box-shadow:0 4px 0 var(--line);background:var(--card);font-size:22px;font-weight:900}
+.op.zy{color:var(--ink);font-size:24px;letter-spacing:2px}
+.op.good{background:var(--t3);color:#2b2140}.op.bad{background:var(--t1);color:#fff}
+.op[disabled]{opacity:1}
+.zboxes{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:8px 0 4px}
+.zbox{display:flex;flex-direction:column;align-items:center;gap:4px}
+.zin{min-width:92px;height:58px;border-radius:16px;border:3px dashed light-dark(#cfc3b0,#5a5170);display:grid;place-items:center;font-size:26px;color:var(--ink);padding:0 8px}
+.zin.cur{border-style:solid;border-color:var(--ink)}
+.zin.good{border:3px solid var(--line);background:var(--t3);color:#2b2140}.zin.bad{border:3px solid var(--line);background:var(--t1);color:#fff}
+.kb{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:5px;padding:0 12px}
+.k{min-height:46px;border-radius:12px;border:2px solid var(--line);box-shadow:0 3px 0 var(--line);background:var(--card);font-size:20px;color:var(--ink);border-bottom:5px solid var(--g,var(--line));padding:0}
+.k:active{transform:translateY(2px);box-shadow:none}
+.k.del{grid-column:span 3;font-size:18px}
+.kt{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;padding:10px 12px 0}
+.kt .k{min-height:54px;color:#fff;font-weight:900;font-size:20px;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1}
+.kt .k small{font-size:11px}
+.kt .k.t1{background:var(--t1)}.kt .k.t2{background:var(--t2)}.kt .k.t3{background:var(--t3)}.kt .k.t4{background:var(--t4)}
+.kt .k.t2,.kt .k.t3{color:#2b2140}
+.cover{align-items:center;text-align:center}
+.cin{position:relative;width:100%;max-width:400px;display:flex;flex-direction:column;align-items:center}
+.cover .chips{justify-content:center}
+.stk{display:flex;gap:10px;justify-content:center;margin:26px 0 6px}
+.stk span{width:58px;height:58px;border-radius:50%;display:grid;place-items:center;font:900 30px/1 "Noto Sans TC",sans-serif;color:#fff;border:3px solid #2b2140;box-shadow:0 4px 0 #2b2140}
+.stk .t2,.stk .t3{color:#2b2140}
+.cover h1{margin:10px 0 0;text-align:center;font-size:clamp(56px,18vw,84px)}
+.pop{font:400 clamp(26px,8vw,34px)/1 "Mochiy Pop One","Zen Maru Gothic",sans-serif;background:#2b2140;color:#fff;border-radius:18px;padding:9px 22px 11px;transform:rotate(-3deg);margin-top:4px;letter-spacing:3px}
+.cover .lead{margin:14px 0 18px;text-align:center}
+.cbs{display:flex;flex-direction:column;gap:10px;width:100%;margin-bottom:26px}
+.cb{align-self:flex-start;background:#fff;border:3px solid #2b2140;border-radius:8px 24px 24px 24px;box-shadow:0 4px 0 #2b2140;padding:8px 16px;display:flex;flex-direction:column;align-items:flex-start;line-height:1.3;color:#2b2140}
+.cb.r{align-self:flex-end;border-radius:24px 8px 24px 24px;align-items:flex-end}
+.cb .hz{font-size:26px;font-weight:900}.cb .zy{font-size:15px;font-weight:700}
+.cb .c1{color:#e8215c}.cb .c2{color:#e08a00}.cb .c3{color:#079a79}.cb .c4{color:#2f62e8}.cb .c5{color:#8a809e}
+.start{width:100%}
+.chg{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;width:100%;margin:4px 0 26px}
+.chg button{background:#fff;border:3px solid #2b2140;border-radius:20px;box-shadow:0 4px 0 #2b2140;padding:10px 2px 9px;display:flex;flex-direction:column;align-items:center;gap:7px;font:400 14px/1 "Mochiy Pop One","Zen Maru Gothic",sans-serif;color:#2b2140}
+.chg .hz{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#fff;font:900 20px/1 "Zen Maru Gothic",sans-serif;font-weight:900;border:2.5px solid #2b2140}
+.chg button:active{transform:translateY(3px);box-shadow:none}
+.winfo{display:flex;align-items:center;justify-content:center;gap:12px;margin:0 0 10px;flex-wrap:wrap}
+.winfo b{font-size:28px}.winfo .hz{font-size:26px;font-weight:900}.winfo .zy{font-size:20px}
+.winfo .pb{min-height:44px;padding:4px 12px}
+.wpad{position:relative;width:min(100%,340px);aspect-ratio:1;margin:0 auto;border:3px solid var(--line);border-radius:20px;overflow:hidden;
+background:#fff linear-gradient(#0000 calc(50% - 1px),#2b214022 calc(50% - 1px) calc(50% + 1px),#0000 0),#fff linear-gradient(90deg,#0000 calc(50% - 1px),#2b214022 calc(50% - 1px) calc(50% + 1px),#0000 0);background-blend-mode:multiply}
+.wpad canvas{position:absolute;inset:0;width:100%;height:100%}
+#wc{touch-action:none;cursor:crosshair}
+.wbtn{display:flex;gap:8px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.hintb{display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.15;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:none}.hintb small{font-size:11px;color:var(--sub)}
+.wbtn .btn{flex:1;min-width:0;white-space:nowrap;padding:8px 6px;font-size:15px}
+.blks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:0 16px}
+.blk{position:relative;aspect-ratio:1/.95;border:3px solid var(--line);border-radius:26px;box-shadow:0 6px 0 var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;overflow:hidden;padding:24px 8px 12px;text-align:center}
+.blks>.blk:last-child:nth-child(odd){grid-column:1/-1;justify-self:center;width:calc(50% - 6px)}
+.blk.sm{aspect-ratio:1/.82;gap:8px;padding:14px 6px 10px;border-radius:22px;box-shadow:0 5px 0 var(--line)}
+.blk::before{content:"";position:absolute;inset:0;background:radial-gradient(#ffffff40 2px,transparent 2.5px) 0 0/16px 16px;pointer-events:none}
+.blk:active{transform:translateY(4px);box-shadow:0 2px 0 var(--line)}
+.blk .bno{position:absolute;top:10px;left:12px;width:30px;height:30px;border-radius:50%;background:#fff;color:#2b2140;border:2.5px solid #2b2140;display:grid;place-items:center;font-weight:900;font-size:15px}
+.blk .tag{position:absolute;top:10px;right:10px;margin:0}
+.blk .bic{position:relative;display:grid;place-items:center;min-height:56px}
+.blk:not(.sm) .bic svg{width:64px;height:64px}
+.blk b{font:400 clamp(26px,7.5vw,32px)/1.15 "Mochiy Pop One","Zen Maru Gothic",sans-serif;position:relative}
+.blk.sm b{font:900 clamp(15px,4.4vw,18px)/1.2 "Zen Maru Gothic",sans-serif}
+.bt{display:inline-block;background:#fff;color:#2b2140;border:2.6px solid #2b2140;border-radius:14px;padding:6px 10px;font:900 20px/1 "Zen Maru Gothic",sans-serif}
+.bt.zy{font-family:"Noto Sans TC",sans-serif}
+.bst{position:relative;font-size:14px;letter-spacing:1px;color:#2b2140}.bst i{font-style:normal;opacity:.3}
+.zp{position:relative;display:flex;align-items:flex-end;gap:2px;background:#fff;border:2.5px solid #2b2140;border-radius:14px;padding:4px 10px 5px 6px}
+.zp small{font:900 10px/1 "Zen Maru Gothic",sans-serif;color:#fff;background:#2b2140;border-radius:6px;padding:3px 4px;margin-right:4px;align-self:center}
+.zp>span{display:flex;flex-direction:column;align-items:center;font-size:20px;font-weight:900;line-height:1.1}
+.zp i{font-style:normal;font-size:10px;line-height:1.2;white-space:nowrap}
+.zp .q1{color:#e8215c}.zp .q2{color:#e08a00}.zp .q3{color:#079a79}.zp .q4{color:#2f62e8}.zp .q5{color:#8a809e}
+.yomi{font:400 15px/1 "Mochiy Pop One","Zen Maru Gothic",sans-serif;letter-spacing:6px;margin-top:20px;color:#2b2140;position:relative}
+.ico svg,.badge svg{width:40px;height:40px}
+.mn{min-height:76px}
+.lvh .badge{font-size:24px;color:#fff;font-weight:900}
+.cw{position:relative;display:flex;gap:6px;margin-top:6px}
+.cw>span{display:flex;flex-direction:column;align-items:center;font:900 clamp(28px,8vw,34px)/1.05 "Noto Sans TC","PingFang TC",sans-serif}
+.cw i{font:700 12px/1.2 "Noto Sans TC","PingFang TC",sans-serif;font-style:normal;white-space:nowrap;margin-bottom:2px}
+.blk.wb{background:var(--card);aspect-ratio:1/.8}
+.blk.wb::before{display:none}
+.tocp{justify-content:flex-start;padding-top:calc(env(safe-area-inset-top) + 16px)}
+.tocp .tbar{position:relative;display:flex;align-items:center;justify-content:space-between;width:100%;margin-bottom:22px}
+.tocp .tbar h1{margin:0;font:400 30px/1 "Mochiy Pop One","Zen Maru Gothic",sans-serif;background:#2b2140;color:#fff;border-radius:16px;padding:9px 20px 11px;transform:rotate(-2deg);letter-spacing:4px}
+.tocp .ib{background:#fff;border-color:#2b2140;box-shadow:0 3px 0 #2b2140;color:#2b2140}
+.tocp .blks{padding:0;width:100%}
+.tocp .blk.wb{background:#fff;border-color:#2b2140;box-shadow:0 6px 0 #2b2140;padding:10px;justify-content:center;gap:0}
+.tocp .cw{margin:0}
+.tocp .c1{color:#e8215c}.tocp .c2{color:#e08a00}.tocp .c3{color:#079a79}.tocp .c4{color:#2f62e8}.tocp .c5{color:#8a809e}
+.tabs{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:0 16px 12px}
+.tabs button{min-height:58px;border-radius:14px;border:2.5px solid var(--line);background:var(--card);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.15;font-weight:900;font-size:15px;padding:4px 2px}
+.tabs button small{font-size:11px;color:var(--sub);font-weight:700}
+.tabs button.on{background:var(--ink);color:var(--bg)}.tabs button.on small{color:inherit;opacity:.8}
+.bst2{font-size:10px;letter-spacing:0;color:var(--t2)}.bst2 i{font-style:normal;opacity:.35;color:var(--sub)}
+.pat{display:flex;align-items:center;gap:4px;margin:6px 0 -2px;font-weight:900;font-size:13px}
+.pat span{min-width:26px;height:22px;border-radius:8px;display:grid;place-items:center;border:2px solid var(--line);color:#fff;padding:0 4px}
+.pat .t2,.pat .t3{color:#2b2140}.pat i{font-style:normal;color:var(--sub)}
+.wst{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.wst div{border:2.5px solid var(--line);border-radius:18px;padding:10px;display:flex;flex-direction:column;align-items:center}
+.wst b{font-size:36px;line-height:1.1}.wst span{font-size:13px;color:var(--sub);font-weight:700}
+.boxd{display:flex;gap:3px;flex:none}.boxd i{width:10px;height:10px;border-radius:50%;border:2px solid var(--line);background:var(--card)}.boxd i.on{background:var(--t3)}
+.due{position:absolute;top:8px;right:8px;min-width:28px;height:28px;border-radius:14px;background:#ff4d7d;color:#fff;border:2.5px solid #2b2140;display:grid;place-items:center;font:900 14px/1 "Zen Maru Gothic",sans-serif;padding:0 6px}
+.gstat{position:relative;display:flex;align-items:center;gap:12px;width:100%;background:#fff;border:3px solid #2b2140;border-radius:22px;box-shadow:0 5px 0 #2b2140;padding:8px 14px 8px 8px;margin-bottom:16px;text-align:left;color:#2b2140}
+.gpet{flex:none;width:64px;height:60px;display:grid;place-items:center}
+.ginfo{flex:1;display:flex;flex-direction:column;gap:3px}
+.grow{display:flex;justify-content:space-between;align-items:center;font-size:17px}
+.grow b{font-family:"Noto Sans TC",sans-serif}
+.fire{display:inline-flex;align-items:center;gap:2px;font-weight:900;font-size:15px}
+.gsub{font-size:12px;font-weight:700;color:#7a6f8e}
+.gbar{height:10px;border-radius:6px;background:light-dark(#efe5d4,#3a3348);border:2px solid var(--line);overflow:hidden}.gstat .gbar{background:#efe5d4;border-color:#2b2140}
+.gbar i{display:block;height:100%;border-radius:4px;transition:width .4s}
+.petbox{display:grid;place-items:center;min-height:170px}
+.pn{font-size:20px;margin:4px 0 8px}.pn small{font-size:13px;color:var(--sub)}
+.seg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px}
+.seg button{min-height:44px;border-radius:14px;border:2.5px solid var(--line);font-weight:900;font-size:14px;background:var(--card)}
+.seg .on{background:var(--ink);color:var(--bg)}
+.gg{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 16px 14px}
+.gc{background:var(--card);border:3px solid var(--line);border-radius:22px;box-shadow:0 4px 0 var(--line);padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.gc b{font-size:32px;line-height:1;display:flex;align-items:center;gap:2px}.gc b small{font-size:14px;color:var(--sub)}
+.gl{font-size:13px;font-weight:900;color:var(--sub)}
+.rk{display:flex;align-items:baseline;gap:10px;margin:4px 0 8px}.rk b{font:900 26px/1 "Noto Sans TC",sans-serif}.rk small{color:var(--sub);font-weight:700}
+.stamps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;padding:0 16px}
+.stp{aspect-ratio:1;border-radius:50%;border:2.5px dashed light-dark(#cfc3b0,#5a5170);display:grid;place-items:center;font:900 12px/1.1 "Noto Sans TC",sans-serif;color:var(--sub);text-align:center;padding:4px}
+.stp.on{border:3px double var(--c);color:var(--c);transform:rotate(var(--r));background:light-dark(#fff,#2a2537)}
+.tah{display:flex;justify-content:space-between;align-items:center;margin:0 16px 12px;padding:8px 14px;border-radius:16px;border:3px solid var(--line);background:var(--sun);color:#2b2140;font-weight:900}
+.tah b{font-size:24px}
+#toasts{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 18px);transform:translateX(-50%);z-index:20;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:min(92vw,420px)}
+.toast{color:#fff;border:3px solid #2b2140;box-shadow:0 4px 0 #2b2140;border-radius:18px;padding:10px 16px;font-weight:900;text-align:center;animation:pop .3s}
+@keyframes pop{from{transform:scale(.7);opacity:0}}
+.rs{width:100%;min-height:64px;margin:6px 0;border-radius:12px;border:2px solid var(--line);font:14px/1.4 monospace;padding:8px;background:var(--card);color:var(--ink)}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+{
+/* 書式：漢字|ピンイン（数字＝声調、*＝教育部辞典では輕聲）|意味 */
+const LV=[
+{n:'ひとつの音',s:'一音節で四聲の基本',col:'var(--t1)',d:`媽|ma1|お母さん
+麻|ma2|麻
+馬|ma3|馬
+罵|ma4|叱る
+八|ba1|8
+拔|ba2|抜く
+把|ba3|握る・〜を
+爸|ba4|お父さん
+湯|tang1|スープ
+糖|tang2|砂糖
+躺|tang3|横になる
+燙|tang4|熱い・やけどする
+衣|yi1|服
+姨|yi2|おば
+椅|yi3|いす
+意|yi4|意味
+書|shu1|本
+鼠|shu3|ねずみ
+樹|shu4|木
+花|hua1|花
+滑|hua2|すべる
+話|hua4|話
+天|tian1|空・日
+甜|tian2|甘い
+魚|yu2|魚
+雨|yu3|雨
+去|qu4|行く
+喝|he1|飲む
+河|he2|川
+好|hao3|よい
+號|hao4|番号・日
+飛|fei1|飛ぶ
+肥|fei2|太った
+水|shui3|水
+睡|shui4|眠る
+吃|chi1|食べる
+來|lai2|来る
+走|zou3|歩く
+看|kan4|見る`},
+{n:'ふたつの音',s:'台湾の日常単語',col:'var(--t2)',d:`臺灣|tai2 wan1|台湾
+臺北|tai2 bei3|台北
+老師|lao3 shi1|先生
+學生|xue2 sheng1|学生
+學校|xue2 xiao4|学校
+捷運|jie2 yun4|MRT・地下鉄
+機車|ji1 che1|バイク・スクーター
+高鐵|gao1 tie3|台湾新幹線
+火車|huo3 che1|列車
+夜市|ye4 shi4|夜市
+便當|bian4 dang1|弁当
+鳳梨|feng4 li2|パイナップル
+芭樂|ba1 le4|グァバ
+芒果|mang2 guo3|マンゴー
+西瓜|xi1 gua1|スイカ
+番茄|fan1 qie2|トマト
+香蕉|xiang1 jiao1|バナナ
+蘋果|ping2 guo3|りんご
+牛奶|niu2 nai3|牛乳
+咖啡|ka1 fei1|コーヒー
+可樂|ke3 le4|コーラ
+麵包|mian4 bao1|パン
+早餐|zao3 can1|朝ごはん
+冷氣|leng3 qi4|エアコン
+垃圾|le4 se4|ごみ
+手機|shou3 ji1|携帯電話
+電腦|dian4 nao3|パソコン
+網路|wang3 lu4|インターネット
+影片|ying3 pian4|動画
+電影|dian4 ying3|映画
+音樂|yin1 yue4|音楽
+喜歡|xi3 huan1|好き
+今天|jin1 tian1|今日
+明天|ming2 tian1|明日
+昨天|zuo2 tian1|昨日
+天氣|tian1 qi4|天気
+生日|sheng1 ri4|誕生日
+工作|gong1 zuo4|仕事
+醫生|yi1 sheng1|医者
+銀行|yin2 hang2|銀行
+熊貓|xiong2 mao1|パンダ
+日本|ri4 ben3|日本
+旅行|lv3 xing2|旅行
+文化|wen2 hua4|文化
+學習|xue2 xi2|学ぶ
+加油|jia1 you2|がんばれ
+再見|zai4 jian4|さようなら
+快樂|kuai4 le4|楽しい`},
+{n:'重ね言葉とあいさつ',s:'家族・身近なもの・あいさつ',col:'var(--t3)',d:`媽媽|ma1 ma1*|お母さん
+爸爸|ba4 ba4*|お父さん
+哥哥|ge1 ge1*|兄
+姊姊|jie3 jie3*|姉
+弟弟|di4 di4*|弟
+妹妹|mei4 mei4*|妹
+謝謝|xie4 xie4*|ありがとう
+我們|wo3 men2*|私たち
+你們|ni3 men2*|あなたたち
+他們|ta1 men2*|彼ら
+桌子|zhuo1 zi3*|机
+椅子|yi3 zi3*|いす
+孩子|hai2 zi3*|子ども
+兒子|er2 zi3*|息子
+杯子|bei1 zi3*|コップ
+房子|fang2 zi3*|家
+早安|zao3 an1|おはよう
+晚安|wan3 an1|おやすみ
+颱風|tai2 feng1|台風
+綠茶|lv4 cha2|緑茶
+紅茶|hong2 cha2|紅茶
+公園|gong1 yuan2|公園
+醫院|yi1 yuan4|病院
+機場|ji1 chang3|空港`},
+{n:'長い単語・四字',s:'長い単語と四字の言葉',col:'var(--t4)',d:`計程車|ji4 cheng2 che1|タクシー
+腳踏車|jiao3 ta4 che1|自転車
+悠遊卡|you1 you2 ka3|悠遊カード
+便利商店|bian4 li4 shang1 dian4|コンビニ
+珍珠奶茶|zhen1 zhu1 nai3 cha2|タピオカミルクティー
+滷肉飯|lu3 rou4 fan4|魯肉飯
+牛肉麵|niu2 rou4 mian4|牛肉麺
+小籠包|xiao3 long2 bao1|小籠包
+鳳梨酥|feng4 li2 su1|パイナップルケーキ
+馬鈴薯|ma3 ling2 shu3|じゃがいも
+星期天|xing1 qi2 tian1|日曜日
+衛生紙|wei4 sheng1 zhi3|ティッシュ
+圖書館|tu2 shu1 guan3|図書館
+動物園|dong4 wu4 yuan2|動物園
+冰淇淋|bing1 qi2 lin2|アイスクリーム
+巧克力|qiao3 ke4 li4|チョコレート
+火車站|huo3 che1 zhan4|駅
+生日快樂|sheng1 ri4 kuai4 le4|お誕生日おめでとう
+新年快樂|xin1 nian2 kuai4 le4|あけましておめでとう
+歡迎光臨|huan1 ying2 guang1 lin2|いらっしゃいませ
+恭喜發財|gong1 xi3 fa1 cai2|お金持ちになりますように
+山明水秀|shan1 ming2 shui3 xiu4|山水の美しい景色
+花紅柳綠|hua1 hong2 liu3 lv4|色鮮やかな春の景色
+心直口快|xin1 zhi2 kou3 kuai4|裏表なく率直
+千錘百鍊|qian1 chui2 bai3 lian4|鍛え抜かれた`}];
+
+/* 単語帳用の追加単語 */
+const EX=`飛機|fei1 ji1|飛行機
+冬天|dong1 tian1|冬
+春天|chun1 tian1|春
+公司|gong1 si1|会社
+餐廳|can1 ting1|レストラン
+公車|gong1 che1|路線バス
+開車|kai1 che1|車を運転する
+中文|zhong1 wen2|中国語
+新聞|xin1 wen2|ニュース
+星期|xing1 qi2|週・曜日
+歡迎|huan1 ying2|歓迎する
+香腸|xiang1 chang2|台湾ソーセージ
+雞排|ji1 pai2|台湾式フライドチキン
+鉛筆|qian1 bi3|鉛筆
+開始|kai1 shi3|始める
+身體|shen1 ti3|体
+中午|zhong1 wu3|昼
+豬肉|zhu1 rou4|豚肉
+雞肉|ji1 rou4|鶏肉
+商店|shang1 dian4|店
+車站|che1 zhan4|駅・停留所
+方便|fang1 bian4|便利
+叔叔|shu1 shu1*|おじ
+箱子|xiang1 zi3*|箱
+塞車|sai1 che1|渋滞
+房間|fang2 jian1|部屋
+時間|shi2 jian1|時間
+茶杯|cha2 bei1|湯のみ
+船|chuan2|船
+騎車|qi2 che1|バイク・自転車に乗る
+同學|tong2 xue2|クラスメート
+籃球|lan2 qiu2|バスケットボール
+牛排|niu2 pai2|ステーキ
+毛筆|mao2 bi3|毛筆
+游泳|you2 yong3|泳ぐ
+啤酒|pi2 jiu3|ビール
+同事|tong2 shi4|同僚
+牛肉|niu2 rou4|牛肉
+羊肉|yang2 rou4|羊肉
+白菜|bai2 cai4|白菜
+白飯|bai2 fan4|白いごはん
+盤子|pan2 zi3*|皿
+鞋子|xie2 zi3*|くつ
+鼻子|bi2 zi3*|鼻
+美國|mei3 guo2|アメリカ
+女兒|nv3 er2|娘
+有名|you3 ming2|有名
+檢查|jian3 cha2|検査する
+火鍋|huo3 guo1|鍋料理
+馬路|ma3 lu4|道路
+你好|ni3 hao3|こんにちは
+水果|shui3 guo3|果物
+手錶|shou3 biao3|腕時計
+洗澡|xi3 zao3|お風呂に入る
+可以|ke3 yi3|〜してよい
+老闆|lao3 ban3|店主・社長
+雨傘|yu3 san3|傘
+餃子|jiao3 zi3*|ギョーザ
+李子|li3 zi3*|すもも
+考試|kao3 shi4|試験
+請問|qing3 wen4|おたずねします
+好看|hao3 kan4|きれい・面白い
+韭菜|jiu3 cai4|ニラ
+汽車|qi4 che1|自動車
+認真|ren4 zhen1|まじめ
+蛋糕|dan4 gao1|ケーキ
+上班|shang4 ban1|出勤する
+大家|da4 jia1|みなさん
+豆漿|dou4 jiang1|豆乳
+豆花|dou4 hua1|豆花（豆腐デザート）
+地圖|di4 tu2|地図
+問題|wen4 ti2|問題
+太陽|tai4 yang2|太陽
+芋圓|yu4 yuan2|タロイモ団子
+飯糰|fan4 tuan2|台湾式おにぎり
+報紙|bao4 zhi3|新聞紙
+跳舞|tiao4 wu3|踊る
+熱狗|re4 gou3|ホットドッグ
+下雨|xia4 yu3|雨が降る
+蛋餅|dan4 bing3|台湾式クレープ
+上課|shang4 ke4|授業に出る
+電視|dian4 shi4|テレビ
+飯店|fan4 dian4|ホテル
+坐車|zuo4 che1|乗り物に乗る
+車票|che1 piao4|乗車券
+客運|ke4 yun4|長距離バス
+柿子|shi4 zi3*|柿
+筷子|kuai4 zi3*|はし
+帽子|mao4 zi3*|帽子
+公車站|gong1 che1 zhan4|バス停
+捷運站|jie2 yun4 zhan4|MRTの駅
+加油站|jia1 you2 zhan4|ガソリンスタンド
+停車場|ting2 che1 chang3|駐車場
+紅綠燈|hong2 lv4 deng1|信号
+斑馬線|ban1 ma3 xian4|横断歩道
+安全帽|an1 quan2 mao4|ヘルメット
+遊覽車|you2 lan3 che1|観光バス
+鹹酥雞|xian2 su1 ji1|台湾式から揚げ`;
+
+const EX2=`草莓|cao3 mei2|いちご
+葡萄|pu2 tao2*|ぶどう
+橘子|ju2 zi3*|みかん
+檸檬|ning2 meng2|レモン
+荔枝|li4 zhi1|ライチ
+釋迦|shi4 jia1|釈迦頭（バンレイシ）
+蓮霧|lian2 wu4|レンブ
+木瓜|mu4 gua1|パパイヤ
+奇異果|qi2 yi4 guo3|キウイ
+水蜜桃|shui3 mi4 tao2|白桃
+櫻桃|ying1 tao2|さくらんぼ
+哈密瓜|ha1 mi4 gua1|メロン
+火龍果|huo3 long2 guo3|ドラゴンフルーツ
+酪梨|lao4 li2|アボカド
+炒飯|chao3 fan4|チャーハン
+炒麵|chao3 mian4|焼きそば
+雞肉飯|ji1 rou4 fan4|鶏肉飯
+擔仔麵|dan4 zai3 mian4|担仔麺
+三杯雞|san1 bei1 ji1|三杯鶏
+宮保雞丁|gong1 bao3 ji1 ding1|鶏肉の唐辛子炒め
+酸辣湯|suan1 la4 tang1|酸辣湯
+拉麵|la1 mian4|ラーメン
+壽司|shou4 si1|寿司
+咖哩飯|ka1 li3 fan4|カレーライス
+天婦羅|tian1 fu4 luo2|天ぷら
+漢堡|han4 bao3|ハンバーガー
+披薩|pi1 sa4|ピザ
+義大利麵|yi4 da4 li4 mian4|パスタ
+涼麵|liang2 mian4|冷やし麺
+水餃|shui3 jiao3|水ギョーザ
+鍋貼|guo1 tie1|焼きギョーザ
+粽子|zong4 zi3*|ちまき
+肉圓|rou4 yuan2|肉圓（バーワン）
+包子|bao1 zi3*|中華まん
+饅頭|man2 tou2*|マントウ
+蔥油餅|cong1 you2 bing3|ネギ入りおやき
+胡椒餅|hu2 jiao1 bing3|胡椒餅
+大腸包小腸|da4 chang2 bao1 xiao3 chang2|もち米ソーセージのホットドッグ
+麵線|mian4 xian4|そうめん（煮込み）
+蘿蔔糕|luo2 bo2* gao1|大根もち
+烏龍茶|wu1 long2 cha2|ウーロン茶
+奶茶|nai3 cha2|ミルクティー
+果汁|guo3 zhi1|ジュース
+開水|kai1 shui3|お湯・飲み水
+冰水|bing1 shui3|冷たい水
+汽水|qi4 shui3|炭酸飲料
+紅酒|hong2 jiu3|赤ワイン
+高粱酒|gao1 liang2 jiu3|コーリャン酒
+冬瓜茶|dong1 gua1 cha2|冬瓜茶
+木瓜牛奶|mu4 gua1 niu2 nai3|パパイヤミルク
+雞蛋|ji1 dan4|卵
+青菜|qing1 cai4|青菜
+高麗菜|gao1 li4 cai4|キャベツ
+洋蔥|yang2 cong1|玉ねぎ
+紅蘿蔔|hong2 luo2 bo2*|にんじん
+地瓜|di4 gua1|さつまいも
+玉米|yu4 mi3|とうもろこし
+香菇|xiang1 gu1|しいたけ
+蝦子|xia1 zi3*|えび
+芒果冰|mang2 guo3 bing1|マンゴーかき氷
+剉冰|cuo4 bing1|かき氷
+布丁|bu4 ding1|プリン
+餅乾|bing3 gan1|クッキー
+甜點|tian2 dian3|デザート
+糖果|tang2 guo3|あめ
+雞蛋糕|ji1 dan4 gao1|ベビーカステラ
+太陽餅|tai4 yang2 bing3|太陽餅
+新北|xin1 bei3|新北
+基隆|ji1 long2|基隆
+桃園|tao2 yuan2|桃園
+新竹|xin1 zhu2|新竹
+苗栗|miao2 li4|苗栗
+臺中|tai2 zhong1|台中
+彰化|zhang1 hua4|彰化
+南投|nan2 tou2|南投
+雲林|yun2 lin2|雲林
+嘉義|jia1 yi4|嘉義
+臺南|tai2 nan2|台南
+高雄|gao1 xiong2|高雄
+屏東|ping2 dong1|屏東
+宜蘭|yi2 lan2|宜蘭
+花蓮|hua1 lian2|花蓮
+臺東|tai2 dong1|台東
+澎湖|peng2 hu2|澎湖
+金門|jin1 men2|金門
+馬祖|ma3 zu3|馬祖
+墾丁|ken3 ding1|墾丁
+九份|jiu3 fen4|九份
+淡水|dan4 shui3|淡水
+日月潭|ri4 yue4 tan2|日月潭
+阿里山|a1 li3 shan1|阿里山
+太魯閣|tai4 lu3 ge2|太魯閣
+西門町|xi1 men2 ding1|西門町
+士林|shi4 lin2|士林
+信義|xin4 yi4|信義
+北海道|bei3 hai3 dao4|北海道
+青森|qing1 sen1|青森
+岩手|yan2 shou3|岩手
+宮城|gong1 cheng2|宮城
+秋田|qiu1 tian2|秋田
+山形|shan1 xing2|山形
+福島|fu2 dao3|福島
+茨城|ci2 cheng2|茨城
+群馬|qun2 ma3|群馬
+埼玉|qi2 yu4|埼玉
+千葉|qian1 ye4|千葉
+東京|dong1 jing1|東京
+神奈川|shen2 nai4 chuan1|神奈川
+新潟|xin1 xi4|新潟
+富山|fu4 shan1|富山
+石川|shi2 chuan1|石川
+福井|fu2 jing3|福井
+山梨|shan1 li2|山梨
+長野|chang2 ye3|長野
+岐阜|qi2 fu4|岐阜
+靜岡|jing4 gang1|静岡
+愛知|ai4 zhi1|愛知
+三重|san1 chong2|三重
+滋賀|zi1 he4|滋賀
+京都|jing1 du1|京都
+大阪|da4 ban3|大阪
+兵庫|bing1 ku4|兵庫
+奈良|nai4 liang2|奈良
+和歌山|he2 ge1 shan1|和歌山
+鳥取|niao3 qu3|鳥取
+島根|dao3 gen1|島根
+岡山|gang1 shan1|岡山
+廣島|guang3 dao3|広島
+山口|shan1 kou3|山口
+德島|de2 dao3|徳島
+香川|xiang1 chuan1|香川
+愛媛|ai4 yuan2|愛媛
+高知|gao1 zhi1|高知
+福岡|fu2 gang1|福岡
+佐賀|zuo3 he4|佐賀
+長崎|chang2 qi2|長崎
+熊本|xiong2 ben3|熊本
+大分|da4 fen1|大分
+宮崎|gong1 qi2|宮崎
+鹿兒島|lu4 er2 dao3|鹿児島
+沖繩|chong1 sheng2|沖縄
+新宿|xin1 su4|新宿
+澀谷|se4 gu3|渋谷
+池袋|chi2 dai4|池袋
+上野|shang4 ye3|上野
+淺草|qian3 cao3|浅草
+銀座|yin2 zuo4|銀座
+秋葉原|qiu1 ye4 yuan2|秋葉原
+原宿|yuan2 su4|原宿
+六本木|liu4 ben3 mu4|六本木
+品川|pin3 chuan1|品川
+台場|tai2 chang3|お台場
+吉祥寺|ji2 xiang2 si4|吉祥寺
+表參道|biao3 can1 dao4|表参道
+築地|zhu2 di4|築地
+新橋|xin1 qiao2|新橋
+皇居|huang2 ju1|皇居
+晴空塔|qing2 kong1 ta3|スカイツリー
+東京鐵塔|dong1 jing1 tie3 ta3|東京タワー
+東京車站|dong1 jing1 che1 zhan4|東京駅
+羽田機場|yu3 tian2 ji1 chang3|羽田空港
+成田機場|cheng2 tian2 ji1 chang3|成田空港
+中國|zhong1 guo2|中国
+韓國|han2 guo2|韓国
+英國|ying1 guo2|イギリス
+法國|fa4 guo2|フランス
+德國|de2 guo2|ドイツ
+義大利|yi4 da4 li4|イタリア
+西班牙|xi1 ban1 ya2|スペイン
+荷蘭|he2 lan2|オランダ
+瑞士|rui4 shi4|スイス
+俄羅斯|e2 luo2 si1|ロシア
+加拿大|jia1 na2 da4|カナダ
+墨西哥|mo4 xi1 ge1|メキシコ
+巴西|ba1 xi1|ブラジル
+澳洲|ao4 zhou1|オーストラリア
+紐西蘭|niu3 xi1 lan2|ニュージーランド
+泰國|tai4 guo2|タイ
+越南|yue4 nan2|ベトナム
+新加坡|xin1 jia1 po1|シンガポール
+印度|yin4 du4|インド
+印尼|yin4 ni2|インドネシア
+菲律賓|fei1 lv4 bin1|フィリピン
+馬來西亞|ma3 lai2 xi1 ya4|マレーシア
+香港|xiang1 gang3|香港
+爺爺|ye2 ye2*|祖父（父方）
+奶奶|nai3 nai3*|祖母（父方）
+外公|wai4 gong1|祖父（母方）
+外婆|wai4 po2|祖母（母方）
+阿姨|a1 yi2|おば（母の姉妹）
+舅舅|jiu4 jiu4*|おじ（母の兄弟）
+姑姑|gu1 gu1*|おば（父の姉妹）
+伯伯|bo2 bo2*|おじ（父の兄）
+父母|fu4 mu3|両親
+家人|jia1 ren2|家族
+兄弟|xiong1 di4|兄弟
+姊妹|jie3 mei4|姉妹
+孫子|sun1 zi3*|孫
+小孩|xiao3 hai2|子ども
+寶寶|bao3 bao3*|赤ちゃん
+先生|xian1 sheng1|夫・〜さん（男性）
+太太|tai4 tai4*|妻・奥さん
+老公|lao3 gong1|だんな
+老婆|lao3 po2|奥さん（くだけた言い方）
+朋友|peng2 you3|友だち
+好朋友|hao3 peng2 you3|親友
+男朋友|nan2 peng2 you3|彼氏
+女朋友|nv3 peng2 you3|彼女
+情人|qing2 ren2|恋人
+夫妻|fu1 qi1|夫婦
+室友|shi4 you3|ルームメイト
+網友|wang3 you3|ネット上の友だち
+鄰居|lin2 ju1|近所の人
+客人|ke4 ren2|お客さん
+學長|xue2 zhang3|先輩（男性）
+學姊|xue2 jie3|先輩（女性）
+學弟|xue2 di4|後輩（男性）
+學妹|xue2 mei4|後輩（女性）
+校長|xiao4 zhang3|校長
+主管|zhu3 guan3|上司
+經理|jing1 li3|マネージャー
+員工|yuan2 gong1|社員・従業員
+店員|dian4 yuan2|店員
+護士|hu4 shi4|看護師
+警察|jing3 cha2|警察官`;
+
+const S1=`我是日本人。|wo3 shi4 ri4 ben3 ren2|私は日本人です。
+你好嗎？|ni3 hao3 ma5|元気ですか？
+我很好。|wo3 hen3 hao3|元気です。
+謝謝你。|xie4 xie4* ni3|ありがとう。
+我愛臺灣。|wo3 ai4 tai2 wan1|台湾が大好き。
+今天很熱。|jin1 tian1 hen3 re4|今日は暑い。
+早安，老師。|zao3 an1 lao3 shi1|先生、おはようございます。
+好吃嗎？|hao3 chi1 ma5|おいしい？
+這個多少錢？|zhe4 ge4* duo1 shao3 qian2|これはいくら？
+捷運站在哪裡？|jie2 yun4 zhan4 zai4 na3 li3|MRTの駅はどこ？
+請問，廁所在哪裡？|qing3 wen4 ce4 suo3 zai4 na3 li3|すみません、トイレはどこですか？
+我喜歡吃芒果。|wo3 xi3 huan1 chi1 mang2 guo3|マンゴーが好きです。
+我想喝珍珠奶茶。|wo3 xiang3 he1 zhen1 zhu1 nai3 cha2|タピオカミルクティーが飲みたい。
+我們去夜市吧。|wo3 men2* qu4 ye4 shi4 ba5|夜市に行こう。
+他是我的朋友。|ta1 shi4 wo3 de5 peng2 you3|彼は私の友だちです。`;
+const S2=`我明天要坐高鐵去臺南。|wo3 ming2 tian1 yao4 zuo4 gao1 tie3 qu4 tai2 nan2|明日、高鐵で台南へ行きます。
+週末我們去夜市吃雞排吧。|zhou1 mo4 wo3 men2* qu4 ye4 shi4 chi1 ji1 pai2 ba5|週末、夜市へ雞排を食べに行こう。
+這家店的牛肉麵非常好吃。|zhe4 jia1 dian4 de5 niu2 rou4 mian4 fei1 chang2 hao3 chi1|この店の牛肉麺はとてもおいしい。
+請問，去臺北車站要怎麼走？|qing3 wen4 qu4 tai2 bei3 che1 zhan4 yao4 zen3 me5 zou3|すみません、台北駅へはどう行けばいいですか？
+我在學中文，但是聲調很難。|wo3 zai4 xue2 zhong1 wen2 dan4 shi4 sheng1 diao4 hen3 nan2|中国語を勉強していますが、声調が難しいです。
+臺灣的夏天很熱，常常下雨。|tai2 wan1 de5 xia4 tian1 hen3 re4 chang2 chang2 xia4 yu3|台湾の夏は暑くて、よく雨が降ります。
+我媽媽喜歡喝熱的烏龍茶。|wo3 ma1 ma1* xi3 huan1 he1 re4 de5 wu1 long2 cha2|母は温かいウーロン茶が好きです。
+我的好朋友住在高雄。|wo3 de5 hao3 peng2 you3 zhu4 zai4 gao1 xiong2|親友は高雄に住んでいます。
+我想買兩張去花蓮的車票。|wo3 xiang3 mai3 liang3 zhang1 qu4 hua1 lian2 de5 che1 piao4|花蓮行きの切符を2枚買いたいです。
+下個星期是我哥哥的生日。|xia4 ge4* xing1 qi2 shi4 wo3 ge1 ge1* de5 sheng1 ri4|来週は兄の誕生日です。`;
+
+const CAT=[
+{k:'food',n:'食べ物',s:'果物・料理・小吃・飲み物など',ic:'吃',col:'var(--t1)',g:[
+ ['fruit','果物','水果 鳳梨 芭樂 芒果 西瓜 香蕉 蘋果 柿子 李子 草莓 葡萄 橘子 檸檬 荔枝 釋迦 蓮霧 木瓜 奇異果 水蜜桃 櫻桃 哈密瓜 火龍果 酪梨'],
+ ['dish','料理','滷肉飯 牛肉麵 小籠包 雞肉飯 擔仔麵 三杯雞 宮保雞丁 酸辣湯 炒飯 炒麵 火鍋 餃子 水餃 鍋貼 粽子 肉圓 便當 白飯 牛排 涼麵 拉麵 壽司 咖哩飯 天婦羅 漢堡 披薩 義大利麵'],
+ ['snack','小吃・朝ごはん','雞排 鹹酥雞 香腸 大腸包小腸 胡椒餅 蔥油餅 麵線 熱狗 蛋餅 飯糰 包子 饅頭 蘿蔔糕 麵包 早餐'],
+ ['drink','飲み物','珍珠奶茶 奶茶 綠茶 紅茶 烏龍茶 冬瓜茶 木瓜牛奶 豆漿 牛奶 咖啡 可樂 果汁 汽水 開水 冰水 啤酒 紅酒 高粱酒'],
+ ['ingr','肉・野菜・食材','豬肉 雞肉 牛肉 羊肉 雞蛋 蝦子 青菜 白菜 高麗菜 韭菜 洋蔥 紅蘿蔔 番茄 馬鈴薯 地瓜 玉米 香菇'],
+ ['sweet','スイーツ・おやつ','芒果冰 剉冰 豆花 芋圓 蛋糕 雞蛋糕 布丁 餅乾 糖果 甜點 巧克力 冰淇淋 鳳梨酥 太陽餅']]},
+{k:'trans',n:'交通・乗り物',s:'捷運・機車・高鐵など',ic:'車',col:'var(--t4)',g:[
+ ['trans','交通・乗り物','捷運 捷運站 高鐵 火車 火車站 公車 公車站 客運 遊覽車 計程車 機車 腳踏車 汽車 飛機 機場 船 車站 車票 悠遊卡 坐車 開車 騎車 塞車 馬路 紅綠燈 斑馬線 停車場 加油站 安全帽']]},
+{k:'place',n:'地名・国名',s:'台湾・日本・東京・世界の国',ic:'地',col:'var(--t3)',g:[
+ ['tw','台湾の地名','臺北 新北 基隆 桃園 新竹 苗栗 臺中 彰化 南投 雲林 嘉義 臺南 高雄 屏東 宜蘭 花蓮 臺東 澎湖 金門 馬祖 墾丁 九份 淡水 日月潭 阿里山 太魯閣 西門町 士林 信義'],
+ ['jp','日本の都道府県','北海道 青森 岩手 宮城 秋田 山形 福島 茨城 群馬 埼玉 千葉 東京 神奈川 新潟 富山 石川 福井 山梨 長野 岐阜 靜岡 愛知 三重 滋賀 京都 大阪 兵庫 奈良 和歌山 鳥取 島根 岡山 廣島 山口 德島 香川 愛媛 高知 福岡 佐賀 長崎 熊本 大分 宮崎 鹿兒島 沖繩','栃木は中国語での読み方が定まっていないため入れていません。'],
+ ['tokyo','東京の地名','新宿 澀谷 池袋 上野 淺草 銀座 秋葉原 原宿 六本木 品川 台場 吉祥寺 表參道 築地 新橋 皇居 晴空塔 東京鐵塔 東京車站 羽田機場 成田機場'],
+ ['country','世界の国','臺灣 日本 中國 韓國 香港 美國 加拿大 墨西哥 巴西 英國 法國 德國 義大利 西班牙 荷蘭 瑞士 俄羅斯 澳洲 紐西蘭 泰國 越南 新加坡 馬來西亞 印尼 菲律賓 印度']]},
+{k:'people',n:'人間関係',s:'家族・友だち・学校や職場',ic:'人',col:'var(--t2)',g:[
+ ['family','家族','爸爸 媽媽 哥哥 姊姊 弟弟 妹妹 兒子 女兒 孩子 小孩 寶寶 爺爺 奶奶 外公 外婆 叔叔 伯伯 舅舅 姑姑 阿姨 父母 兄弟 姊妹 孫子 家人 先生 太太 老公 老婆'],
+ ['friend','友だち・身近な人','朋友 好朋友 男朋友 女朋友 情人 夫妻 室友 網友 鄰居 客人 大家 我們 你們 他們'],
+ ['work','学校・職場','老師 學生 同學 學長 學姊 學弟 學妹 校長 同事 老闆 主管 經理 員工 店員 醫生 護士 警察']]},
+{k:'sent',n:'文の練習',s:'単文と少し長い文',ic:'文',col:'var(--t4)',sent:true,g:[['s1','単文',S1],['s2','少し長い文',S2]]}];
+
+const EX3=`買|mai3|買う
+賣|mai4|売る
+說|shuo1|話す
+聽|ting1|聞く
+寫|xie3|書く
+讀|du2|読む
+學|xue2|学ぶ
+坐|zuo4|座る・乗る
+站|zhan4|立つ
+開|kai1|開ける・運転する
+玩|wan2|遊ぶ
+做|zuo4|する・作る
+找|zhao3|探す
+等|deng3|待つ
+給|gei3|あげる
+住|zhu4|住む
+想|xiang3|〜したい・思う
+要|yao4|ほしい・〜する
+會|hui4|できる
+回家|hui2 jia1|家に帰る
+唱歌|chang4 ge1|歌う
+休息|xiu1 xi2*|休む
+認識|ren4 shi4*|知り合う
+知道|zhi1 dao4*|知っている
+覺得|jue2 de2*|〜と思う
+打電話|da3 dian4 hua4|電話をかける
+大|da4|大きい
+小|xiao3|小さい
+多|duo1|多い
+少|shao3|少ない
+熱|re4|暑い・熱い
+冷|leng3|寒い・冷たい
+快|kuai4|速い
+慢|man4|遅い
+貴|gui4|（値段が）高い
+新|xin1|新しい
+舊|jiu4|古い
+累|lei4|疲れた
+忙|mang2|忙しい
+難|nan2|難しい
+便宜|pian2 yi2*|安い
+好吃|hao3 chi1|おいしい
+好喝|hao3 he1|（飲み物が）おいしい
+好玩|hao3 wan2|楽しい・面白い
+漂亮|piao4 liang4*|きれい
+可愛|ke3 ai4|かわいい
+高興|gao1 xing4|うれしい
+開心|kai1 xin1|楽しい
+容易|rong2 yi4|簡単
+舒服|shu1 fu2*|気持ちいい
+熱鬧|re4 nao4*|にぎやか
+安靜|an1 jing4|静か`;
+const TALK1=`小明|你好！|ni3 hao3|こんにちは！
+由美|你好！|ni3 hao3|こんにちは！
+小明|請問你貴姓？|qing3 wen4 ni3 gui4 xing4|お名前は？
+由美|我姓田中，叫田中由美。|wo3 xing4 tian2 zhong1 jiao4 tian2 zhong1 you2 mei3|田中です。田中由美といいます。
+小明|你是哪國人？|ni3 shi4 na3 guo2 ren2|どこの国の方ですか？
+由美|我是日本人。|wo3 shi4 ri4 ben3 ren2|日本人です。
+小明|歡迎你來臺灣！|huan1 ying2 ni3 lai2 tai2 wan1|台湾へようこそ！
+由美|謝謝！|xie4 xie4*|ありがとう！`;
+const TALK2=`由美|老闆，這個多少錢？|lao3 ban3 zhe4 ge4* duo1 shao3 qian2|すみません、これはいくらですか？
+老闆|五十塊。|wu3 shi2 kuai4|50元です。
+由美|好，我要兩個。|hao3 wo3 yao4 liang3 ge4*|じゃあ、2つください。
+老闆|要辣嗎？|yao4 la4 ma5|辛くしますか？
+由美|要，小辣就好。|yao4 xiao3 la4 jiu4 hao3|はい、少し辛めで。
+老闆|好的，請稍等。|hao3 de5 qing3 shao1 deng3|はい、少々お待ちください。
+由美|謝謝老闆！|xie4 xie4* lao3 ban3|ありがとう！`;
+const TALK3=`由美|請問，捷運站在哪裡？|qing3 wen4 jie2 yun4 zhan4 zai4 na3 li3|すみません、MRTの駅はどこですか？
+路人|往前走，在右邊。|wang3 qian2 zou3 zai4 you4 bian1|まっすぐ行って、右側です。
+由美|走路要多久？|zou3 lu4 yao4 duo1 jiu3|歩いてどのくらいかかりますか？
+路人|大概五分鐘。|da4 gai4 wu3 fen1 zhong1|だいたい5分です。
+由美|好，謝謝你！|hao3 xie4 xie4* ni3|わかりました、ありがとう！
+路人|沒問題！|mei2 wen4 ti2|どういたしまして！`;
+CAT.splice(4,0,{k:'verb',n:'動詞・形容詞',s:'よく使う動き・ようす',ic:'動',col:'var(--t1)',g:[
+ ['verb','よく使う動詞','吃 喝 去 來 看 走 睡 買 賣 說 聽 寫 讀 學 坐 站 開 玩 做 找 等 給 住 想 要 會 喜歡 工作 學習 旅行 休息 認識 知道 覺得 回家 洗澡 上課 上班 唱歌 跳舞 游泳 開車 打電話'],
+ ['adj','よく使う形容詞','好 大 小 多 少 熱 冷 快 慢 貴 新 舊 甜 累 忙 難 便宜 好吃 好喝 好看 好玩 漂亮 可愛 高興 開心 快樂 方便 有名 容易 舒服 熱鬧 安靜']]});
+CAT.push({k:'talk',n:'会話',s:'場面ごとの短い会話',ic:'話',col:'var(--t3)',talk:true,g:[['t1','あいさつ・自己紹介',TALK1],['t2','夜市で買い物',TALK2],['t3','道をたずねる',TALK3]]});
+
+const EX4=`零|ling2|ゼロ
+一|yi1|1
+二|er4|2
+三|san1|3
+四|si4|4
+五|wu3|5
+六|liu4|6
+七|qi1|7
+九|jiu3|9
+十|shi2|10
+百|bai3|百
+千|qian1|千
+萬|wan4|万
+兩|liang3|2つ
+幾|ji3|いくつ
+多少|duo1 shao3|どのくらい・いくら
+一百|yi1 bai3|100
+前天|qian2 tian1|おととい
+後天|hou4 tian1|あさって
+早上|zao3 shang4*|朝
+下午|xia4 wu3|午後
+晚上|wan3 shang4*|夜
+現在|xian4 zai4|今
+時候|shi2 hou4*|〜のとき
+小時|xiao3 shi2|〜時間
+分鐘|fen1 zhong1|〜分間
+星期一|xing1 qi2 yi1|月曜日
+星期二|xing1 qi2 er4|火曜日
+星期三|xing1 qi2 san1|水曜日
+星期四|xing1 qi2 si4|木曜日
+星期五|xing1 qi2 wu3|金曜日
+星期六|xing1 qi2 liu4|土曜日
+週末|zhou1 mo4|週末
+今年|jin1 nian2|今年
+明年|ming2 nian2|来年
+去年|qu4 nian2|去年
+晴天|qing2 tian1|晴れ
+下雪|xia4 xue3|雪が降る
+打雷|da3 lei2|雷が鳴る
+雲|yun2|雲
+風|feng1|風
+溫暖|wen1 nuan3|暖かい
+涼快|liang2 kuai4*|涼しい
+夏天|xia4 tian1|夏
+秋天|qiu1 tian1|秋
+氣溫|qi4 wen1|気温
+地震|di4 zhen4|地震
+彩虹|cai3 hong2|虹
+狗|gou3|犬
+貓|mao1|猫
+鳥|niao3|鳥
+老虎|lao3 hu3|トラ
+獅子|shi1 zi3*|ライオン
+兔子|tu4 zi3*|ウサギ
+猴子|hou2 zi3*|サル
+大象|da4 xiang4|ゾウ
+牛|niu2|牛
+豬|zhu1|豚
+雞|ji1|鶏
+羊|yang2|羊
+老鼠|lao3 shu3|ネズミ
+蛇|she2|ヘビ
+烏龜|wu1 gui1|カメ
+長頸鹿|chang2 jing3 lu4|キリン
+企鵝|qi4 e2|ペンギン
+臺灣黑熊|tai2 wan1 hei1 xiong2|タイワンツキノワグマ
+頭|tou2|頭
+臉|lian3|顔
+眼睛|yan3 jing1*|目
+耳朵|er3 duo3*|耳
+嘴巴|zui3 ba1*|口
+牙齒|ya2 chi3|歯
+頭髮|tou2 fa3|髪
+脖子|bo2 zi3*|首
+肩膀|jian1 bang3|肩
+手|shou3|手
+腳|jiao3|足
+肚子|du4 zi3*|おなか
+心|xin1|心
+生病|sheng1 bing4|病気になる
+感冒|gan3 mao4|かぜ
+發燒|fa1 shao1|熱が出る
+頭痛|tou2 tong4|頭痛
+藥|yao4|薬
+健康|jian4 kang1|健康
+運動|yun4 dong4|運動
+睡覺|shui4 jiao4|寝る
+掛號|gua4 hao4|（病院の）受付をする
+健保卡|jian4 bao3 ka3|健康保険証
+家|jia1|家
+客廳|ke4 ting1|リビング
+廚房|chu2 fang2|台所
+廁所|ce4 suo3|トイレ
+浴室|yu4 shi4|浴室
+陽臺|yang2 tai2|ベランダ
+門|men2|ドア
+窗戶|chuang1 hu4*|窓
+床|chuang2|ベッド
+沙發|sha1 fa1|ソファー
+冰箱|bing1 xiang1|冷蔵庫
+洗衣機|xi3 yi1 ji1|洗濯機
+電燈|dian4 deng1|電灯
+鑰匙|yao4 shi2*|かぎ
+衣服|yi1 fu2*|服
+褲子|ku4 zi3*|ズボン
+裙子|qun2 zi3*|スカート
+外套|wai4 tao4|上着
+襯衫|chen4 shan1|シャツ
+襪子|wa4 zi3*|靴下
+眼鏡|yan3 jing4|めがね
+包包|bao1 bao1|かばん
+錢包|qian2 bao1|財布
+口罩|kou3 zhao4|マスク
+顏色|yan2 se4|色
+紅色|hong2 se4|赤
+橘色|ju2 se4|オレンジ色
+黃色|huang2 se4|黄色
+綠色|lv4 se4|緑
+藍色|lan2 se4|青
+紫色|zi3 se4|紫
+粉紅色|fen3 hong2 se4|ピンク
+白色|bai2 se4|白
+黑色|hei1 se4|黒
+灰色|hui1 se4|グレー
+咖啡色|ka1 fei1 se4|茶色
+郵局|you2 ju2|郵便局
+超市|chao1 shi4|スーパー
+百貨公司|bai3 huo4 gong1 si1|デパート
+電影院|dian4 ying3 yuan4|映画館
+博物館|bo2 wu4 guan3|博物館
+廟|miao4|お寺・廟
+市場|shi4 chang3|市場
+咖啡廳|ka1 fei1 ting1|カフェ
+藥局|yao4 ju2|薬局
+警察局|jing3 cha2 ju2|警察署
+上面|shang4 mian4|上
+下面|xia4 mian4|下
+前面|qian2 mian4|前
+後面|hou4 mian4|後ろ
+左邊|zuo3 bian1|左側
+右邊|you4 bian1|右側
+裡面|li3 mian4|中
+外面|wai4 mian4|外
+旁邊|pang2 bian1|そば
+對面|dui4 mian4|向かい
+中間|zhong1 jian1|真ん中
+東|dong1|東
+西|xi1|西
+南|nan2|南
+北|bei3|北
+附近|fu4 jin4|近く
+這裡|zhe4 li3|ここ
+那裡|na4 li3|あそこ
+跑步|pao3 bu4|ジョギング
+棒球|bang4 qiu2|野球
+足球|zu2 qiu2|サッカー
+網球|wang3 qiu2|テニス
+羽球|yu3 qiu2|バドミントン
+爬山|pa2 shan1|山登り
+看書|kan4 shu1|読書
+看電影|kan4 dian4 ying3|映画を見る
+聽音樂|ting1 yin1 yue4|音楽を聴く
+拍照|pai1 zhao4|写真を撮る
+畫畫|hua4 hua4|絵を描く
+打電動|da3 dian4 dong4|ゲームをする
+釣魚|diao4 yu2|釣り
+做菜|zuo4 cai4|料理をする
+難過|nan2 guo4|悲しい
+生氣|sheng1 qi4|怒る
+害怕|hai4 pa4|怖い
+緊張|jin3 zhang1|緊張する
+擔心|dan1 xin1|心配する
+放心|fang4 xin1|安心する
+愛|ai4|愛する
+無聊|wu2 liao2|退屈
+感動|gan3 dong4|感動する
+好笑|hao3 xiao4|おかしい
+驚訝|jing1 ya4|驚く
+寂寞|ji4 mo4|さびしい
+幸福|xing4 fu2|幸せ
+教室|jiao4 shi4|教室
+下課|xia4 ke4|授業が終わる
+功課|gong1 ke4|宿題
+書包|shu1 bao1|通学かばん
+筆記本|bi3 ji4 ben3|ノート
+橡皮擦|xiang4 pi2 ca1|消しゴム
+黑板|hei1 ban3|黒板
+大學|da4 xue2|大学
+下班|xia4 ban1|退勤する
+開會|kai1 hui4|会議をする
+薪水|xin1 shui3|給料
+加班|jia1 ban1|残業する
+請假|qing3 jia4|休みを取る
+名片|ming2 pian4|名刺
+錢|qian2|お金
+塊|kuai4|〜元（話し言葉）
+打折|da3 zhe2|割引する
+發票|fa1 piao4|レシート
+信用卡|xin4 yong4 ka3|クレジットカード
+現金|xian4 jin1|現金
+找錢|zhao3 qian2|おつりを出す
+袋子|dai4 zi3*|袋
+付錢|fu4 qian2|お金を払う
+刷卡|shua1 ka3|カードで払う
+結帳|jie2 zhang4|会計する
+排隊|pai2 dui4|並ぶ
+試穿|shi4 chuan1|試着する`;
+CAT.splice(4,0,
+{k:'num',n:'数字・時間',ic:'clock',col:'var(--t4)',g:[
+ ['number','数字','零 一 二 三 四 五 六 七 八 九 十 百 千 萬 兩 幾 多少 一百'],
+ ['time','時間・曜日','今天 明天 昨天 前天 後天 早上 中午 下午 晚上 現在 時候 小時 分鐘 星期 星期一 星期二 星期三 星期四 星期五 星期六 星期天 週末 今年 明年 去年']]},
+{k:'nature',n:'天気・動物',ic:'sun',col:'var(--t2)',g:[
+ ['weather','天気・季節','天氣 晴天 下雨 下雪 打雷 颱風 地震 太陽 雲 風 彩虹 熱 冷 溫暖 涼快 氣溫 春天 夏天 秋天 冬天'],
+ ['animal','動物','狗 貓 鳥 魚 牛 豬 雞 羊 馬 蛇 老虎 獅子 兔子 猴子 大象 熊貓 老鼠 烏龜 企鵝 長頸鹿 臺灣黑熊']]},
+{k:'body',n:'体・健康',ic:'heart',col:'var(--t1)',g:[
+ ['bodyp','体','頭 臉 眼睛 耳朵 鼻子 嘴巴 牙齒 頭髮 脖子 肩膀 手 腳 肚子 心 身體'],
+ ['health','病気・健康','生病 感冒 發燒 頭痛 藥 醫生 醫院 護士 掛號 健保卡 健康 運動 睡覺 休息']]},
+{k:'life',n:'家・服・色',ic:'house',col:'var(--t3)',g:[
+ ['home','家・部屋','家 房子 房間 客廳 廚房 廁所 浴室 陽臺 門 窗戶 床 桌子 椅子 沙發 冰箱 冷氣 電視 洗衣機 電燈 鑰匙'],
+ ['wear','服・持ち物','衣服 褲子 裙子 外套 襯衫 襪子 鞋子 帽子 眼鏡 手錶 包包 錢包 雨傘 口罩 手機'],
+ ['color','色','顏色 紅色 橘色 黃色 綠色 藍色 紫色 粉紅色 白色 黑色 灰色 咖啡色']]},
+{k:'town',n:'町・場所',ic:'building',col:'#ff8a5b',g:[
+ ['place2','建物・お店','學校 銀行 郵局 醫院 藥局 警察局 公園 圖書館 博物館 電影院 百貨公司 超市 便利商店 市場 夜市 餐廳 咖啡廳 飯店 廟 公司'],
+ ['dir','方向・位置','上面 下面 前面 後面 左邊 右邊 裡面 外面 旁邊 對面 中間 附近 這裡 那裡 東 西 南 北']]},
+{k:'hobby',n:'趣味・気持ち',ic:'ball',col:'var(--t4)',g:[
+ ['sport','趣味・スポーツ','運動 跑步 游泳 爬山 棒球 籃球 足球 網球 羽球 唱歌 跳舞 看書 看電影 聽音樂 旅行 拍照 畫畫 打電動 釣魚 做菜'],
+ ['feel','気持ち','高興 開心 快樂 幸福 感動 好笑 驚訝 難過 生氣 害怕 緊張 擔心 放心 寂寞 無聊 累 愛 喜歡']]},
+{k:'school',n:'学校・仕事',ic:'book',col:'var(--t3)',g:[
+ ['study','学校','學校 大學 教室 老師 學生 同學 上課 下課 考試 功課 問題 書包 鉛筆 筆記本 橡皮擦 黑板 學習'],
+ ['job','仕事','工作 公司 上班 下班 開會 加班 請假 薪水 名片 同事 老闆 主管']]},
+{k:'shop',n:'買い物・お金',ic:'wallet',col:'var(--t2)',g:[
+ ['money','買い物・お金','買 賣 錢 塊 多少 貴 便宜 打折 現金 信用卡 刷卡 付錢 找錢 結帳 發票 袋子 排隊 試穿 錢包']]});
+const EX5=`百香果|bai3 xiang1 guo3|パッションフルーツ
+楊桃|yang2 tao2|スターフルーツ
+柚子|you4 zi3*|ブンタン
+龍眼|long2 yan3|リュウガン
+椰子|ye1 zi3*|ヤシの実
+榴槤|liu2 lian2|ドリアン
+山竹|shan1 zhu2|マンゴスチン
+甘蔗|gan1 zhe4|サトウキビ
+番石榴|fan1 shi2 liu2|グァバ（正式名）
+麻油雞|ma2 you2 ji1|ごま油の鶏スープ
+番茄炒蛋|fan1 qie2 chao3 dan4|トマトと卵の炒め物
+糖醋排骨|tang2 cu4 pai2 gu3|スペアリブの甘酢
+紅燒牛肉|hong2 shao1 niu2 rou4|牛肉の醤油煮込み
+炸醬麵|zha2 jiang4 mian4|ジャージャー麺
+佛跳牆|fo2 tiao4 qiang2|仏跳牆（高級スープ）
+東坡肉|dong1 po1 rou4|豚の角煮
+薑母鴨|jiang1 mu3 ya1|ショウガ鴨鍋
+羊肉爐|yang2 rou4 lu2|羊肉鍋
+客家小炒|ke4 jia1 xiao3 chao3|客家風炒め
+清蒸魚|qing1 zheng1 yu2|蒸し魚
+潤餅|run4 bing3|台湾式春巻き
+米糕|mi3 gao1|おこわ
+地瓜球|di4 gua1 qiu2|さつまいもボール
+車輪餅|che1 lun2 bing3|今川焼き
+烤玉米|kao3 yu4 mi3|焼きとうもろこし
+鹹豆漿|xian2 dou4 jiang1|塩味の豆乳スープ
+燒餅油條|shao1 bing3 you2 tiao2|焼餅と揚げパン
+蛋黃酥|dan4 huang2 su1|卵黄パイ
+生煎包|sheng1 jian1 bao1|焼き小籠包
+檸檬紅茶|ning2 meng2 hong2 cha2|レモンティー
+拿鐵|na2 tie3|ラテ
+無糖|wu2 tang2|砂糖なし
+半糖|ban4 tang2|砂糖半分
+去冰|qu4 bing1|氷なし
+少冰|shao3 bing1|氷少なめ
+微糖|wei2 tang2|砂糖ちょっと
+常溫|chang2 wen1|常温
+熱飲|re4 yin3|ホットドリンク
+外帶|wai4 dai4|持ち帰り
+內用|nei4 yong4|店内で食べる
+茄子|qie2 zi3*|なす
+菠菜|bo1 cai4|ほうれん草
+空心菜|kong1 xin1 cai4|空心菜
+花椰菜|hua1 ye1 cai4|ブロッコリー・カリフラワー
+大蒜|da4 suan4|にんにく
+辣椒|la4 jiao1|唐辛子
+醬油|jiang4 you2|しょうゆ
+九層塔|jiu3 ceng2 ta3|バジル（台湾バジル）
+香菜|xiang1 cai4|パクチー
+海鮮|hai3 xian1|海鮮
+蛤蜊|ge2 li2*|はまぐり・あさり
+豆芽菜|dou4 ya2 cai4|もやし
+米酒|mi3 jiu3|米酒（料理酒）
+仙草|xian1 cao3|仙草ゼリー
+愛玉|ai4 yu4|愛玉ゼリー
+紅豆湯|hong2 dou4 tang1|おしるこ
+湯圓|tang1 yuan2|白玉だんご
+綠豆湯|lv4 dou4 tang1|緑豆スープ
+芋頭|yu4 tou2*|タロイモ
+鬆餅|song1 bing3|パンケーキ・ワッフル
+馬卡龍|ma3 ka3 long2|マカロン
+提拉米蘇|ti2 la1 mi3 su1|ティラミス
+單程|dan1 cheng2|片道
+來回|lai2 hui2|往復
+月臺|yue4 tai2|ホーム
+轉乘|zhuan3 cheng2|乗り換え
+出口|chu1 kou3|出口
+入口|ru4 kou3|入口
+上車|shang4 che1|乗車する
+下車|xia4 che1|降車する
+末班車|mo4 ban1 che1|終電・最終便
+首班車|shou3 ban1 che1|始発
+博愛座|bo2 ai4 zuo4|優先席
+誤點|wu4 dian3|遅延
+行李|xing2 li3*|荷物
+自由座|zi4 you2 zuo4|自由席
+對號座|dui4 hao4 zuo4|指定席
+板橋|ban3 qiao2|板橋
+中壢|zhong1 li4|中壢
+鹿港|lu4 gang3|鹿港
+安平|an1 ping2|安平
+綠島|lv4 dao3|緑島
+蘭嶼|lan2 yu3|蘭嶼
+合歡山|he2 huan1 shan1|合歓山
+野柳|ye3 liu3|野柳
+平溪|ping2 xi1|平渓
+清境農場|qing1 jing4 nong2 chang3|清境農場
+旗津|qi2 jin1|旗津
+小琉球|xiao3 liu2 qiu2|小琉球
+埃及|ai1 ji2|エジプト
+希臘|xi1 la4|ギリシャ
+土耳其|tu3 er3 qi2|トルコ
+阿根廷|a1 gen1 ting2|アルゼンチン
+南非|nan2 fei1|南アフリカ
+瑞典|rui4 dian3|スウェーデン
+芬蘭|fen1 lan2|フィンランド
+葡萄牙|pu2 tao2 ya2|ポルトガル
+沙烏地阿拉伯|sha1 wu1 di4 a1 la1 bo2|サウジアラビア
+烏克蘭|wu1 ke4 lan2|ウクライナ
+以色列|yi3 se4 lie4|イスラエル
+柬埔寨|jian3 pu3 zhai4|カンボジア
+孟加拉|meng4 jia1 la1|バングラデシュ
+冰島|bing1 dao3|アイスランド
+挪威|nuo2 wei1|ノルウェー
+波蘭|bo1 lan2|ポーランド
+親戚|qin1 qi1|親戚
+祖父|zu3 fu4|祖父
+祖母|zu3 mu3|祖母
+女婿|nv3 xu4|娘の夫
+媳婦|xi2 fu4*|息子の妻
+獨生子|du2 sheng1 zi3|一人息子
+公公|gong1 gong1*|夫の父
+婆婆|po2 po2*|夫の母
+岳父|yue4 fu4|妻の父
+岳母|yue4 mu3|妻の母
+堂哥|tang2 ge1|いとこ（父方・年上の男性）
+表姊|biao3 jie3|いとこ（年上の女性）
+雙胞胎|shuang1 bao1 tai1|双子
+粉絲|fen3 si1|ファン
+網紅|wang3 hong2|インフルエンサー
+前輩|qian2 bei4|先輩・目上の人
+晚輩|wan3 bei4|後輩・目下の人
+陌生人|mo4 sheng1 ren2|知らない人
+知己|zhi1 ji3|親友・理解者
+閨蜜|gui1 mi4|女性の親友
+青梅竹馬|qing1 mei2 zhu2 ma3|幼なじみ
+前男友|qian2 nan2 you3|元カレ
+夥伴|huo3 ban4|仲間・パートナー
+秘書|mi4 shu1|秘書
+律師|lv4 shi1|弁護士
+工程師|gong1 cheng2 shi1|エンジニア
+司機|si1 ji1|運転手
+廚師|chu2 shi1|料理人
+記者|ji4 zhe3|記者
+總經理|zong3 jing1 li3|社長
+董事長|dong3 shi4 zhang3|会長
+實習生|shi2 xi2 sheng1|インターン
+公務員|gong1 wu4 yuan2|公務員
+客戶|ke4 hu4|取引先・顧客
+會計|kuai4 ji4|会計・経理
+第一|di4 yi1|第一・1番目
+一半|yi1 ban4|半分
+號碼|hao4 ma3|番号
+數字|shu4 zi4|数字
+億|yi4|億
+倍|bei4|〜倍
+加|jia1|足す
+減|jian3|引く
+乘|cheng2|掛ける
+除|chu2|割る
+上個月|shang4 ge4* yue4|先月
+下個月|xia4 ge4* yue4|来月
+半天|ban4 tian1|半日
+每天|mei3 tian1|毎日
+剛才|gang1 cai2|さっき
+以前|yi3 qian2|以前
+以後|yi3 hou4|今後・〜のあと
+最近|zui4 jin4|最近
+傍晚|bang4 wan3|夕方
+凌晨|ling2 chen2|深夜・明け方
+平日|ping2 ri4|平日
+假日|jia4 ri4|休日
+農曆|nong2 li4|旧暦
+過年|guo4 nian2|旧正月を過ごす
+截止日|jie2 zhi3 ri4|締め切り日
+陰天|yin1 tian1|くもり
+多雲|duo1 yun2|くもりがち
+梅雨|mei2 yu3|梅雨
+潮濕|chao2 shi1|湿っぽい
+乾燥|gan1 zao4|乾燥している
+悶熱|men1 re4|蒸し暑い
+天氣預報|tian1 qi4 yu4 bao4|天気予報
+豪雨|hao2 yu3|豪雨
+寒流|han2 liu2|寒波
+午後雷陣雨|wu3 hou4 lei2 zhen4 yu3|午後の夕立
+颱風假|tai2 feng1 jia4|台風休み
+空氣品質|kong1 qi4 pin3 zhi2|空気の質
+紫外線|zi3 wai4 xian4|紫外線
+蝴蝶|hu2 die2|チョウ
+蜜蜂|mi4 feng1|ミツバチ
+螞蟻|ma3 yi3|アリ
+青蛙|qing1 wa1|カエル
+鯨魚|jing1 yu2|クジラ
+海豚|hai3 tun2|イルカ
+狐狸|hu2 li2*|キツネ
+蟑螂|zhang1 lang2|ゴキブリ
+蚊子|wen2 zi3*|蚊
+鱷魚|e4 yu2|ワニ
+孔雀|kong3 que4|クジャク
+松鼠|song1 shu3|リス
+石虎|shi2 hu3|ベンガルヤマネコ
+臺灣藍鵲|tai2 wan1 lan2 que4|ヤマムスメ（台湾の鳥）
+眉毛|mei2 mao2|まゆげ
+嘴唇|zui3 chun2|くちびる
+喉嚨|hou2 long2*|のど
+手指|shou3 zhi3|手の指
+膝蓋|xi1 gai4|ひざ
+背|bei4|背中
+胸|xiong1|胸
+皮膚|pi2 fu1|皮膚
+骨頭|gu3 tou2*|骨
+肌肉|ji1 rou4|筋肉
+心臟|xin1 zang4|心臓
+肺|fei4|肺
+胃|wei4|胃
+拉肚子|la1 du4 zi3*|下痢をする
+過敏|guo4 min3|アレルギー
+受傷|shou4 shang1|けがをする
+打針|da3 zhen1|注射をする
+吃藥|chi1 yao4|薬を飲む
+看醫生|kan4 yi1 sheng1|医者にかかる
+流鼻水|liu2 bi2 shui3|鼻水が出る
+處方箋|chu3 fang1 jian1|処方箋
+住院|zhu4 yuan4|入院する
+出院|chu1 yuan4|退院する
+急診|ji2 zhen3|救急外来
+健康檢查|jian4 kang1 jian3 cha2|健康診断
+骨折|gu3 zhe2|骨折
+失眠|shi1 mian2|不眠
+書房|shu1 fang2|書斎
+樓梯|lou2 ti1|階段
+電梯|dian4 ti1|エレベーター
+垃圾桶|le4 se4 tong3|ごみ箱
+吹風機|chui1 feng1 ji1|ドライヤー
+衣櫃|yi1 gui4|洋服だんす
+枕頭|zhen3 tou2*|まくら
+棉被|mian2 bei4|ふとん
+房東|fang2 dong1|大家さん
+房租|fang2 zu1|家賃
+套房|tao4 fang2|ワンルーム（バス・トイレ付き）
+雅房|ya3 fang2|共用バス・トイレの部屋
+管理員|guan3 li3 yuan2|管理人
+押金|ya1 jin1|敷金
+熱水器|re4 shui3 qi4|給湯器
+除濕機|chu2 shi1 ji1|除湿機
+運動鞋|yun4 dong4 xie2|スニーカー
+拖鞋|tuo1 xie2|スリッパ・サンダル
+牛仔褲|niu2 zai3 ku4|ジーンズ
+圍巾|wei2 jin1|マフラー
+手套|shou3 tao4|手袋
+項鍊|xiang4 lian4|ネックレス
+背包|bei1 bao1|リュック
+戒指|jie4 zhi3|指輪
+耳環|er3 huan2|イヤリング
+洋裝|yang2 zhuang1|ワンピース
+西裝|xi1 zhuang1|スーツ
+領帶|ling3 dai4|ネクタイ
+雨衣|yu3 yi1|レインコート
+防曬乳|fang2 shai4 ru3|日焼け止め
+深藍色|shen1 lan2 se4|紺色
+淺綠色|qian3 lv4 se4|薄緑
+米色|mi3 se4|ベージュ
+天藍色|tian1 lan2 se4|空色
+透明|tou4 ming2|透明
+彩色|cai3 se4|カラー
+鮮豔|xian1 yan4|鮮やか
+螢光色|ying2 guang1 se4|蛍光色
+書店|shu1 dian4|書店
+體育館|ti3 yu4 guan3|体育館
+游泳池|you2 yong3 chi2|プール
+美容院|mei3 rong2 yuan4|美容院
+診所|zhen3 suo3|診療所
+區公所|qu1 gong1 suo3|区役所
+戶政事務所|hu4 zheng4 shi4 wu4 suo3|戸籍事務所
+移民署|yi2 min2 shu3|移民署
+大使館|da4 shi3 guan3|大使館
+立法院|li4 fa3 yuan4|立法院
+夜店|ye4 dian4|クラブ
+傳統市場|chuan2 tong3 shi4 chang3|伝統市場
+東邊|dong1 bian1|東側
+西邊|xi1 bian1|西側
+南邊|nan2 bian1|南側
+北邊|bei3 bian1|北側
+往前|wang3 qian2|前へ
+轉角|zhuan3 jiao3|曲がり角
+路口|lu4 kou3|交差点
+十字路口|shi2 zi4 lu4 kou3|十字路
+地下室|di4 xia4 shi4|地下室
+斜對面|xie2 dui4 mian4|斜め向かい
+巷子|xiang4 zi3*|路地
+巷|xiang4|〜巷（住所の路地）
+弄|nong4|〜弄（巷より細い路地）
+隔壁|ge2 bi4|隣
+樓上|lou2 shang4|上の階
+樓下|lou2 xia4|下の階
+健身房|jian4 shen1 fang2|ジム
+瑜伽|yu2 jia1|ヨガ
+露營|lu4 ying2|キャンプ
+逛街|guang4 jie1|ショッピング
+看漫畫|kan4 man4 hua4|漫画を読む
+潛水|qian2 shui3|ダイビング
+衝浪|chong1 lang4|サーフィン
+馬拉松|ma3 la1 song1|マラソン
+書法|shu1 fa3|書道
+攝影|she4 ying3|写真撮影
+桌遊|zhuo1 you2|ボードゲーム
+追劇|zhui1 ju4|ドラマを見続ける
+興奮|xing1 fen4|興奮する
+失望|shi1 wang4|がっかりする
+後悔|hou4 hui3|後悔する
+羨慕|xian4 mu4|うらやましい
+煩|fan2|いらいらする
+尷尬|gan1 ga4|気まずい
+感激|gan3 ji1|感激する
+沮喪|ju3 sang4|落ち込む
+嫉妒|ji2 du4|嫉妬する
+欣慰|xin1 wei4|ほっとしてうれしい
+焦慮|jiao1 lv4|不安になる
+學期|xue2 qi2|学期
+放假|fang4 jia4|休みになる
+寒假|han2 jia4|冬休み
+暑假|shu3 jia4|夏休み
+成績|cheng2 ji4|成績
+畢業|bi4 ye4|卒業する
+留學|liu2 xue2|留学する
+字典|zi4 dian3|辞書
+研究所|yan2 jiu4 suo3|大学院
+論文|lun4 wen2|論文
+獎學金|jiang3 xue2 jin1|奨学金
+報告|bao4 gao4|レポート・発表
+選課|xuan3 ke4|履修登録
+補習班|bu3 xi2 ban1|塾
+交換學生|jiao1 huan4 xue2 sheng1|交換留学生
+面試|mian4 shi4|面接
+履歷|lv3 li4|履歴書
+辦公室|ban4 gong1 shi4|オフィス
+出差|chu1 chai1|出張する
+會議|hui4 yi4|会議
+電子郵件|dian4 zi3 you2 jian4|Eメール
+合約|he2 yue1|契約
+業務|ye4 wu4|営業・業務
+年終獎金|nian2 zhong1 jiang3 jin1|年末ボーナス
+辭職|ci2 zhi2|辞職する
+升遷|sheng1 qian1|昇進
+創業|chuang4 ye4|起業する
+簡報|jian3 bao4|プレゼン
+零錢|ling2 qian2|小銭
+收據|shou1 ju4|領収書
+價錢|jia4 qian2|値段
+退貨|tui4 huo4|返品する
+換貨|huan4 huo4|交換する
+特價|te4 jia4|特価
+會員卡|hui4 yuan2 ka3|会員カード
+提款機|ti2 kuan3 ji1|ATM
+統一發票|tong3 yi1 fa1 piao4|統一発票（台湾のレシート）
+載具|zai4 ju4|電子レシートの登録コード
+分期付款|fen1 qi2 fu4 kuan3|分割払い
+匯率|hui4 lv4|為替レート
+手續費|shou3 xu4 fei4|手数料
+轉帳|zhuan3 zhang4|振り込み
+行動支付|xing2 dong4 zhi1 fu4|スマホ決済
+參加|can1 jia1|参加する
+準備|zhun3 bei4|準備する
+決定|jue2 ding4|決める
+介紹|jie4 shao4|紹介する
+幫忙|bang1 mang2|手伝う
+練習|lian4 xi2|練習する
+記得|ji4 de2*|覚えている
+忘記|wang4 ji4|忘れる
+搬家|ban1 jia1|引っ越す
+打掃|da3 sao3|掃除する
+討論|tao3 lun4|話し合う
+解決|jie3 jue2|解決する
+抱怨|bao4 yuan4|文句を言う
+適應|shi4 ying4|慣れる
+堅持|jian1 chi2|やり通す
+浪費|lang4 fei4|むだにする
+預約|yu4 yue1|予約する
+報名|bao4 ming2|申し込む
+乾淨|gan1 jing4|清潔
+危險|wei2 xian3|危ない
+重要|zhong4 yao4|重要
+奇怪|qi2 guai4|変だ
+厲害|li4 hai4|すごい
+年輕|nian2 qing1|若い
+辛苦|xin1 ku3|大変だ・ご苦労さま
+複雜|fu4 za2|複雑
+普通|pu3 tong1|ふつう
+正式|zheng4 shi4|正式
+誠實|cheng2 shi2|誠実
+浪漫|lang4 man4|ロマンチック
+小氣|xiao3 qi4*|けち`;
+const LVX={"fruit": "百香果 楊桃 柚子 龍眼 椰子 | 榴槤 山竹 甘蔗 番石榴", "dish": "麻油雞 番茄炒蛋 糖醋排骨 紅燒牛肉 炸醬麵 | 佛跳牆 東坡肉 薑母鴨 羊肉爐 客家小炒 清蒸魚", "snack": "潤餅 米糕 地瓜球 車輪餅 烤玉米 | 鹹豆漿 燒餅油條 蛋黃酥 生煎包", "drink": "檸檬紅茶 拿鐵 無糖 半糖 去冰 少冰 外帶 內用 | 微糖 常溫 熱飲", "ingr": "茄子 菠菜 空心菜 花椰菜 大蒜 辣椒 醬油 | 九層塔 香菜 海鮮 蛤蜊 豆芽菜 米酒", "sweet": "仙草 愛玉 紅豆湯 湯圓 綠豆湯 芋頭 | 鬆餅 馬卡龍 提拉米蘇", "trans": "單程 來回 月臺 轉乘 出口 入口 上車 下車 | 末班車 首班車 博愛座 誤點 行李 自由座 對號座", "tw": "板橋 中壢 鹿港 安平 綠島 蘭嶼 合歡山 | 野柳 平溪 清境農場 旗津 小琉球", "country": "埃及 希臘 土耳其 阿根廷 南非 瑞典 芬蘭 葡萄牙 | 沙烏地阿拉伯 烏克蘭 以色列 柬埔寨 孟加拉 冰島 挪威 波蘭", "family": "親戚 祖父 祖母 女婿 媳婦 獨生子 | 公公 婆婆 岳父 岳母 堂哥 表姊 雙胞胎", "friend": "粉絲 網紅 前輩 晚輩 陌生人 | 知己 閨蜜 青梅竹馬 前男友 夥伴", "work": "秘書 律師 工程師 司機 廚師 記者 | 總經理 董事長 實習生 公務員 客戶 會計", "number": "第一 一半 號碼 數字 | 億 倍 加 減 乘 除", "time": "上個月 下個月 半天 每天 剛才 以前 以後 最近 | 傍晚 凌晨 平日 假日 農曆 過年 截止日", "weather": "陰天 多雲 梅雨 潮濕 乾燥 悶熱 天氣預報 | 豪雨 寒流 午後雷陣雨 颱風假 空氣品質 紫外線", "animal": "蝴蝶 蜜蜂 螞蟻 青蛙 鯨魚 海豚 狐狸 | 蟑螂 蚊子 鱷魚 孔雀 松鼠 石虎 臺灣藍鵲", "bodyp": "眉毛 嘴唇 喉嚨 手指 膝蓋 背 胸 | 皮膚 骨頭 肌肉 心臟 肺 胃", "health": "拉肚子 過敏 受傷 打針 吃藥 看醫生 流鼻水 | 處方箋 住院 出院 急診 健康檢查 骨折 失眠", "home": "書房 樓梯 電梯 垃圾桶 吹風機 衣櫃 枕頭 棉被 | 房東 房租 套房 雅房 管理員 押金 熱水器 除濕機", "wear": "運動鞋 拖鞋 牛仔褲 圍巾 手套 項鍊 背包 | 戒指 耳環 洋裝 西裝 領帶 雨衣 防曬乳", "color": "深藍色 淺綠色 米色 天藍色 | 透明 彩色 鮮豔 螢光色", "place2": "書店 體育館 游泳池 美容院 診所 加油站 停車場 | 區公所 戶政事務所 移民署 大使館 立法院 夜店 傳統市場", "dir": "東邊 西邊 南邊 北邊 往前 轉角 路口 | 十字路口 地下室 斜對面 巷子 巷 弄 隔壁 樓上 樓下", "sport": "健身房 瑜伽 露營 逛街 看漫畫 | 潛水 衝浪 馬拉松 書法 攝影 桌遊 追劇", "feel": "興奮 失望 後悔 羨慕 煩 | 尷尬 感激 沮喪 嫉妒 欣慰 焦慮", "study": "學期 放假 寒假 暑假 成績 畢業 留學 字典 | 研究所 論文 獎學金 報告 選課 補習班 交換學生", "job": "面試 履歷 辦公室 出差 會議 電子郵件 | 合約 業務 年終獎金 辭職 升遷 創業 簡報", "money": "零錢 收據 價錢 退貨 換貨 特價 會員卡 提款機 | 統一發票 載具 分期付款 匯率 手續費 轉帳 行動支付", "verb": "參加 準備 決定 介紹 幫忙 練習 記得 忘記 搬家 打掃 | 討論 解決 抱怨 適應 堅持 浪費 預約 報名", "adj": "乾淨 危險 重要 奇怪 厲害 年輕 辛苦 | 複雜 普通 正式 誠實 浪漫 小氣"};
+const EX6=`護照|hu4 zhao4|パスポート
+景點|jing3 dian3|観光スポット
+機票|ji1 piao4|航空券
+民宿|min2 su4|民宿
+溫泉|wen1 quan2|温泉
+迷路|mi2 lu4|道に迷う
+簽證|qian1 zheng4|ビザ
+行李箱|xing2 li3* xiang1|スーツケース
+訂房|ding4 fang2|部屋を予約する
+導遊|dao3 you2|ガイド
+觀光客|guan1 guang1 ke4|観光客
+紀念品|ji4 nian4 pin3|記念品
+伴手禮|ban4 shou3 li3|お土産
+換錢|huan4 qian2|両替する
+自由行|zi4 you2 xing2|個人旅行
+時差|shi2 cha1|時差
+入境|ru4 jing4|入国する
+出境|chu1 jing4|出国する
+退稅|tui4 shui4|免税の払い戻し
+旅行社|lv3 xing2 she4|旅行会社
+登機證|deng1 ji1 zheng4|搭乗券
+海關|hai3 guan1|税関
+免稅店|mian3 shui4 dian4|免税店
+春節|chun1 jie2|旧正月
+紅包|hong2 bao1|お年玉・ご祝儀
+中秋節|zhong1 qiu1 jie2|中秋節
+月餅|yue4 bing3|月餅
+端午節|duan1 wu3 jie2|端午節
+烤肉|kao3 rou4|バーベキュー
+元宵節|yuan2 xiao1 jie2|元宵節（ランタン祭り）
+燈會|deng1 hui4|ランタンフェスティバル
+天燈|tian1 deng1|天灯（スカイランタン）
+清明節|qing1 ming2 jie2|清明節
+掃墓|sao3 mu4|墓参り
+年夜飯|nian2 ye4 fan4|大みそかのごちそう
+春聯|chun1 lian2|正月の飾り対句
+鞭炮|bian1 pao4|爆竹
+國慶日|guo2 qing4 ri4|建国記念日
+媽祖|ma1 zu3|媽祖（海の女神）
+布袋戲|bu4 dai4 xi4|台湾の人形劇
+原住民|yuan2 zhu4 min2|先住民
+客家|ke4 jia1|客家
+雙十節|shuang1 shi2 jie2|双十節
+舞龍舞獅|wu3 long2 wu3 shi1|龍舞・獅子舞
+鹹|xian2|しょっぱい
+辣|la4|辛い
+酸|suan1|すっぱい
+苦|ku3|苦い
+香|xiang1|いいにおい
+冰|bing1|冷たい・氷
+難吃|nan2 chi1|まずい
+碗|wan3|おわん
+湯匙|tang1 chi2|スプーン
+菜單|cai4 dan1|メニュー
+炒|chao3|炒める
+煮|zhu3|煮る
+炸|zha2|揚げる
+烤|kao3|焼く
+蒸|zheng1|蒸す
+切|qie1|切る
+點菜|dian3 cai4|注文する
+買單|mai3 dan1|お会計
+打包|da3 bao1|持ち帰り用に包む
+吃飽|chi1 bao3|おなかいっぱい
+吃素|chi1 su4|菜食
+口味|kou3 wei4|味・好み
+清淡|qing1 dan4|あっさり
+油膩|you2 ni4|脂っこい
+香脆|xiang1 cui4|香ばしくサクサク
+臭|chou4|臭い
+上網|shang4 wang3|ネットにつなぐ
+照片|zhao4 pian4|写真
+耳機|er3 ji1|イヤホン
+充電|chong1 dian4|充電する
+密碼|mi4 ma3|パスワード
+網站|wang3 zhan4|ウェブサイト
+帳號|zhang4 hao4|アカウント
+充電器|chong1 dian4 qi4|充電器
+下載|xia4 zai4|ダウンロード
+傳訊息|chuan2 xun4 xi2|メッセージを送る
+螢幕|ying2 mu4|画面
+鍵盤|jian4 pan2|キーボード
+滑鼠|hua2 shu3|マウス
+軟體|ruan3 ti3|ソフトウェア
+截圖|jie2 tu2|スクリーンショット
+留言|liu2 yan2|コメントする
+分享|fen1 xiang3|シェアする
+行動電源|xing2 dong4 dian4 yuan2|モバイルバッテリー
+應用程式|ying4 yong4 cheng2 shi4|アプリ
+無線網路|wu2 xian4 wang3 lu4|Wi-Fi
+按讚|an4 zan4|いいねを押す
+追蹤|zhui1 zong1|フォローする
+登入|deng1 ru4|ログイン
+更新|geng1 xin1|アップデート
+當機|dang4 ji1|フリーズする
+山|shan1|山
+海|hai3|海
+湖|hu2|湖
+島|dao3|島
+草|cao3|草
+天空|tian1 kong1|空
+星星|xing1 xing1*|星
+月亮|yue4 liang4*|月
+海邊|hai3 bian1|海辺
+石頭|shi2 tou2*|石
+森林|sen1 lin2|森
+沙灘|sha1 tan1|砂浜
+瀑布|pu4 bu4|滝
+地球|di4 qiu2|地球
+火山|huo3 shan1|火山
+海浪|hai3 lang4|波
+日出|ri4 chu1|日の出
+夕陽|xi4 yang2|夕日
+山谷|shan1 gu3|谷
+平原|ping2 yuan2|平野
+海峽|hai3 xia2|海峡
+珊瑚|shan1 hu2|サンゴ
+環境|huan2 jing4|環境
+污染|wu1 ran3|汚染
+氣候|qi4 hou4|気候
+什麼|shen2 me5|なに
+誰|shei2|だれ
+哪裡|na3 li3|どこ
+怎麼|zen3 me5|どうやって
+為什麼|wei4 shen2 me5|なぜ
+幾點|ji3 dian3|何時
+對|dui4|そうです・正しい
+沒有|mei2 you3|ない・〜していない
+好的|hao3 de5|わかりました
+真的|zhen1 de5|本当に
+請|qing3|どうぞ・〜してください
+對不起|dui4 bu4* qi3|ごめんなさい
+不客氣|bu4 ke4 qi4*|どういたしまして
+沒關係|mei2 guan1 xi4*|大丈夫です
+哪個|na3 ge4*|どれ
+怎麼樣|zen3 me5 yang4|どうですか
+多久|duo1 jiu3|どのくらい（時間）
+多遠|duo1 yuan3|どのくらい（距離）
+應該|ying1 gai1|〜すべき・たぶん
+已經|yi3 jing1|もう
+還是|hai2 shi4|それとも・やはり
+所以|suo3 yi3|だから
+但是|dan4 shi4|でも
+因為|yin1 wei4|なぜなら
+非常|fei1 chang2|とても
+一起|yi1 qi3|いっしょに
+不好意思|bu4 hao3 yi4 si1*|すみません
+一定|yi1 ding4|必ず
+也許|ye3 xu3|もしかすると
+如果|ru2 guo3|もし
+比較|bi3 jiao4|比較的・わりと`;
+CAT.splice(CAT.findIndex(c=>c.k=='verb'),0,
+{k:'travel',n:'旅行・観光',ic:'plane',col:'var(--t4)',g:[['trip','旅行・観光','旅行 護照 機票 飯店 民宿 溫泉 景點 地圖 拍照 迷路 | 簽證 行李箱 訂房 導遊 觀光客 紀念品 伴手禮 換錢 自由行 時差 | 入境 出境 退稅 旅行社 登機證 海關 免稅店']]},
+{k:'culture',n:'行事・文化',ic:'lantern',col:'var(--t1)',g:[['fest','台湾の行事・文化','過年 春節 紅包 中秋節 月餅 端午節 粽子 湯圓 廟 烤肉 | 元宵節 燈會 天燈 清明節 掃墓 年夜飯 春聯 鞭炮 國慶日 | 媽祖 布袋戲 原住民 客家 雙十節 舞龍舞獅']]},
+{k:'taste',n:'味・調理・食事',ic:'bowl2',col:'var(--t2)',g:[['tastes','味・調理・食事','甜 鹹 辣 酸 苦 香 冰 好吃 難吃 碗 湯匙 筷子 菜單 | 炒 煮 炸 烤 蒸 切 點菜 買單 打包 吃飽 吃素 口味 | 清淡 油膩 香脆 臭']]},
+{k:'tech',n:'スマホ・ネット',ic:'phone',col:'var(--t3)',g:[['net','スマホ・ネット','手機 電腦 網路 上網 照片 影片 耳機 充電 密碼 網站 | 帳號 充電器 下載 傳訊息 螢幕 鍵盤 滑鼠 軟體 截圖 留言 分享 | 行動電源 應用程式 無線網路 按讚 追蹤 登入 更新 當機']]},
+{k:'earth',n:'自然・地理',ic:'mountain',col:'var(--t3)',g:[['geo','自然・地理','山 海 河 湖 島 花 樹 草 天空 星星 月亮 海邊 石頭 | 森林 沙灘 瀑布 地球 火山 海浪 日出 夕陽 溫泉 | 山谷 平原 海峽 珊瑚 環境 污染 氣候']]},
+{k:'words',n:'疑問詞・よく使う言葉',ic:'q',col:'#ff8a5b',g:[['basicw','疑問詞・よく使う言葉','什麼 誰 哪裡 怎麼 為什麼 幾點 多少 對 沒有 好的 真的 請 謝謝 對不起 不客氣 沒關係 再見 | 哪個 怎麼樣 多久 多遠 應該 已經 還是 所以 但是 因為 非常 一起 不好意思 | 一定 也許 如果 比較']]});
+/* --- 単語の解析 --- */
+const DICT={};
+const isH=c=>/[㐀-鿿]/.test(c);
+const parse=(r,keep)=>{const[h,p,j]=r.split('|');const sy=p.split(' ').map(x=>{const n=x.endsWith('*');x=x.replace('*','');return{b:x.slice(0,-1).replace('v','ü'),t:+x.slice(-1),n}});const w={h,ch:Array.from(h).filter(isH),sy,j};if(!keep)DICT[h]=DICT[h]||w;return w};
+LV.forEach((l,i)=>{l.k='lv'+(i+1);l.id=i+1;l.t=`Lv.${i+1} ${l.n}`;l.par='base';l.w=l.d.split('\n').map(r=>parse(r))});
+[EX,EX2,EX3,EX4,EX5,EX6].forEach(x=>x.split('\n').forEach(r=>parse(r)));
+const GS=[];
+CAT.forEach(c=>{c.sets=c.g.map(([k,n,l,note])=>{if(LVX[k])l=l+' | '+LVX[k];const z={k:'g_'+k,t:n,col:c.col,par:'cat:'+c.k,note,sent:c.sent||c.talk,talk:c.talk,
+ w:c.talk?l.split('\n').map(r=>{const i=r.indexOf('|');const w=parse(r.slice(i+1),1);w.sp=r.slice(0,i);return w}):c.sent?l.split('\n').map(r=>parse(r,1)):l.replace(/\|/g,' ').split(/\s+/).filter(Boolean).map(h=>DICT[h]).filter(Boolean)};if(!c.sent&&!c.talk&&l.includes('|')){z.levels=l.split('|').map(x=>x.trim().split(/\s+/).filter(Boolean).map(h=>DICT[h]).filter(Boolean))}GS.push(z);return z})});
+const ALL=Object.values(DICT);
+const CB={};for(let a=1;a<5;a++)for(let b=1;b<5;b++){const w=ALL.filter(x=>x.sy.length==2&&x.sy[0].t==a&&x.sy[1].t==b);CB[a+''+b]={k:'cb'+a+b,t:`${a}聲＋${b}聲`,par:'combos',col:`var(--t${a})`,w,ab:[a,b]}}
+const sandhi=w=>w.sy.some((s,k)=>k&&s.t==3&&w.sy[k-1].t==3);
+const neuN=w=>w.sy.some(s=>s.n);
+
+/* --- ピンイン・注音 --- */
+const MK={a:'āáǎà',e:'ēéěè',i:'īíǐì',o:'ōóǒò',u:'ūúǔù','ü':'ǖǘǚǜ'};
+function pyMark(b,t){if(t<1||t>4)return b;let k=b.includes('a')?b.indexOf('a'):b.includes('e')?b.indexOf('e'):b.includes('ou')?b.indexOf('o'):-1;
+ if(k<0){for(let i=b.length-1;i>=0;i--)if(MK[b[i]]){k=i;break}}return b.slice(0,k)+MK[b[k]][t-1]+b.slice(k+1)}
+const IN={b:'ㄅ',p:'ㄆ',m:'ㄇ',f:'ㄈ',d:'ㄉ',t:'ㄊ',n:'ㄋ',l:'ㄌ',g:'ㄍ',k:'ㄎ',h:'ㄏ',j:'ㄐ',q:'ㄑ',x:'ㄒ',zh:'ㄓ',ch:'ㄔ',sh:'ㄕ',r:'ㄖ',z:'ㄗ',c:'ㄘ',s:'ㄙ'};
+const FI={a:'ㄚ',o:'ㄛ',e:'ㄜ',ai:'ㄞ',ei:'ㄟ',ao:'ㄠ',ou:'ㄡ',an:'ㄢ',en:'ㄣ',ang:'ㄤ',eng:'ㄥ',ong:'ㄨㄥ',er:'ㄦ',i:'ㄧ',ia:'ㄧㄚ',ie:'ㄧㄝ',iao:'ㄧㄠ',iou:'ㄧㄡ',ian:'ㄧㄢ',in:'ㄧㄣ',iang:'ㄧㄤ',ing:'ㄧㄥ',iong:'ㄩㄥ',u:'ㄨ',ua:'ㄨㄚ',uo:'ㄨㄛ',uai:'ㄨㄞ',uei:'ㄨㄟ',uan:'ㄨㄢ',uen:'ㄨㄣ',uang:'ㄨㄤ',ueng:'ㄨㄥ',v:'ㄩ',ve:'ㄩㄝ',van:'ㄩㄢ',vn:'ㄩㄣ','':''};
+const YW={yi:'i',ya:'ia',ye:'ie',yao:'iao',you:'iou',yan:'ian',yin:'in',yang:'iang',ying:'ing',yong:'iong',yu:'v',yue:'ve',yuan:'van',yun:'vn',wu:'u',wa:'ua',wo:'uo',wai:'uai',wei:'uei',wan:'uan',wen:'uen',wang:'uang',weng:'ueng'};
+function zy(b,t){let s=b.replace('ü','v'),i='',f;
+ if(YW[s]!=null)f=YW[s];else{const m=s.match(/^(zh|ch|sh|[bpmfdtnlgkhjqxrzcs])?(.*)$/);i=m[1]||'';f=m[2];
+  if(i&&'jqx'.includes(i)&&f[0]=='u')f='v'+f.slice(1);
+  f={iu:'iou',ui:'uei',un:'uen'}[f]||f;
+  if(['zh','ch','sh','r','z','c','s'].includes(i)&&f=='i')f=''}
+ const z=(IN[i]||'')+(FI[f]??'?');
+ return t==5?'˙'+z:z+(['','','ˊ','ˇ','ˋ'][t]||'')}
+const TN=['','1聲','2聲','3聲','4聲','輕聲'];
+const TD=['','高く平らに','下から上へ上がる','低く抑える','高いところから一気に下がる','軽く短く（助詞など）'];
+const MKS=['','記号なし','ˊ','ˇ','ˋ','˙'];
+const hzC=w=>{let k=0;return Array.from(w.h).map(c=>isH(c)?`<span class="c${w.sy[k++].t}">${esc(c)}</span>`:`<span class="c5">${esc(c)}</span>`).join('')};
+const pyC=w=>w.sy.map(s=>`<span class="c${s.t}">${pyMark(s.b,s.t)}</span>`).join(' ');
+const zyS=w=>w.sy.map(s=>`<span class="c${s.t}">${zy(s.b,s.t)}</span>`).join(' ');
+const noteOf=w=>w.orig?`辞書の表記：${w.orig}（${w.origZ}）`:w.sandhiNo?'声調は変わりません':[neuN(w)?(w.sy.length>4?`辞典では輕聲の字：${w.ch.filter((c,k)=>w.sy[k].n).join('・')}`:`辞典では輕聲：${w.sy.map(s=>s.n?zy(s.b,5):zy(s.b,s.t)).join(' ')}`):'',w.sy.some(s=>s.t==5)?'的・嗎・吧などの助詞は台湾でも輕聲':'',sandhi(w)?'3聲が続くところは前が2聲で発音':'',w.ch.includes('不')&&w.h!='不'?'不は4聲の前で2聲に変わります（不要 búyào など）':'',w.h!='一'&&w.ch.includes('一')?'一は後ろの声調で読み方が変わります（一百 yìbǎi など）':w.h=='一'?'単独や数を数えるときは1聲。後ろの声調で変わります':''].filter(Boolean).join('／');
+
+/* --- 声調の線 --- */
+const P={1:[5,5],2:[3,5],3:[2,1,4],4:[5,1],5:[3]};
+function cv(t,w=44,h=30,sw=4,col='currentColor'){const pts=P[t],y=l=>4+(5-l)/4*(h-8);if(t==5)return`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true"><circle cx="${w/2}" cy="${y(3)}" r="${sw+1}" fill="${col}"/></svg>`;
+ const d=t==3?`M5 ${y(2)} Q${w*.42} ${y(0.2)} ${w-5} ${y(4)}`:`M5 ${y(pts[0])} L${w-5} ${y(pts[1])}`;
+ return`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true" preserveAspectRatio="none"><path d="${d}" fill="none" stroke="${col}" stroke-width="${sw}" stroke-linecap="round"/></svg>`}
+
+/* --- 保存 --- */
+const ST={chars:true,py:true,zy:true,slow:false,best:{}};
+try{Object.assign(ST,JSON.parse(localStorage.getItem('sisheng')||'{}'))}catch(e){}
+const save=()=>{try{localStorage.setItem('sisheng',JSON.stringify(ST))}catch(e){}};
+const bestS=k=>(ST.best&&ST.best[k]&&ST.best[k].s)||0;
+
+/* --- 音声 --- */
+let voices=[],ac=null,lastU=null,unlocked=false;const ss=('speechSynthesis' in window)?window.speechSynthesis:null;
+const lv=()=>{try{voices=ss.getVoices()||[]}catch(e){}};if(ss){lv();try{ss.addEventListener('voiceschanged',lv)}catch(e){ss.onvoiceschanged=lv}}
+const voice=()=>{if(!voices.length)lv();return voices.find(v=>/zh[-_]TW/i.test(v.lang))||voices.find(v=>/^zh/i.test(v.lang)&&!/HK|yue/i.test(v.lang+v.name))||null};
+function utter(text){const u=new SpeechSynthesisUtterance(text),v=voice();if(v)u.voice=v;u.lang=v?v.lang:'zh-TW';u.rate=ST.slow?.5:.8;u.volume=1;return u}
+function unlock(){if(unlocked)return;unlocked=true;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume();const b=ac.createBuffer(1,1,22050),src=ac.createBufferSource();src.buffer=b;src.connect(ac.destination);src.start(0)}catch(e){}
+ try{if(ss){const u=new SpeechSynthesisUtterance(' ');u.volume=0;ss.speak(u)}}catch(e){}}
+document.addEventListener('pointerdown',unlock,{capture:true});document.addEventListener('touchend',unlock,{capture:true});document.addEventListener('click',unlock,{capture:true});
+function speak(text,tones){if(!ss){hum(tones);return}
+ try{if(ss.speaking||ss.pending)ss.cancel();ss.resume();lastU=utter(text);lastU.onerror=e=>{if(e.error!='interrupted'&&e.error!='canceled')hum(tones)};ss.speak(lastU)}catch(e){hum(tones)}}
+function speakAll(texts){if(!ss)return;try{ss.cancel();ss.resume();window._q=texts.map(utter);window._q.forEach(u=>ss.speak(u))}catch(e){}}
+function hum(tones){try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume();let t0=ac.currentTime+.05;const fq=l=>160*Math.pow(2,(l-1)/5),k=ST.slow?1.5:1;
+ tones.forEach(t=>{const pts=P[t]||[3],dur=(t==5?.2:t==3?.55:.42)*k,o=ac.createOscillator(),g=ac.createGain();o.type='triangle';
+  o.frequency.setValueAtTime(fq(pts[0]),t0);pts.slice(1).forEach((l,j)=>o.frequency.linearRampToValueAtTime(fq(l),t0+dur*(j+1)/(pts.length-1)));
+  g.gain.setValueAtTime(0,t0);g.gain.linearRampToValueAtTime(.3,t0+.03);g.gain.setValueAtTime(.3,t0+dur-.06);g.gain.linearRampToValueAtTime(0,t0+dur);
+  o.connect(g).connect(ac.destination);o.start(t0);o.stop(t0+dur+.02);t0+=dur+.1})}catch(e){}}
+const sayW=w=>speak(w.h,w.sy.map(s=>s.t));
+
+/* --- 状態と描画 --- */
+const app=document.getElementById('app');
+let S={v:'cover'},sheet=false;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
+const stars=n=>'★'.repeat(n)+`<i>${'★'.repeat(3-n)}</i>`;
+const ic={back:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+gear:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg>',
+spk:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
+wave:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M3 12c2-6 4-6 6 0s4 6 6 0 4-6 6 0"/></svg>'};
+const top=(t,back)=>`<div class="top">${back?`<button class="ib" data-a="nav" data-v="${back}" aria-label="もどる">${ic.back}</button>`:''}<h1>${t}</h1><button class="ib" data-a="set" aria-label="設定">${ic.gear}</button></div>`;
+const legend=z=>`<div class="legend">${[1,2,3,4].concat(z.neu?[5]:[]).map(t=>`<span class="t${t}">${TN[t]}</span>`).join('')}</div>`;
+const mn=(a,ico,col,t,s,extra='')=>`<button class="mn" ${a}><span class="ico hz" style="background:${col}">${ico}</span><span><b>${t}${extra}</b>${s?`<span class="s">${s}</span>`:''}</span><span class="chev">›</span></button>`;
+
+function cover(){const st=[['ㄅ',1,-10,0],['ㄆ',2,8,10],['ㄇ',3,-6,-4],['ㄈ',4,10,8]];
+ const bub=(h,w,r,c)=>`<div class="cb ${r?'r':''}" style="--c:${c}"><span class="hz" lang="zh-Hant-TW">${hzC(w)}</span><span class="zy">${zyS(w)}</span></div>`;
+ const nh=parse('你好！|ni3 hao3|',1),xx=parse('謝謝！|xie4 xie4|',1);
+ return`<section class="cover"><div class="dots"></div><div class="zrib" aria-hidden="true">ㄅㄆㄇㄈ ㄉㄊㄋㄌ ㄍㄎㄏ</div>
+<div class="cin">
+<div class="chips"><span>繁體字</span><span>注音</span><span>ピンイン</span></div>
+<div class="stk" aria-hidden="true">${st.map(([z,t,r,y])=>`<span class="t${t}" style="transform:rotate(${r}deg) translateY(${y}px)">${z}</span>`).join('')}</div>
+<div class="yomi">たいわん　かご</div><h1 lang="ja"><span style="color:#ff4d7d">台</span><span style="color:#fff">湾</span><span style="color:#18c29c">華</span><span style="color:#4c7dff">語</span></h1>
+<p class="lead">注音・発音・単語・文・会話<br>まるごと練習帳</p>
+<div class="chg">${[['1','注音','var(--t1)','data-a="nav" data-v="zhu"'],['2','発音','var(--t2)','data-a="nav" data-v="pron"'],['3','単語','var(--t3)','data-a="nav" data-v="cats"'],['4','文','var(--t4)','data-a="cat" data-c="sent"'],['5','会話','#ff8a5b','data-a="cat" data-c="talk"']].map(([i,l,c,a])=>`<button ${a}><span class="hz" style="background:${c}">${i}</span>${l}</button>`).join('')}</div>
+<button class="start" data-a="nav" data-v="toc">はじめる ▶</button></div></section>`}
+
+const I=(b)=>`<svg viewBox="0 0 48 48" width="52" height="52" fill="#fff" stroke="#2b2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${b}</svg>`;
+const IC={
+zy:I('<circle cx="24" cy="24" r="19"/><text x="24" y="32" text-anchor="middle" font-size="23" font-weight="900" fill="#2b2140" stroke="none" font-family="Noto Sans TC,sans-serif">ㄅ</text>'),
+sound:I('<path d="M8 19h7l9-7v24l-9-7H8z"/><path d="M30 17a9 9 0 0 1 0 14M35 12a16 16 0 0 1 0 24" fill="none"/>'),
+cards:I('<rect x="7" y="12" width="26" height="30" rx="4" transform="rotate(-10 20 27)"/><rect x="15" y="7" width="26" height="30" rx="4"/><path d="M21 16h14M21 22h14M21 28h9" fill="none"/>'),
+doc:I('<rect x="10" y="6" width="28" height="36" rx="4"/><path d="M16 15h16M16 21h16M16 27h16M16 33h10" fill="none"/>'),
+talk:I('<path d="M5 10h24a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H15l-6 5v-5H5a3 3 0 0 1-3-3V13a3 3 0 0 1 3-3z"/><path d="M20 22h20a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3h-2v5l-6-5H20a3 3 0 0 1-3-3V25a3 3 0 0 1 3-3z" fill="#ffd23f"/>'),
+grid:I('<rect x="7" y="7" width="15" height="15" rx="3"/><rect x="26" y="7" width="15" height="15" rx="3"/><rect x="7" y="26" width="15" height="15" rx="3"/><rect x="26" y="26" width="15" height="15" rx="3"/>'),
+pencil:I('<path d="M10 38l3-10 20-20 7 7-20 20z"/><path d="M28 13l7 7M13 28l7 7" fill="none"/>'),
+test:I('<rect x="6" y="6" width="30" height="36" rx="4"/><path d="M12 24l6 6 12-13" fill="none" stroke-width="3.4"/><path d="M33 41l2-7 8-8 4 4-8 8z" fill="#ffd23f"/>'),
+choose:I('<rect x="6" y="6" width="16" height="16" rx="4"/><rect x="26" y="6" width="16" height="16" rx="4" fill="#ffd23f"/><rect x="6" y="26" width="16" height="16" rx="4"/><rect x="26" y="26" width="16" height="16" rx="4"/><path d="M30 14l3 3 6-6" fill="none"/>'),
+key:I('<rect x="4" y="12" width="40" height="26" rx="5"/><path d="M11 20h2M18 20h2M25 20h2M32 20h2M11 26h2M18 26h2M25 26h2M32 26h2M15 32h18" fill="none"/>'),
+stairs:I('<path d="M6 40V32h10v-8h10v-8h10V8h6v32z"/>'),
+combo:I('<rect x="4" y="8" width="40" height="32" rx="6"/><path d="M10 30l9-12M27 18c3 8 8 8 11-4" fill="none" stroke-width="3.4"/>'),
+tone:I('<rect x="4" y="8" width="40" height="32" rx="6"/><path d="M11 30c4 7 9 7 13-6M29 16l9 14" fill="none" stroke-width="3.4"/>'),
+food:I('<path d="M6 24h36a18 18 0 0 1-36 0z"/><path d="M28 6L40 20M33 5L42 17" fill="none"/><path d="M17 18c-2-3 2-5 0-8M24 18c-2-3 2-5 0-8" fill="none"/>'),
+bus:I('<rect x="9" y="5" width="30" height="34" rx="6"/><rect x="13" y="10" width="22" height="12" rx="2" fill="#bfe0ff"/><circle cx="16" cy="31" r="2.5" fill="#2b2140"/><circle cx="32" cy="31" r="2.5" fill="#2b2140"/><path d="M14 39v4M34 39v4" fill="none"/>'),
+pin:I('<path d="M24 44S10 29 10 19a14 14 0 0 1 28 0c0 10-14 25-14 25z"/><circle cx="24" cy="19" r="5" fill="#ffd23f"/>'),
+people:I('<circle cx="17" cy="15" r="7"/><circle cx="32" cy="17" r="6" fill="#ffd23f"/><path d="M4 40c0-9 6-14 13-14s13 5 13 14z"/><path d="M28 40c0-6 2-10 4-11 6 0 12 4 12 11z" fill="#ffd23f"/>'),
+spark:I('<path d="M24 4l5 13 14 1-11 9 4 14-12-8-12 8 4-14-11-9 14-1z"/>'),
+clock:I('<circle cx="24" cy="24" r="19"/><path d="M24 12v12l8 5" fill="none" stroke-width="3.2"/>'),
+sun:I('<circle cx="20" cy="20" r="9" fill="#ffd23f"/><path d="M20 4v4M20 32v4M4 20h4M32 20h4M8.7 8.7l2.8 2.8M28.5 28.5l2.8 2.8M8.7 31.3l2.8-2.8M28.5 11.5l2.8-2.8" fill="none"/><path d="M18 42a8 8 0 0 1 2-15 10 10 0 0 1 19 3 6 6 0 0 1 0 12z"/>'),
+heart:I('<path d="M24 42S6 31 6 18a9 9 0 0 1 18-3 9 9 0 0 1 18 3c0 13-18 24-18 24z"/>'),
+house:I('<path d="M6 22L24 7l18 15v20H6z"/><rect x="19" y="28" width="10" height="14"/>'),
+building:I('<rect x="8" y="10" width="20" height="32"/><rect x="28" y="20" width="12" height="22"/><path d="M13 16h3M20 16h3M13 23h3M20 23h3M13 30h3M20 30h3M32 26h4M32 32h4" fill="none"/>'),
+ball:I('<circle cx="24" cy="24" r="18"/><path d="M8 18c8 2 14 8 16 24M40 18c-8 2-14 8-16 24M10 14c6-2 22-2 28 0" fill="none"/>'),
+book:I('<path d="M24 12c-5-4-12-4-18-3v29c6-1 13-1 18 3 5-4 12-4 18-3V9c-6-1-13-1-18 3z"/><path d="M24 12v29" fill="none"/>'),
+wallet:I('<rect x="5" y="12" width="38" height="28" rx="5"/><path d="M5 18h30" fill="none"/><rect x="30" y="24" width="13" height="9" rx="3" fill="#ffd23f"/>'),
+plane:I('<path d="M4 26l14 2 10 14h5l-5-14 10-1 4 5h4l-2-8 2-8h-4l-4 5-10-1 5-14h-5L18 20 4 22z"/>'),
+lantern:I('<path d="M24 4v4" fill="none"/><rect x="18" y="8" width="12" height="4" rx="1"/><ellipse cx="24" cy="25" rx="14" ry="13" fill="#ff4d7d"/><path d="M24 12v26M15 15c-3 6-3 14 0 20M33 15c3 6 3 14 0 20" fill="none"/><rect x="18" y="38" width="12" height="4" rx="1"/><path d="M24 42v4" fill="none"/>'),
+bowl2:I('<path d="M5 22h38a19 19 0 0 1-38 0z"/><path d="M14 13c2-3 6-3 8 0s6 3 8 0" fill="none"/>'),
+phone:I('<rect x="13" y="4" width="22" height="40" rx="5"/><path d="M21 9h6" fill="none"/><circle cx="24" cy="38" r="2" fill="#2b2140"/>'),
+mountain:I('<path d="M3 42l15-26 8 12 6-8 13 22z"/><path d="M14 23l4-7 4 7" fill="#fff"/><circle cx="37" cy="11" r="5" fill="#ffd23f"/>'),
+q:I('<circle cx="24" cy="24" r="19"/><text x="24" y="32" text-anchor="middle" font-size="22" font-weight="900" fill="#2b2140" stroke="none" font-family="Zen Maru Gothic,sans-serif">?</text>')};
+const blk=(a,icon,t,col,dark,extra='')=>`<button class="blk sm" ${a} style="background:${col};color:${dark?'#2b2140':'#fff'}"><span class="bic">${icon}</span><b>${t}</b>${extra}</button>`;
+const st3=k=>`<span class="bst">${stars(bestS(k))}</span>`;
+const grid=(h)=>`<div class="blks">${h}</div>`;
+
+function toc(){const bl=(h,py,a)=>{const sy=py.split(' ');return`<button class="blk wb" ${a} aria-label="${h}"><span class="cw" lang="zh-Hant-TW">${Array.from(h).map((c,k)=>{const x=sy[k],t=+x.slice(-1),bb=x.slice(0,-1);return`<span class="c${t}"><i>${zy(bb,t)}</i>${c}</span>`}).join('')}</span></button>`};
+ return`<section class="cover tocp"><div class="dots"></div><div class="zrib" aria-hidden="true">ㄅㄆㄇㄈ ㄉㄊㄋㄌ ㄍㄎㄏ</div><div class="cin">
+<div class="tbar"><button class="ib" data-a="nav" data-v="cover" aria-label="表紙へ">${ic.back}</button><h1>目次</h1><button class="ib" data-a="set" aria-label="設定">${ic.gear}</button></div>${status()}
+<div class="blks">${bl('注音','zhu4 yin1','data-a="nav" data-v="zhu"')+bl('發音','fa1 yin1','data-a="nav" data-v="pron"')+bl('單字','dan1 zi4','data-a="nav" data-v="cats"')+bl('句子','ju4 zi5','data-a="cat" data-c="sent"')+bl('會話','hui4 hua4','data-a="cat" data-c="talk"')+bl('複習','fu4 xi2','data-a="nav" data-v="weak"').replace('</button>',(()=>{const n=weakDue().length;return n?`<span class="due">${n}</span></button>`:'</button>'})())}</div></div></section>`}
+
+function pron(){return top('発音','toc')+mn('data-a="nav" data-v="sandhi"','<span class="bt" style="font-size:14px;padding:4px 6px">3→2</span>','var(--t1)','声調の変化','')+mn('data-a="nav" data-v="basics"',IC.tone,'var(--t2)','四聲のきほん','')+mn('data-a="nav" data-v="base"',IC.stairs,'var(--t3)','レベル練習','')+mn('data-a="nav" data-v="combos"',IC.combo,'var(--t4)','声調の組み合わせ','')}
+
+const PAL=['var(--t1)','var(--t2)','var(--t3)','var(--t4)','#ff8a5b'];
+const CIC={travel:'plane',culture:'lantern',taste:'bowl2',tech:'phone',earth:'mountain',words:'q',num:'clock',nature:'sun',body:'heart',life:'house',town:'building',hobby:'ball',school:'book',shop:'wallet',food:'food',trans:'bus',place:'pin',people:'people',verb:'spark',sent:'doc',talk:'talk'};
+function cats(){return top('単語','toc')+CAT.filter(c=>!c.sent&&!c.talk).map(c=>mn(`data-a="cat" data-c="${c.k}"`,IC[CIC[c.k]],c.col,c.n,'',c.tag?'<span class="tag">試作</span>':'')).join('')}
+
+function cat(){const c=S.cat;return top(c.n,c.sent||c.talk?'toc':'cats')+c.sets.map((z,i)=>{const col=c.talk?'#ff8a5b':c.col;return`<div class="lv"><div class="lvh"><span class="badge" style="background:${col}">${IC[CIC[c.k]]}</span><div><b>${z.t}</b></div><span class="stars" aria-label="ベスト星${bestS(z.k)}">${stars(bestS(z.k))}</span></div>
+<div class="lvb"><button class="btn" data-a="open" data-k="${z.k}">${c.talk?'会話を見る':c.sent?'文を見る':'単語を見る'}</button><button class="btn go" style="background:${col};${c.talk?'color:#2b2140':''}" data-a="quiz" data-k="${z.k}">クイズ ▶</button></div></div>`}).join('')}
+
+function talkView(z){return`<div class="plays" style="margin:0 0 12px"><button class="pb" data-a="playall">${ic.spk}会話を通して聞く</button></div><div class="chat">${z.w.map((w,i)=>`<button class="bub ${w.sp=='由美'?'r':''}" data-a="sayw" data-i="${i}"><small class="sp">${esc(w.sp)}</small><span class="hz" lang="zh-Hant-TW">${hzC(w)}</span><span class="py">${pyC(w)}</span><span class="zy">${zyS(w)}</span><small class="ja">${esc(w.j)}</small></button>`).join('')}</div>`}
+
+/* --- 注音 --- */
+const ZS=`ㄅ b 玻 bo1 声母|ㄆ p 坡 po1 声母|ㄇ m 摸 mo1 声母|ㄈ f 佛 fo2 声母|ㄉ d 得 de2 声母|ㄊ t 特 te4 声母|ㄋ n 你 ni3 声母|ㄌ l 樂 le4 声母|ㄍ g 哥 ge1 声母|ㄎ k 科 ke1 声母|ㄏ h 喝 he1 声母|ㄐ j 雞 ji1 声母|ㄑ q 七 qi1 声母|ㄒ x 西 xi1 声母|ㄓ zh 知 zhi1 声母|ㄔ ch 吃 chi1 声母|ㄕ sh 詩 shi1 声母|ㄖ r 日 ri4 声母|ㄗ z 字 zi4 声母|ㄘ c 詞 ci2 声母|ㄙ s 四 si4 声母|ㄧ i(y) 衣 yi1 介音|ㄨ u(w) 烏 wu1 介音|ㄩ ü(yu) 魚 yu2 介音|ㄚ a 八 ba1 韻母|ㄛ o 喔 o1 韻母|ㄜ e 鵝 e2 韻母|ㄝ ê 爺 ye2 韻母|ㄞ ai 愛 ai4 韻母|ㄟ ei 黑 hei1 韻母|ㄠ ao 好 hao3 韻母|ㄡ ou 歐 ou1 韻母|ㄢ an 安 an1 韻母|ㄣ en 恩 en1 韻母|ㄤ ang 湯 tang1 韻母|ㄥ eng 冷 leng3 韻母|ㄦ er 兒 er2 韻母`.split('|').map(r=>{const[s,p,h,x,g]=r.split(' ');return{s,p,h,b:x.slice(0,-1),t:+x.slice(-1),g}});
+const ZG={'声母':'var(--t1)','介音':'var(--t3)','韻母':'var(--t4)'};
+const ZQ=[['sym2py','記号を見てピンインを選ぶ','ㄅ→b'],['py2sym','ピンインを見て記号を選ぶ','b→ㄅ'],['listen','聞いて注音を選ぶ','音→ㄇㄚ'],['dict1','書き取り（1文字）','音→入力'],['dict2','書き取り（単語）','音→入力']];
+const shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
+const zw=w=>w.sy.map(s=>zy(s.b,s.t)).join(' ');
+const SWP=[['ㄓ','ㄗ'],['ㄔ','ㄘ'],['ㄕ','ㄙ'],['ㄋ','ㄌ'],['ㄢ','ㄤ'],['ㄣ','ㄥ'],['ㄅ','ㄆ'],['ㄉ','ㄊ'],['ㄍ','ㄎ'],['ㄐ','ㄑ'],['ㄧ','ㄩ'],['ㄛ','ㄡ'],['ㄞ','ㄟ']];
+function variants(w){const ok=zw(w),out=new Set();let n=0;
+ while(out.size<3&&n++<80){const parts=w.sy.map(s=>zy(s.b,s.t)),k=Math.floor(Math.random()*parts.length),s=w.sy[k];
+  if(Math.random()<.5){let t;do{t=1+Math.floor(Math.random()*4)}while(t==s.t);parts[k]=zy(s.b,t)}
+  else{const pr=shuf(SWP).find(([a,b])=>parts[k].includes(a)||parts[k].includes(b));if(!pr)continue;parts[k]=parts[k].includes(pr[0])?parts[k].replace(pr[0],pr[1]):parts[k].replace(pr[1],pr[0])}
+  const v=parts.join(' ');if(v!=ok)out.add(v)}
+ return shuf([ok,...out])}
+
+function zhu(){const ZI={sym2py:'<span class="bt zy" style="font-size:13px;padding:4px 5px">ㄅ→b</span>',py2sym:'<span class="bt zy" style="font-size:13px;padding:4px 5px">b→ㄅ</span>',listen:IC.sound,dict1:IC.key,dict2:IC.key};const ZT={sym2py:'記号→ピンイン',py2sym:'ピンイン→記号',listen:'聞き取り',dict1:'書き取り（1文字）',dict2:'書き取り（単語）'};
+ const sr=k=>`<span class="stars" style="font-size:15px;margin-left:8px">${stars(bestS(k))}</span>`;
+ return top('注音','toc')+`<p class="sec" style="margin-top:0">見る・書く</p>`+mn('data-a="nav" data-v="zlist"',IC.grid,'var(--t1)','注音一覧','')+mn('data-a="zwstart" data-k="trace"',IC.pencil,'var(--t3)','なぞり書き','')+mn('data-a="zwstart" data-k="test"',IC.test,'var(--t2)','手書きテスト','',sr('zq_write'))+
+ `<p class="sec">クイズ</p>`+ZQ.map(([k],i)=>mn(`data-a="zstart" data-k="${k}"`,ZI[k],['var(--t4)','var(--t4)','#ff8a5b','var(--t1)','var(--t1)'][i],ZT[k],'',sr('zq_'+k))).join('')}
+
+function zlist(){return top('注音一覧','zhu')+['声母','介音','韻母'].map(g=>`<p class="sec">${g}${g=='声母'?'（子音）':g=='介音'?'（i・u・ü）':'（母音）'}</p><div class="zgrid">${ZS.filter(z=>z.g==g).map(z=>`<button class="zt" data-a="zsay" data-s="${z.s}" style="--g:${ZG[g]}"><span class="zy">${z.s}</span><b>${esc(z.p)}</b><small class="hz">${z.h} ${zy(z.b,z.t)}</small></button>`).join('')}</div>`).join('')+
+ `<div class="note">注音（ㄅㄆㄇㄈ）は台湾で使われている発音記号です。声調は1聲が記号なし、2聲ˊ・3聲ˇ・4聲ˋ、輕聲は˙を前に付けます。ㄓㄔㄕㄖㄗㄘㄙ は単独で zhi・chi・shi・ri・zi・ci・si と読みます。</div>`}
+
+function zstart(k){const pool=k=='dict1'?LV[0].w:k=='dict2'?LV[1].w.concat(LV[2].w):LV[0].w.concat(LV[1].w);
+ let items;
+ if(k=='sym2py'||k=='py2sym')items=shuf(ZS).slice(0,10).map(z=>({z,opts:shuf([z,...shuf(ZS.filter(o=>o.g==z.g&&o!==z)).slice(0,3)])}));
+ else items=shuf(pool).slice(0,10).map(w=>({w,opts:k=='listen'?variants(w):null}));
+ go('zq',{zq:{k,t:ZQ.find(q=>q[0]==k)[1],items,i:0,sc:0,sel:null,inp:[],cur:'',done:false}});setTimeout(zplay,250)}
+function zplay(){const q=S.zq,it=q.items[q.i];if(it.w)sayW(it.w);else speak(it.z.h,[it.z.t])}
+function zfinish(ok){const q=S.zq;q.done=true;if(ok){q.sc++;confetti();award(10)}const it=q.items[q.i];if(!ok&&it.w)weakAdd(it.w);if(it.w)setTimeout(()=>sayW(it.w),300);else speak(it.z.h,[it.z.t])}
+const KB='ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄧㄨㄩㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦ';
+const zgOf=c=>(ZS.find(z=>z.s==c)||{}).g;
+function zq(){const q=S.zq,it=q.items[q.i];let body='';
+ if(q.k=='sym2py'||q.k=='py2sym'){const z=it.z,sym=q.k=='sym2py';
+  body=`<div class="card"><div class="meta"><span>${q.i+1} / ${q.items.length}</span><span>正解 ${q.sc}</span></div>
+  <div class="${sym?'zbig zy':'zbig'}">${sym?z.s:esc(z.p)}</div><div class="dn">${esc(z.g)}</div>
+  ${q.done?`<div class="mean"><span class="hz">${z.h}</span>　<span class="zy">${zy(z.b,z.t)}</span>　${pyMark(z.b,z.t)}</div>`:''}
+  <div class="plays"><button class="pb alt" data-a="zplay">${ic.spk}例の音</button></div></div>
+  <div class="opts">${it.opts.map((o,j)=>{const st=q.done?(o===z?'good':q.sel===j?'bad':''):'';return`<button class="op ${st} ${sym?'':'zy'}" data-a="zopt" data-j="${j}" ${q.done?'disabled':''}>${sym?esc(o.p):o.s}</button>`}).join('')}</div>`}
+ else if(q.k=='listen'){const w=it.w,ok=zw(w);
+  body=`<div class="card"><div class="meta"><span>${q.i+1} / ${q.items.length}</span><span>正解 ${q.sc}</span></div>
+  ${q.done?`<div class="mean"><span class="hz" style="font-size:34px">${hzC(w)}</span></div><div class="py">${pyC(w)}</div>`:`<div class="zbig">${ic.spk.replace('width="22" height="22"','width="64" height="64"')}</div>`}
+  <div class="mean">${esc(w.j)}</div><div class="plays"><button class="pb" data-a="zplay">${ic.spk}もう一度</button><button class="pb alt" data-a="slow">${ST.slow?'ゆっくり ON':'ゆっくり OFF'}</button></div></div>
+  <div class="opts one">${it.opts.map((o,j)=>{const st=q.done?(o==ok?'good':q.sel===j?'bad':''):'';return`<button class="op zy ${st}" data-a="zopt" data-j="${j}" ${q.done?'disabled':''}>${o}</button>`}).join('')}</div>`}
+ else{const w=it.w,n=w.sy.length,ans=w.sy.map(s=>zy(s.b,s.t));
+  const boxes=Array.from({length:n},(_,k)=>{const v=k<q.inp.length?q.inp[k]:k==q.inp.length?q.cur:'';const cls=q.done?(q.inp[k]==ans[k]?'good':'bad'):k==q.inp.length?'cur':'';
+   return`<div class="zbox"><div class="zin zy ${cls}">${v||'&nbsp;'}</div>${q.done&&q.inp[k]!=ans[k]?`<div class="fix zy c${w.sy[k].t}">${ans[k]}</div>`:''}${q.done?`<div class="hz c${w.sy[k].t}" style="font-size:26px;font-weight:900">${esc(w.ch[k])}</div>`:''}</div>`}).join('');
+  body=`<div class="card"><div class="meta"><span>${q.i+1} / ${q.items.length}</span><span>正解 ${q.sc}</span></div>
+  <div class="mean">${esc(w.j)}</div><div class="zboxes">${boxes}</div>
+  <div class="plays"><button class="pb" data-a="zplay">${ic.spk}もう一度</button><button class="pb alt" data-a="slow">${ST.slow?'ゆっくり ON':'ゆっくり OFF'}</button></div></div>
+  ${q.done?'':`<div class="kb">${Array.from(KB).map(c=>`<button class="k zy" style="--g:${ZG[zgOf(c)]}" data-a="zk" data-c="${c}">${c}</button>`).join('')}<button class="k del" data-a="zdel" aria-label="1文字消す">⌫</button></div>
+  <div class="kt">${[1,2,3,4].map(t=>`<button class="k t${t}" data-a="ztone" data-t="${t}">${t==1?'1聲':MKS[t]}<small>${t==1?'記号なし':TN[t]}</small></button>`).join('')}</div>
+  <p class="dn" style="text-align:center;margin:8px 16px">記号を入れたら最後に声調キーで1文字が確定します</p>`}`}
+ return top(q.t,'zhu')+`<div class="prog"><i style="width:${q.i/q.items.length*100}%"></i></div>`+body+
+ (q.done?`<div class="row" style="padding-top:0"><button class="btn go" style="background:var(--t4)" data-a="znext">${q.i+1<q.items.length?'次へ ▶':'結果を見る ▶'}</button></div>`:'')}
+
+/* --- 手書き --- */
+function zwStart(mode){const list=mode=='trace'?ZS.slice():shuf(ZS).slice(0,10);go('zw',{zw:{mode,list,i:0,strokes:[],guide:mode=='trace',res:null,sc:0}})}
+const ZWF=`"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif`;
+function glyph(x,W,s,fill,stroke){x.font=`700 ${W*.7}px ${ZWF}`;x.textAlign='center';x.textBaseline='middle';if(stroke){x.lineWidth=stroke;x.lineJoin='round';x.strokeStyle=fill;x.strokeText(s,W/2,W*.53)}x.fillStyle=fill;x.fillText(s,W/2,W*.53)}
+function inkDraw(x,W,strokes,lw,col){x.lineCap=x.lineJoin='round';x.lineWidth=lw;x.strokeStyle=col;x.fillStyle=col;strokes.forEach(st=>{if(st.length==1){x.beginPath();x.arc(st[0][0]*W,st[0][1]*W,lw/2,0,7);x.fill();return}x.beginPath();x.moveTo(st[0][0]*W,st[0][1]*W);st.slice(1).forEach(p=>x.lineTo(p[0]*W,p[1]*W));x.stroke()})}
+function zwJudge(){const q=S.zw,z=q.list[q.i];if(!q.strokes.length)return;const N=100;
+ const mk=f=>{const c=document.createElement('canvas');c.width=c.height=N;const x=c.getContext('2d');f(x);return x.getImageData(0,0,N,N).data};
+ const core=mk(x=>glyph(x,N,z.s,'#000',2)),zone=mk(x=>glyph(x,N,z.s,'#000',N*.15)),ink=mk(x=>inkDraw(x,N,q.strokes,N*.05,'#000')),fat=mk(x=>inkDraw(x,N,q.strokes,N*.17,'#000'));
+ let c=0,cc=0,k=0,kk=0;for(let i=3;i<core.length;i+=4){if(core[i]>100){c++;if(fat[i]>60)cc++}if(ink[i]>100){k++;if(zone[i]>60)kk++}}
+ const cov=c?cc/c:0,pre=k?kk/k:0;q.res=cov>.8&&pre>.85?3:cov>.6&&pre>.7?2:1;if(q.res>1)award(10);if(q.mode=='test'&&q.res>1)q.sc++;if(q.res==3)confetti();render()}
+let zwT=0;
+function zwInit(){const c=document.getElementById('wc'),g=document.getElementById('wg');if(!c)return;const q=S.zw,z=q.list[q.i],W=c.parentElement.clientWidth,dpr=window.devicePixelRatio||1;
+ [c,g].forEach(e=>{e.width=e.height=W*dpr;e.getContext('2d').setTransform(dpr,0,0,dpr,0,0)});
+ const gx=g.getContext('2d'),x=c.getContext('2d'),lw=W*.05;
+ let hint=false;const dg=()=>{gx.clearRect(0,0,W,W);if(hint)glyph(gx,W,z.s,'rgba(43,33,64,.28)');else if(q.guide||q.res)glyph(gx,W,z.s,q.res&&!q.guide?'rgba(255,77,125,.35)':'rgba(43,33,64,.16)')};
+ const hb=document.getElementById('whint');if(hb){const on=e=>{e.preventDefault();hint=true;dg()},off=()=>{hint=false;dg()};hb.onpointerdown=on;hb.onpointerup=hb.onpointerleave=hb.onpointercancel=off;hb.oncontextmenu=e=>e.preventDefault()}
+ dg();if(document.fonts&&document.fonts.load)document.fonts.load(`700 40px "Noto Sans TC"`,z.s).then(dg).catch(()=>{});
+ inkDraw(x,W,q.strokes,lw,'#2b2140');
+ const lock=()=>q.mode=='test'&&q.res;let cur=null;
+ const pt=e=>{const r=c.getBoundingClientRect();return[(e.clientX-r.left)/r.width,(e.clientY-r.top)/r.height]};
+ c.onpointerdown=e=>{if(lock())return;e.preventDefault();clearTimeout(zwT);if(q.res){q.strokes=[];q.res=null;x.clearRect(0,0,W,W);const f=document.getElementById('wfb');if(f)f.remove();dg()}c.setPointerCapture(e.pointerId);cur=[pt(e)];q.strokes.push(cur);inkDraw(x,W,[cur],lw,'#2b2140')};
+ c.onpointermove=e=>{if(!cur)return;e.preventDefault();const p=pt(e),l=cur[cur.length-1];cur.push(p);x.lineCap='round';x.lineWidth=lw;x.strokeStyle='#2b2140';x.beginPath();x.moveTo(l[0]*W,l[1]*W);x.lineTo(p[0]*W,p[1]*W);x.stroke()};
+ c.onpointerup=c.onpointercancel=()=>{if(!cur)return;cur=null;clearTimeout(zwT);zwT=setTimeout(()=>{if(S.v=='zw'&&S.zw===q&&q.strokes.length&&!q.res)zwJudge()},1100)}}
+function zwView(){const q=S.zw,z=q.list[q.i],tr=q.mode=='trace',last=q.i+1>=q.list.length;
+ const msg=['','もう一度書いてみよう','OK！ いい感じ','◎ きれいに書けました！'];
+ return top(tr?'なぞり書き':'手書きテスト','zhu')+`<div class="prog"><i style="width:${(tr?q.i+1:q.i)/q.list.length*100}%"></i></div>
+<div class="card" style="padding-bottom:14px"><div class="meta"><span>${q.i+1} / ${q.list.length}</span><span>${tr?esc(z.g):'正解 '+q.sc}</span></div>
+<div class="winfo"><b>${esc(z.p)}</b><span class="hz">${z.h}</span>${tr||q.res?`<span class="zy">${zy(z.b,z.t)}</span>`:''}<button class="pb alt" data-a="zwsay" aria-label="例の音">${ic.spk}</button></div>
+<div class="wpad"><canvas id="wg"></canvas><canvas id="wc" aria-label="ここに書く"></canvas></div>
+${q.res?`<div id="wfb" class="fb ${q.res==3?'t3':q.res==2?'t2':'t1'}" style="margin:12px 0 0;color:${q.res==1?'#fff':'#2b2140'}">${msg[q.res]}${!tr?`　正解は <span class="zy" style="color:inherit">${z.s}</span>`:''}</div>`:''}
+<div class="wbtn">${tr?`<button class="btn" data-a="zwguide">お手本 ${q.guide?'ON':'OFF'}</button>`:''}<button class="btn" data-a="zwclear" ${q.mode=='test'&&q.res?'disabled':''}>消す</button><button class="btn hintb" id="whint" ${q.res?'disabled':''}>ヒント<small>押している間</small></button></div></div>
+<div class="row" style="padding-top:0">${tr?`<button class="btn" data-a="zwmove" data-d="-1" ${q.i?'':'disabled'}>◀ 前</button><button class="btn go" style="background:var(--t4)" data-a="zwmove" data-d="1" ${last?'disabled':''}>次 ▶</button>`:
+ q.res?`<button class="btn go" style="background:var(--t4)" data-a="zwmove" data-d="1">${last?'結果を見る ▶':'次へ ▶'}</button>`:''}</div>
+<p class="dn" style="text-align:center;margin:10px 16px">${tr?'うすいお手本の上を指でなぞって書きます。':'ピンインと例の字を見て、注音の記号を書きます。'}書き終わって少し待つと自動で判定します。書き順の判定はありません。</p>`}
+function zwMove(d){const q=S.zw;if(q.mode=='test'&&q.i+1>=q.list.length&&d>0){const r=q.sc/q.list.length,st=r>=.9?3:r>=.7?2:r>=.5?1:0;ST.best=ST.best||{};const b=ST.best.zq_write||{s:0,sc:0};ST.best.zq_write={s:Math.max(b.s,st),sc:Math.max(b.sc,q.sc)};if(st==3)s3add('zq_write');save();
+ S.zq={k:'write',t:'手書きテスト',sc:q.sc,items:q.list};go('zres');return}
+ q.i=Math.max(0,Math.min(q.list.length-1,q.i+d));q.strokes=[];q.res=null;render()}
+
+function zres(){const q=S.zq,r=q.sc/q.items.length,st=r>=.9?3:r>=.7?2:r>=.5?1:0;
+ return top('結果','zhu')+`<div class="card"><div style="font-weight:900">${q.t}</div><div class="big">${q.sc}<span style="font-size:28px"> / ${q.items.length}</span></div><div class="stars" style="font-size:34px;margin:0">${stars(st)}</div></div>
+<div class="row"><button class="btn" data-a="nav" data-v="zhu">もどる</button><button class="btn go" style="background:var(--t4)" data-a="zstart" data-k="${q.k}">もう一度 ▶</button></div>`}
+function znext(){const q=S.zq;if(q.i+1<q.items.length){Object.assign(q,{i:q.i+1,sel:null,inp:[],cur:'',done:false});render();setTimeout(zplay,200)}
+ else{const r=q.sc/q.items.length,st=r>=.9?3:r>=.7?2:r>=.5?1:0,k='zq_'+q.k;ST.best=ST.best||{};const b=ST.best[k]||{s:0,sc:0};ST.best[k]={s:Math.max(b.s,st),sc:Math.max(b.sc,q.sc)};if(st==3)s3add(k);save();go('zres')}}
+
+function base(){return top('レベル練習','pron')+LV.map(l=>`<div class="lv"><div class="lvh"><span class="badge" style="background:${l.col}">${l.id}</span><div><b>${l.t}</b></div><span class="stars" aria-label="ベスト星${bestS(l.k)}">${stars(bestS(l.k))}</span></div>
+<div class="lvb"><button class="btn" data-a="open" data-k="${l.k}">単語を見る</button><button class="btn go" style="background:${l.col}" data-a="quiz" data-k="${l.k}">クイズ ▶</button></div></div>`).join('')}
+
+function combos(){return top('声調の組み合わせ','pron')+`<p class="sec" style="margin-top:0">左が1文字目、上が2文字目の声調です</p>
+<div class="grid"><span></span>${[1,2,3,4].map(b=>`<span class="gh c${b}">${TN[b]}</span>`).join('')}
+${[1,2,3,4].map(a=>`<span class="gh c${a}">${a}</span>`+[1,2,3,4].map(b=>{const c=CB[a+''+b];return`<button class="cell" data-a="open" data-k="${c.k}" aria-label="${c.t} ${c.w.length}語"><span class="bar"><i class="t${a}"></i><i class="t${b}"></i></span><span class="nm"><b>${a}+${b}</b><small>${c.w.length}語</small></span></button>`}).join('')).join('')}</div>
+<div class="note" style="margin-top:16px">2音節の単語を声調の並びで分けています。3聲＋3聲は、実際には前の3聲が2聲に変わって発音されます。</div>`}
+
+function basics(){return top('四聲のきほん','pron')+[1,2,3,4].map(t=>`<button class="tone" data-a="hum" data-t="${t}"><span class="sw t${t}">${cv(t,56,40,5,t==2||t==3?'#2b2140':'#fff')}</span><span style="flex:1"><b class="c${t}">${TN[t]}</b> <span class="zy">注音 <span class="c${t}">${MKS[t]}</span></span><p>${TD[t]}</p></span><span class="ib" style="width:40px;height:40px">${ic.wave}</span></button>`).join('')+`
+<div class="note"><b>台湾華語のポイント</b><br>・3聲は「低く抑える」だけで終わることが多く、最後まで上がりきらない発音が一般的です。<br>・輕聲：台湾では日常会話で輕聲になる語は大陸より少なく、謝謝・桌子なども本来の声調で読むのが普通です。このアプリの答えは本来の声調で、教育部の辞典で輕聲になっている語には注記を付けています（例 媽媽：辞典では <span class="zy">ㄇㄚ ˙ㄇㄚ</span>）。<br>・的・嗎・吧などの助詞は台湾でも輕聲で、注音では「˙」を前に付けます（文の練習で出てきます）。<br>・3聲が続くと前が2聲に変わります（你好 → ní hǎo）。答えは元の声調です。</div>
+<p class="sec">波マークは声調の高さを音にした「トーン音」です。</p>`}
+
+const LVN=['初級','中級','上級'];
+const curList=z=>z.levels&&S.lf>=0?z.levels[S.lf]:z.w;
+const qkey=z=>z.levels&&S.lf>=0?z.k+'_'+S.lf:z.k;
+function learn(){const z=S.set;const sub=z.ab?`<div class="card" style="padding:14px"><div style="display:flex;justify-content:center;gap:10px;align-items:center">${z.ab.map(t=>`<span class="tone" style="margin:0;width:auto;padding:8px 12px;box-shadow:none"><span class="sw t${t}" style="width:60px;height:44px">${cv(t,44,30,5,t==2||t==3?'#2b2140':'#fff')}</span><b class="c${t}">${TN[t]}</b></span>`).join('<b>＋</b>')}</div><div class="plays"><button class="pb alt" data-a="humab">${ic.wave}トーン音</button></div></div>`:'';
+ if(z.talk)return top(z.t,z.par)+`<div class="row" style="padding:0 16px 12px"><button class="btn go" style="background:#ff8a5b;color:#2b2140" data-a="quiz" data-k="${z.k}">クイズ ▶</button></div>`+legend(z)+talkView(z);
+ const L=curList(z);let prev='';
+ const tabs=z.levels?`<div class="tabs" role="tablist">${z.levels.map((a,i)=>`<button role="tab" aria-selected="${S.lf==i}" class="${S.lf==i?'on':''}" data-a="lf" data-i="${i}">${LVN[i]}<small>${a.length}語</small><span class="bst2">${stars(bestS(z.k+'_'+i))}</span></button>`).join('')}<button role="tab" aria-selected="${S.lf<0}" class="${S.lf<0?'on':''}" data-a="lf" data-i="-1">すべて<small>${z.w.length}語</small><span class="bst2">${stars(bestS(z.k))}</span></button></div>`:'';
+ const rows=L.map(w=>{const i=z.w.indexOf(w);const pat=w.sy.map(x=>x.t).join('');let h='';
+  
+  return h+`<button class="li ${z.sent?'sent':''}" data-a="sayw" data-i="${i}"><span class="hz" lang="zh-Hant-TW">${hzC(w)}</span><span class="tx"><div>${pyC(w)}</div><div class="zy">${zyS(w)}</div><small>${esc(w.j)}</small>${noteOf(w)?`<small class="n">${noteOf(w)}</small>`:''}</span></button>`}).join('');
+ return top(z.t,z.par)+sub+tabs+(L.length?`<div class="row" style="padding:0 16px 12px"><button class="btn go" style="background:${z.col}" data-a="quiz" data-k="${z.k}">${z.levels?(S.lf<0?'すべて':LVN[S.lf])+'の':''}クイズ ▶</button></div>`:'')+legend(z)+`<p class="sec" style="margin-top:0">漢字の色が声調です。タップで発音を聞けます</p>${z.note?`<div class="note" style="margin-top:0">${z.note}</div>`:''}${L.length?`<div class="list">${rows}</div>`:'<div class="note">この組み合わせの単語はまだありません。</div>'}`}
+
+function quiz(){const z=S.set,w=S.q[S.i],n=w.sy.length,done=S.p.length==n;
+ const res=done?w.sy.map((s,k)=>S.p[k]==s.t):[];const allOk=done&&res.every(Boolean);
+ return top(z.ta?z.t:z.t+' クイズ',z.par)+(z.ta?`<div class="tah"><span>残り <b id="tm">${Math.max(0,Math.ceil((S.taEnd-Date.now())/1000))}</b> 秒</span><span>正解 <b>${S.sc}</b></span><span>${S.combo>1?S.combo+'連続！':''}</span></div>`:`<div class="prog"><i style="width:${S.i/S.q.length*100}%"></i></div>`)+`
+<div class="card"><div class="meta"><span>${z.ta?(S.i+1)+'問目':(S.i+1)+' / '+S.q.length}</span><span>正解 ${S.sc}</span></div>
+<div class="word ${n>5?'cmp':''}" lang="zh-Hant-TW">${w.sy.map((s,k)=>{const p=S.p[k];return`<div class="syl"><div class="hz ${ST.chars||done?'':'q'} ${done?'c'+s.t:''}">${ST.chars||done?esc(w.ch[k]):'？'}</div>
+<div class="slot ${!done&&k==S.p.length?'cur':''} ${p?'t'+p:''}" ${p?`data-t="${p}"`:''}>${p?cv(p,n>5?40:60,n>5?28:40,4,p==2||p==3?'#2b2140':'#fff')+`<em>${TN[p]}</em>`:''}${done?`<span class="mk ${res[k]?'ok':'ng'}">${res[k]?'○':'×'}</span>`:''}</div>
+${ST.py||done?`<div class="py ${done?'c'+s.t:''}">${done?pyMark(s.b,s.t):s.b}</div>`:''}
+${ST.zy||done?`<div class="zy ${done?'c'+s.t:''}">${zy(s.b,done?s.t:1)}</div>`:''}
+${done&&!res[k]?`<div class="fix c${s.t}">正解 ${TN[s.t]}</div>`:''}</div>`}).join('')}</div>
+<div class="mean">${esc(w.j)}</div>${done&&noteOf(w)?`<div class="dn">${noteOf(w)}</div>`:''}
+<div class="plays"><button class="pb" data-a="play">${ic.spk}もう一度</button><button class="pb alt" data-a="slow">${ST.slow?'ゆっくり ON':'ゆっくり OFF'}</button><button class="pb alt" data-a="humq" aria-label="トーン音">${ic.wave}</button></div></div>
+${done&&z.ta?`<div class="fb ${allOk?'t3':'t1'}" style="color:${allOk?'#2b2140':'#fff'}">${allOk?'正解！':'残念…'}</div>`:done?`<div class="fb ${allOk?'t3':'t1'}" style="color:${allOk?'#2b2140':'#fff'}">${allOk?'正解！ 好棒！':'おしい！ 正しい声調を聞いてみよう'}</div>
+<div class="row" style="padding-top:0"><button class="btn go" style="background:var(--t4)" data-a="next">${S.i+1<S.q.length?'次へ ▶':'結果を見る ▶'}</button></div>`:
+`<div class="pad ${z.neu?'five':''}">${[1,2,3,4].concat(z.neu?[5]:[]).map(t=>`<button class="tb t${t}" data-a="pick" data-t="${t}" aria-label="${TN[t]}">${cv(t,40,26,4,t==2||t==3?'#2b2140':'#fff')}${TN[t]}<small>${t==1?'－':MKS[t]}</small></button>`).join('')}</div>
+<div class="row"><button class="btn" data-a="undo" ${S.p.length?'':'disabled'}>1つ消す</button></div>`}`}
+
+function result(){const z=S.set,r=S.sc/S.q.length,st=r>=.9?3:r>=.7?2:r>=.5?1:0;
+ return top('結果',z.par)+`<div class="card"><div style="font-weight:900">${z.t}</div><div class="big">${S.sc}<span style="font-size:28px"> / ${S.q.length}</span></div>
+<div class="stars" style="font-size:34px;margin:0">${stars(st)}</div><p style="font-weight:700;margin:10px 0 0">${['もう一回やってみよう！','いい調子！','すごい！あと少し！','完璧！太厲害了！'][st]}</p></div>
+${S.miss.length?`<p class="sec">まちがえた${z.sent?'文':'単語'}</p><div class="list">${S.miss.map((w,i)=>`<button class="li ${z.sent?'sent':''}" data-a="saym" data-i="${i}"><span class="hz" lang="zh-Hant-TW">${hzC(w)}</span><span class="tx"><div>${pyC(w)}</div><div class="zy">${zyS(w)}</div><small>${esc(w.j)}</small></span></button>`).join('')}</div>`:''}
+<div class="row"><button class="btn" data-a="nav" data-v="${z.par}">もどる</button><button class="btn go" style="background:${z.col}" data-a="quiz" data-k="${z.k}">もう一度 ▶</button></div>`}
+
+function setSheet(){const v=voice();const o=(k,t)=>`<div class="opt"><span>${t}</span><button class="sw2" role="switch" aria-checked="${!!ST[k]}" aria-label="${t}" data-a="tog" data-k="${k}"></button></div>`;
+ return`<div class="sheet" data-a="close"><div data-stop="1"><h3>設定</h3>${o('chars','クイズで漢字を先に表示')}${o('py','クイズでピンインを表示')}${o('zy','クイズで注音を表示')}${o('slow','ゆっくり再生')}
+<div class="opt"><span>音声テスト</span><button class="btn" style="min-height:40px;padding:4px 14px" data-a="stest">你好 を再生</button></div>
+<p class="vinfo">${!ss?'この画面では読み上げ機能が使えません。かわりにトーン音（声調の高さの電子音）で再生します。Safari や Chrome でこのページを開くと読み上げが使える場合があります。':v?'読み上げ音声：'+esc(v.name)+'（'+esc(v.lang)+'）'+(/TW/i.test(v.lang)?'':' ※台湾の音声が見つからないため代わりの音声を使用中'):'中国語の音声が見つかりません（音声リスト '+voices.length+' 件）。端末の設定で中国語（台湾）の音声を追加してください。iPhone：設定 > アクセシビリティ > 読み上げコンテンツ > 声 > 中国語（台湾）'}</p>
+<div class="opt" style="border:0"><span>記録のバックアップ</span><button class="btn" style="min-height:40px;padding:4px 14px" data-a="bk">コピー</button></div><textarea id="rs" class="rs" placeholder="ここにバックアップのコードを貼り付けて「復元」"></textarea><div style="text-align:right"><button class="btn" style="min-height:40px;padding:4px 14px" data-a="rs">復元</button></div>
+<p class="vinfo">音が出ないとき：iPhone はマナーモード（消音スイッチ）を解除し、音量を上げてください。</p>
+<div class="row" style="padding:14px 0 0"><button class="btn" data-a="close">閉じる</button></div></div></div>`}
+
+/* --- 苦手単語帳 --- */
+const DAY=864e5,BOX=[0,1,3,7];
+const weakDB=()=>{ST.weak=ST.weak||{};return ST.weak};
+function weakAdd(w){if(!w||DICT[w.h]!==w)return;const db=weakDB(),o=db[w.h]||{n:0};db[w.h]={b:0,d:Date.now(),n:o.n+1};save()}
+function weakHit(w){const db=weakDB(),e=db[w.h];if(!e)return;e.b++;if(e.b>=BOX.length)delete db[w.h];else e.d=Date.now()+BOX[e.b]*DAY;save()}
+const weakAll=()=>Object.keys(weakDB()).map(h=>DICT[h]).filter(Boolean);
+const weakDue=()=>weakAll().filter(w=>weakDB()[w.h].d<=Date.now());
+function weakSet(all){const w=(all?weakAll():weakDue());return{k:all?'weakall':'weak',t:all?'苦手単語（全部）':'今日の復習',w,par:'weak',col:'var(--t1)',neu:w.some(x=>x.sy.some(y=>y.t==5)),weak:1}}
+function weak(){const all=weakAll(),due=weakDue(),db=weakDB();
+ const nx=all.filter(w=>db[w.h].d>Date.now()).map(w=>db[w.h].d).sort((a,b)=>a-b)[0];
+ return top('復習','toc')+`<div class="card"><div class="wst"><div><b>${due.length}</b><span>今日の復習</span></div><div><b>${all.length}</b><span>苦手単語</span></div></div>
+ ${due.length?`<button class="btn go" style="background:var(--t1);width:100%;margin-top:12px" data-a="quiz" data-k="weak">今日の復習をはじめる ▶</button>`:all.length?`<p class="dn" style="margin:12px 0 0">今日の復習はおわりました。次は${new Date(nx).toLocaleDateString('ja-JP',{month:'numeric',day:'numeric'})}に出題します。</p>`:`<p class="dn" style="margin:12px 0 0">クイズでまちがえた単語がここに集まります。</p>`}
+ ${all.length?`<button class="btn" style="width:100%;margin-top:10px" data-a="quiz" data-k="weakall">苦手単語を全部練習</button>`:''}</div>
+ <div class="note" style="margin-top:0">クイズでまちがえた単語は、すぐここで復習できます。正解するたびに次の出題までの間隔が 1日→3日→7日 と延び、4回正解すると卒業です。</div>
+ ${all.length?`<div class="list">${all.sort((a,b)=>db[a.h].d-db[b.h].d).map(w=>`<button class="li" data-a="sayx" data-h="${esc(w.h)}" data-t="${w.sy.map(s=>s.t).join('')}"><span class="hz" lang="zh-Hant-TW">${hzC(w)}</span><span class="tx"><div>${pyC(w)}</div><div class="zy">${zyS(w)}</div><small>${esc(w.j)}</small></span><span class="boxd" aria-label="卒業まであと${BOX.length-db[w.h].b}回">${BOX.map((_,i)=>`<i class="${i<db[w.h].b?'on':''}"></i>`).join('')}</span></button>`).join('')}</div>`:''}`}
+
+/* --- 声調の変化 --- */
+const EX7=`洗手|xi3 shou3|手を洗う
+很好|hen3 hao3|とても良い
+好久|hao3 jiu3|長い間・久しぶり
+演講|yan3 jiang3|スピーチ
+一天|yi1 tian1|1日
+一年|yi1 nian2|1年
+一點|yi1 dian3|少し
+一樣|yi1 yang4|同じ
+一下|yi1 xia4|ちょっと
+一個|yi1 ge4*|1つ
+一共|yi1 gong4|全部で
+一直|yi1 zhi2|ずっと
+一千|yi1 qian1|1000
+十一|shi2 yi1|11
+不要|bu4 yao4|いらない
+不是|bu4 shi4|〜ではない
+不對|bu4 dui4|ちがう
+不會|bu4 hui4|できない・〜しないだろう
+不去|bu4 qu4|行かない
+不錯|bu4 cuo4|なかなか良い
+不用|bu4 yong4|〜しなくてよい
+不好|bu4 hao3|良くない
+不忙|bu4 mang2|忙しくない
+不吃|bu4 chi1|食べない
+不冷|bu4 leng3|寒くない
+不能|bu4 neng2|〜できない`;
+EX7.split('\n').forEach(r=>parse(r));
+function actual(w){const t=w.sy.map(s=>s.t),h=w.ch,o=t.slice();
+ for(let i=0;i<t.length;i++){const nx=o[i+1];
+  if(h[i]=='一'&&o[i]==1&&nx&&!(i>0&&/[第十期統]/.test(h[i-1])))t[i]=nx==4?2:4;
+  else if(h[i]=='不'&&o[i]==4&&nx==4)t[i]=2;
+  else if(o[i]==3&&nx==3)t[i]=2}
+ return t}
+function sclone(w){const t=actual(w),ch=t.some((x,k)=>x!=w.sy[k].t);return{...w,sy:w.sy.map((s,k)=>({...s,t:t[k]})),orig:!ch?'':w.sy.map(s=>pyMark(s.b,s.t)).join(' '),origZ:w.sy.map(s=>zy(s.b,s.t)).join(' '),sandhiNo:!ch}}
+const SAN=[
+ {k:'sd3',t:'3聲＋3聲',col:'var(--t3)',rule:'3聲が2つ続くと、前の3聲は2聲で読みます。3つ続くときは、最後以外が2聲になることが多いです（我很好 → wó hén hǎo）。',l:'你好 很好 水果 手錶 洗澡 洗手 可以 老闆 老虎 雨傘 好久 所以 也許 演講 螞蟻 表姊 打掃 診所 我很好'},
+ {k:'sdyi',t:'「一」の変化',col:'var(--t1)',rule:'「一」は単独・数の最後・順番（第一、十一）では1聲。後ろが4聲なら2聲（一定 yídìng）、1・2・3聲なら4聲（一天 yìtiān）で読みます。',l:'一 第一 十一 星期一 統一發票 一天 一千 一年 一直 一起 一點 一百 一定 一半 一樣 一下 一個 一共'},
+ {k:'sdbu',t:'「不」の変化',col:'var(--t4)',rule:'「不」はふつう4聲。後ろが4聲のときだけ2聲で読みます（不要 búyào）。',l:'不好 不忙 不吃 不冷 不能 不好意思 不要 不是 不對 不會 不去 不錯 不用 不客氣'}];
+SAN.forEach(z=>{z.par='sandhi';z.sandhi=1;z.w=z.l.split(' ').map(h=>{if(!DICT[h]&&h=='我很好')parse('我很好|wo3 hen3 hao3|私は元気です');return DICT[h]}).filter(Boolean).map(sclone);z.neu=false;GS.push(z)});
+function sandhiView(){return top('声調の変化','pron')+`<div class="note" style="margin-top:0">辞書や教科書に書かれる声調と、実際に読むときの声調がちがう場合の練習です。クイズでは<b>実際に読む声調</b>を答えます。</div>`+SAN.map(z=>`<div class="lv"><div class="lvh"><span class="badge" style="background:${z.col};font-size:15px">${z.k=='sd3'?'3+3':z.k=='sdyi'?'一':'不'}</span><div><b>${z.t}</b></div><span class="stars">${stars(bestS(z.k))}</span></div>
+<p class="dn" style="margin:0 16px 12px">${z.rule}</p><div class="lvb"><button class="btn" data-a="open" data-k="${z.k}">単語を見る</button><button class="btn go" style="background:${z.col}" data-a="quiz" data-k="${z.k}">クイズ ▶</button></div></div>`).join('')}
+
+/* --- ゲーム要素 --- */
+const GOAL=10;
+const RANKS=[[0,'觀光客','観光客'],[300,'留學生','留学生'],[1000,'夜市通','夜市マスター'],[2500,'台灣通','台湾通'],[6000,'台灣達人','台湾の達人']];
+const STAGE=[0,100,300,700,1500,3000];
+const PLACES=['九份','日月潭','墾丁','阿里山','太魯閣','淡水','鹿港','安平','綠島','蘭嶼','澎湖','金門','花蓮','臺東','高雄','臺南','嘉義','臺中','新竹','宜蘭','基隆','平溪','野柳','西門町','士林','合歡山','小琉球','旗津','清境農場','馬祖'];
+const dkey=(d=new Date())=>`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+const G=()=>{ST.xp=ST.xp||0;ST.days=ST.days||{};ST.s3=ST.s3||{};ST.pet=ST.pet||'tea';ST.taBest=ST.taBest||0;return ST};
+const rankOf=x=>{let r=0;RANKS.forEach((k,i)=>{if(x>=k[0])r=i});return r};
+const stageOf=x=>{let r=0;STAGE.forEach((k,i)=>{if(x>=k)r=i});return r};
+const today=()=>G().days[dkey()]||0;
+function streak(){const d=new Date();let n=0;if((G().days[dkey(d)]||0)<GOAL)d.setDate(d.getDate()-1);while((ST.days[dkey(d)]||0)>=GOAL){n++;d.setDate(d.getDate()-1)}return n}
+function toast(m,c='var(--t3)'){const t=document.createElement('div');t.className='toast';t.style.background=c;t.innerHTML=m;let box=document.getElementById('toasts');if(!box){box=document.createElement('div');box.id='toasts';document.body.appendChild(box)}box.appendChild(t);setTimeout(()=>t.remove(),2600)}
+function award(n){G();const r0=rankOf(ST.xp),s0=stageOf(ST.xp),d0=today();ST.xp+=n;ST.days[dkey()]=d0+1;save();
+ if(d0+1==GOAL)toast(`今日の目標達成！ 連続 ${streak()} 日`,'#ff8a5b');
+ if(rankOf(ST.xp)>r0)toast(`ランクアップ！ <b lang="zh-Hant-TW">${RANKS[rankOf(ST.xp)][1]}</b>`,'var(--t4)');
+ if(stageOf(ST.xp)>s0)toast(`${petName()}が成長しました！`,'var(--t1)')}
+function s3add(k){G();if(ST.s3[k])return;const n=Object.keys(ST.s3).length;ST.s3[k]=1;save();if(n<PLACES.length)toast(`スタンプ獲得！ <b lang="zh-Hant-TW">${PLACES[n]}</b>`,'var(--t2)')}
+const petName=()=>G().pet=='tea'?'珍珍':'滷滷';
+function pet(size=160){G();const s=stageOf(ST.xp),happy=today()>0,W=size;
+ const face=(x,y)=>happy?`<path d="M${x-14} ${y} q4 -6 8 0M${x+6} ${y} q4 -6 8 0" fill="none" stroke="#2b2140" stroke-width="3" stroke-linecap="round"/><path d="M${x-6} ${y+8} q6 7 12 0" fill="#ff4d7d" stroke="#2b2140" stroke-width="2.5"/><ellipse cx="${x-20}" cy="${y+6}" rx="5" ry="3" fill="#ff9db8"/><ellipse cx="${x+20}" cy="${y+6}" rx="5" ry="3" fill="#ff9db8"/>`
+  :`<path d="M${x-14} ${y} h8M${x+6} ${y} h8" stroke="#2b2140" stroke-width="3" stroke-linecap="round"/><path d="M${x-4} ${y+9} h8" stroke="#2b2140" stroke-width="2.5" stroke-linecap="round"/><text x="${x+26}" y="${y-14}" font-size="14" font-weight="900" fill="#2b2140">z</text>`;
+ let b='';
+ if(ST.pet=='tea'){const lvl=128-(s+1)*13;const pearls=[];for(let i=0;i<s*3;i++)pearls.push(`<circle cx="${46+(i%6)*14+((i/6|0)%2)*7}" cy="${124-(i/6|0)*11}" r="6" fill="#3b2420"/>`);
+  b=`<path d="M74 2 L92 46" stroke="#ff4d7d" stroke-width="9" stroke-linecap="round"/><path d="M30 38 h100 l-12 98 a8 8 0 0 1 -8 7 h-60 a8 8 0 0 1 -8 -7z" fill="#fff" stroke="#2b2140" stroke-width="4"/>
+  <clipPath id="cc"><path d="M30 38 h100 l-12 98 a8 8 0 0 1 -8 7 h-60 a8 8 0 0 1 -8 -7z"/></clipPath><g clip-path="url(#cc)"><rect x="20" y="${lvl}" width="120" height="${150-lvl}" fill="#e0b07a"/>${pearls.join('')}</g>
+  <rect x="24" y="30" width="112" height="12" rx="6" fill="#ffd23f" stroke="#2b2140" stroke-width="4"/>${face(80,74)}`}
+ else{const meat=[];for(let i=0;i<s*2;i++)meat.push(`<rect x="${38+(i%5)*17}" y="${56-(i/5|0)*8+(i%2)*3}" width="14" height="9" rx="4" fill="#8a4b2a" stroke="#2b2140" stroke-width="1.5"/>`);
+  b=`${s>0?`<path d="M58 30 q-6 -10 0 -20M80 26 q-6 -10 0 -20M102 30 q-6 -10 0 -20" fill="none" stroke="#2b214066" stroke-width="3" stroke-linecap="round"/>`:''}
+  <ellipse cx="80" cy="66" rx="52" ry="20" fill="#fff" stroke="#2b2140" stroke-width="3"/>${meat.join('')}${s>=3?`<ellipse cx="112" cy="58" rx="12" ry="9" fill="#fff" stroke="#2b2140" stroke-width="2"/><circle cx="112" cy="58" r="5" fill="#ffae00"/>`:''}${s>=4?`<rect x="40" y="54" width="14" height="7" rx="3" fill="#ffd23f" stroke="#2b2140" stroke-width="1.5"/>`:''}
+  <path d="M18 70 h124 a62 62 0 0 1 -124 0z" fill="#4c7dff" stroke="#2b2140" stroke-width="4"/><path d="M30 84 h100" stroke="#fff" stroke-width="3" stroke-dasharray="6 6"/>${face(80,100)}<rect x="56" y="128" width="48" height="10" rx="4" fill="#4c7dff" stroke="#2b2140" stroke-width="3"/>`}
+ return`<svg viewBox="0 0 160 150" width="${W}" height="${W*150/160}" role="img" aria-label="${petName()}">${b}</svg>`}
+function bar(v,max,col){return`<div class="gbar"><i style="width:${Math.min(100,v/max*100)}%;background:${col}"></i></div>`}
+function status(){G();const r=rankOf(ST.xp),t=today();return`<button class="gstat" data-a="nav" data-v="my" aria-label="マイページ"><span class="gpet">${pet(64)}</span><span class="ginfo"><span class="grow"><b lang="zh-Hant-TW">${RANKS[r][1]}</b><span class="fire">${IC_FIRE}${streak()}日</span></span><span class="gsub">今日 ${Math.min(t,GOAL)}/${GOAL}問</span>${bar(t,GOAL,'#ff8a5b')}</span><span class="chev">›</span></button>`}
+const IC_FIRE='<svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2c1 4 6 6 6 12a6 6 0 0 1-12 0c0-3 2-5 3-6 0 2 1 3 2 3 0-4-1-6 1-9z" fill="#ff8a5b" stroke="#2b2140" stroke-width="1.8"/></svg>';
+function my(){G();const r=rankOf(ST.xp),nx=RANKS[r+1],s=stageOf(ST.xp),ns=STAGE[s+1],t=today(),n3=Object.keys(ST.s3).length,due=weakDue().length;
+ return top('マイページ','toc')+`<div class="card"><div class="petbox">${pet(170)}</div><div class="pn"><b>${petName()}</b>　Lv.${s+1}${ns?`<small>　次の成長まで ${ns-ST.xp}XP</small>`:'<small>　最大まで成長！</small>'}</div>
+ ${ns?bar(ST.xp-STAGE[s],ns-STAGE[s],'var(--t1)'):''}<p class="dn" style="margin:8px 0 0">${t>0?'今日も練習してくれてうれしそう！':'今日はまだ練習していないので眠そう…'}</p>
+ <div class="seg"><button class="${ST.pet=='tea'?'on':''}" data-a="pet" data-p="tea">タピオカミルクティー</button><button class="${ST.pet=='lu'?'on':''}" data-a="pet" data-p="lu">魯肉飯</button></div></div>
+ <div class="gg"><div class="gc"><span class="gl">今日の目標</span><b>${Math.min(t,GOAL)}<small>/${GOAL}</small></b>${bar(t,GOAL,'#ff8a5b')}</div><div class="gc"><span class="gl">連続日数</span><b>${IC_FIRE.replace(/16/g,'26')}${streak()}<small>日</small></b></div></div>
+ <div class="card" style="text-align:left"><span class="gl">ランク</span><div class="rk"><b lang="zh-Hant-TW">${RANKS[r][1]}</b><small>${RANKS[r][2]}・${ST.xp} XP</small></div>${nx?bar(ST.xp-RANKS[r][0],nx[0]-RANKS[r][0],'var(--t4)')+`<p class="dn" style="margin:6px 0 0">次の「${nx[1]}」まで ${nx[0]-ST.xp} XP（1問正解で10XP）</p>`:''}</div>
+ <div class="row" style="padding:0 16px 12px"><button class="btn go" style="background:var(--t3);color:#2b2140" data-a="quiz" data-k="today">今日のおすすめ 5問 ▶${due?`<small style="display:block;font-size:11px">苦手単語 ${due}語を含む</small>`:''}</button></div>
+ <div class="row" style="padding:0 16px 16px"><button class="btn go" style="background:var(--t1)" data-a="quiz" data-k="ta">60秒タイムアタック ▶<small style="display:block;font-size:11px">自己ベスト ${ST.taBest}問</small></button></div>
+ <p class="sec">スタンプ帳 ${Math.min(n3,PLACES.length)}/${PLACES.length}</p><div class="stamps">${PLACES.map((p,i)=>`<span class="stp ${i<n3?'on':''}" style="--c:${['var(--t1)','var(--t4)','var(--t3)','#ff8a5b'][i%4]};--r:${(i*37%21)-10}deg" lang="zh-Hant-TW">${i<n3?p:'？'}</span>`).join('')}</div>
+ <p class="dn" style="margin:8px 16px 16px">クイズで初めて星3つを取るたびに、台湾の名所スタンプが1つもらえます。</p>`}
+function todaySet(){const due=shuf(weakDue()).slice(0,3);const pool=shuf(GS.filter(z=>!z.sent&&!z.sandhi).flatMap(z=>z.levels?z.levels[0]:z.w)).filter(w=>!due.includes(w));
+ const w=due.concat(pool.slice(0,5-due.length));return{k:'today',t:'今日のおすすめ',w,par:'my',col:'var(--t3)',neu:w.some(x=>x.sy.some(y=>y.t==5)),weak:1}}
+function taSet(){const w=shuf([...LV[1].w,...LV[2].w,...Object.values(CB).flatMap(c=>c.w)]).slice(0,200);return{k:'ta',t:'60秒タイムアタック',w,par:'my',col:'var(--t1)',ta:1,neu:false}}
+let taTimer=0;
+function taStart(){clearInterval(taTimer);S.taEnd=Date.now()+60000;S.combo=0;taTimer=setInterval(()=>{const r=Math.max(0,Math.ceil((S.taEnd-Date.now())/1000)),e=document.getElementById('tm');if(e)e.textContent=r;if(r<=0||S.v!='quiz'||!S.set||!S.set.ta){clearInterval(taTimer);if(S.v=='quiz'&&S.set&&S.set.ta)taEnd()}},250)}
+function taEnd(){const n=S.sc;G();const best=n>ST.taBest;if(best){ST.taBest=n;save()}go('tares',{taN:n,taNew:best})}
+function tares(){return top('タイムアタック結果','my')+`<div class="card"><div style="font-weight:900">60秒で正解した数</div><div class="big">${S.taN}<span style="font-size:28px"> 問</span></div>${S.taNew?'<div class="fb t2" style="margin:8px 0 0;color:#2b2140">自己ベスト更新！</div>':`<p class="dn">自己ベスト ${ST.taBest} 問</p>`}</div>
+<div class="row"><button class="btn" data-a="nav" data-v="my">もどる</button><button class="btn go" style="background:var(--t1)" data-a="quiz" data-k="ta">もう一度 ▶</button></div>`}
+/* バックアップ */
+const bkCode=()=>btoa(unescape(encodeURIComponent(JSON.stringify(ST))));
+function restore(code){try{const o=JSON.parse(decodeURIComponent(escape(atob(code.trim()))));if(typeof o!='object')throw 0;Object.keys(ST).forEach(k=>delete ST[k]);Object.assign(ST,o);save();return true}catch(e){return false}}
+
+const findSet=k=>LV.find(l=>l.k==k)||GS.find(c=>c.k==k)||Object.values(CB).find(c=>c.k==k);
+[...LV,...GS,...Object.values(CB)].forEach(z=>z.neu=z.w.some(w=>w.sy.some(s=>s.t==5)));
+const tcmp=(a,b)=>a.sy.length-b.sy.length||a.sy.map(x=>x.t).join('').localeCompare(b.sy.map(x=>x.t).join(''));
+[...LV.slice(1),...GS.filter(z=>!z.sent&&!z.sandhi)].forEach(z=>{z.w=z.w.slice().sort(tcmp);if(z.levels)z.levels=z.levels.map(a=>a.slice().sort(tcmp))});
+function render(){app.innerHTML=({cover,toc,pron,cats,cat,base,combos,basics,learn,quiz,result,zhu,zlist,zq,zres,zw:zwView,weak,sandhi:sandhiView,my,tares})[S.v]()+(sheet?setSheet():'');if(S.v=='zw')zwInit();}
+function go(v,o={}){S={...S,...o,v};render();window.scrollTo(0,0)}
+function startQuiz(k){const set=k=='weak'||k=='weakall'?weakSet(k=='weakall'):k=='today'?todaySet():k=='ta'?taSet():findSet(k);if(!set.w.length){go(k.startsWith('weak')?'weak':S.v);return}if(S.set!==set)S.lf=set.levels?0:-1;const w=curList(set).slice().sort(()=>Math.random()-.5).slice(0,set.ta?200:10);go('quiz',{set,q:w,i:0,p:[],sc:0,miss:[],combo:0});if(set.ta)taStart();setTimeout(()=>sayW(S.q[0]),250)}
+function confetti(){const c=document.createElement('div');c.className='conf';c.innerHTML=Array.from({length:28},(_,i)=>`<i style="left:${Math.random()*100}%;background:var(--t${i%4+1});animation-delay:${Math.random()*.3}s"></i>`).join('');document.body.appendChild(c);setTimeout(()=>c.remove(),1600)}
+function pick(t){const w=S.q[S.i];if(S.p.length>=w.sy.length)return;S.p.push(t);hum([t]);
+ if(S.p.length==w.sy.length){const ok=w.sy.every((s,k)=>S.p[k]==s.t);if(ok){S.sc++;award(10);if(!S.set.ta)confetti();if(S.set.weak)weakHit(w)}else{S.miss.push(w);if(!S.set.sandhi)weakAdd(w)}if(S.set.ta){S.combo=ok?(S.combo||0)+1:0;const i0=S.i;setTimeout(()=>{if(S.v=='quiz'&&S.set.ta&&S.i==i0&&Date.now()<S.taEnd){S.i++;S.p=[];render()}},ok?380:1100)}else setTimeout(()=>sayW(w),350)}render()}
+function next(){if(S.i+1<S.q.length){S.i++;S.p=[];render();setTimeout(()=>sayW(S.q[S.i]),200)}else{const k=qkey(S.set),r=S.sc/S.q.length,st=r>=.9?3:r>=.7?2:r>=.5?1:0;
+ ST.best=ST.best||{};const b=ST.best[k]||{s:0,sc:0};ST.best[k]={s:Math.max(b.s,st),sc:Math.max(b.sc,S.sc)};if(st==3&&!S.set.weak)s3add(k);if(k!==S.set.k){const b2=ST.best[S.set.k]||{s:0,sc:0};ST.best[S.set.k]={s:Math.max(b2.s,st),sc:b2.sc}}save();go('result')}}
+
+app.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;if(b.classList.contains('sheet')&&e.target.closest('[data-stop]'))return;
+ const a=b.dataset.a,d=b.dataset;
+ if(a=='nav'){if(d.v.startsWith('cat:'))go('cat',{cat:CAT.find(c=>c.k==d.v.slice(4))});else go(d.v)}else if(a=='cat')go('cat',{cat:CAT.find(c=>c.k==d.c)});else if(a=='open'){const z=findSet(d.k);go('learn',{set:z,lf:z.levels?0:-1})}else if(a=='lf'){S.lf=+d.i;render()}else if(a=='quiz')startQuiz(d.k);
+ else if(a=='say1')speak(d.h,[+d.t]);else if(a=='hum')hum([+d.t]);else if(a=='humab')hum(S.set.ab);
+ else if(a=='sayw')sayW(S.set.w[+d.i]);else if(a=='saym')sayW(S.miss[+d.i]);
+ else if(a=='play')sayW(S.q[S.i]);else if(a=='humq')hum(S.q[S.i].sy.map(s=>s.t));
+ else if(a=='slow'){ST.slow=!ST.slow;save();render()}
+ else if(a=='pick')pick(+d.t);else if(a=='undo'){S.p.pop();render()}else if(a=='next')next();
+ else if(a=='set'){sheet=true;lv();render()}else if(a=='stest'){speak('你好',[3,3])}else if(a=='pet'){G().pet=d.p;save();render()}else if(a=='bk'){const c=bkCode(),t=document.getElementById('rs');if(t)t.value=c;try{navigator.clipboard.writeText(c).then(()=>toast('バックアップをコピーしました'),()=>toast('下の欄のコードを長押ししてコピーしてください','var(--t2)'))}catch(e){toast('下の欄のコードを長押ししてコピーしてください','var(--t2)')}}else if(a=='rs'){const t=document.getElementById('rs');if(t&&t.value.trim()&&restore(t.value)){toast('記録を復元しました');sheet=false;render()}else toast('コードが正しくありません','var(--t1)')}else if(a=='close'){sheet=false;render()}
+ else if(a=='tog'){ST[d.k]=!ST[d.k];save();render()}
+ else if(a=='playall'){if(ss)speakAll(S.set.w.map(w=>w.h));else hum(S.set.w.flatMap(w=>w.sy.map(s=>s.t)))}
+ else if(a=='zstart')zstart(d.k);else if(a=='zwstart')zwStart(d.k);else if(a=='zwjudge')zwJudge();else if(a=='zwclear'){clearTimeout(zwT);S.zw.strokes=[];S.zw.res=null;render()}else if(a=='zwguide'){S.zw.guide=!S.zw.guide;render()}else if(a=='zwmove')zwMove(+d.d);else if(a=='zwsay'){const z=S.zw.list[S.zw.i];speak(z.h,[z.t])}else if(a=='zplay')zplay();else if(a=='znext')znext();
+ else if(a=='zsay'){const z=ZS.find(x=>x.s==d.s);speak(z.h,[z.t])}
+ else if(a=='zopt'){const q=S.zq,it=q.items[q.i];if(q.done)return;q.sel=+d.j;const o=it.opts[+d.j];zfinish(it.z?o===it.z:o==zw(it.w));render()}
+ else if(a=='zk'){const q=S.zq;if(q.done||q.cur.length>=4)return;q.cur+=d.c;render()}
+ else if(a=='zdel'){const q=S.zq;if(q.done)return;if(q.cur)q.cur=Array.from(q.cur).slice(0,-1).join('');else if(q.inp.length)q.cur=q.inp.pop().replace(/[ˊˇˋ˙]/g,'');render()}
+ else if(a=='ztone'){const q=S.zq,it=q.items[q.i];if(q.done||!q.cur)return;q.inp.push(q.cur+(['','','ˊ','ˇ','ˋ'][+d.t]));q.cur='';if(q.inp.length==it.w.sy.length){const ans=it.w.sy.map(s=>zy(s.b,s.t));zfinish(q.inp.every((v,k)=>v==ans[k]))}render()}});
+document.addEventListener('keydown',e=>{if(S.v!='quiz'||sheet)return;const w=S.q[S.i],done=S.p.length==w.sy.length;
+ if(!done&&(/^[1-4]$/.test(e.key)||(e.key=='5'&&S.set.neu)))pick(+e.key);else if(e.key=='Backspace'&&!done){S.p.pop();render()}else if(e.key=='Enter'&&done&&!S.set.ta)next();else if(e.key==' '){e.preventDefault();sayW(w)}});
+render();
+}
+</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",()=>{navigator.serviceWorker.register("sw.js").catch(()=>{})})}</script>
+</body>
+</html>
