@@ -88,7 +88,7 @@ button:focus-visible{outline:3px solid var(--t4);outline-offset:3px}
 .slot.t2,.slot.t3{color:#2b2140}
 .slot svg{position:absolute;inset:6px;width:calc(100% - 12px);height:calc(100% - 12px);opacity:.35}
 .slot em{font-style:normal;position:relative}
-.mk{position:absolute;top:-12px;right:-10px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:16px;color:#fff;border:2.5px solid var(--line)}
+.mk{position:absolute;top:-12px;right:-10px;width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;padding:0;border:2.5px solid var(--line);box-sizing:border-box;line-height:0}.mk svg{width:100%;height:100%;display:block}
 .ok{background:var(--t3)}.ng{background:var(--t1)}
 .py{font-size:18px;font-weight:700}
 .zy{font-size:17px;font-weight:700;color:var(--sub)}
@@ -162,9 +162,9 @@ button:focus-visible{outline:3px solid var(--t4);outline-offset:3px}
 .sheet>div{width:100%;max-width:540px;background:var(--bg);border-radius:28px 28px 0 0;border:3px solid var(--line);padding:18px 16px calc(24px + env(safe-area-inset-bottom))}
 .sheet h3{margin:0 0 12px;font-size:20px}
 .opt{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:52px;border-bottom:2px dashed light-dark(#e6dccb,#3d3550);font-weight:700}
-.sw2{width:58px;height:34px;border-radius:20px;background:light-dark(#ddd2c0,#4a4258);border:2.5px solid var(--line);position:relative;flex:none}
-.sw2::after{content:"";position:absolute;top:2px;left:2px;width:24px;height:24px;border-radius:50%;background:#fff;border:2px solid var(--line);transition:left .2s}
-.sw2[aria-checked=true]{background:var(--t3)}.sw2[aria-checked=true]::after{left:26px}
+.sw2{-webkit-appearance:none;appearance:none;padding:0;margin:0;box-sizing:border-box;width:60px;height:34px;border-radius:17px;background:light-dark(#ddd2c0,#4a4258);border:2.5px solid var(--line);position:relative;flex:none;overflow:hidden}
+.sw2::after{content:"";box-sizing:border-box;position:absolute;top:50%;left:2px;width:25px;height:25px;margin-top:-12.5px;border-radius:50%;background:#fff;border:2px solid var(--line);transition:transform .2s}
+.sw2[aria-checked=true]{background:var(--t3)}.sw2[aria-checked=true]::after{transform:translateX(26px)}
 .vinfo{font-size:14px;color:var(--sub);margin:10px 0 0}
 .big{font-size:clamp(56px,18vw,84px);font-weight:900;line-height:1;margin:6px 0}
 .conf{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:8}
@@ -317,6 +317,17 @@ background:#fff linear-gradient(#0000 calc(50% - 1px),#2b214022 calc(50% - 1px) 
 .pyb{display:flex;justify-content:flex-end;padding:0 16px 10px;margin-top:-4px}
 .pyb button{min-height:40px;border-radius:20px;border:2.5px solid var(--line);background:var(--card);font-weight:900;font-size:14px;padding:4px 16px;box-shadow:0 3px 0 var(--line)}
 .pyb button.on{background:var(--ink);color:var(--bg)}
+.wov{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;z-index:2;opacity:0;animation:wfade 1.3s ease-out forwards}@keyframes wfade{0%{opacity:0;transform:scale(.7)}15%{opacity:1;transform:scale(1)}65%{opacity:1}100%{opacity:0;transform:scale(1.05)}}.wov svg{width:86%;height:86%}
+.op.hz{font:900 30px/1 "Noto Sans TC",sans-serif;letter-spacing:2px}
+.pyb{gap:8px;flex-wrap:wrap}
+#plall{display:inline-flex;align-items:center;gap:6px;background:var(--sun);color:#2b2140;margin-right:auto}
+#plall svg{width:18px;height:18px}
+.li.now{background:light-dark(#fff3c4,#3a3348);outline:3px solid var(--t2);outline-offset:-3px}
+.segs{display:inline-flex;gap:6px}.segs button{min-width:44px;min-height:36px;border-radius:12px;border:2.5px solid var(--line);font-weight:900;background:var(--card)}.segs .on{background:var(--ink);color:var(--bg)}
+.slot .mk svg{position:static;inset:auto;width:100%;height:100%;opacity:1}
+.bt.rb{display:inline-flex;flex-direction:column;align-items:center;gap:1px;padding:3px 7px 4px;font:900 20px/1 "Noto Sans TC",sans-serif}.bt.rb small{font:700 10px/1 "Noto Sans TC",sans-serif;letter-spacing:1px}
+.cover .start{margin-top:44px}
+.cover:not(.tocp){padding-bottom:calc(env(safe-area-inset-bottom) + 16vh)}
 </style>
 </head>
 <body>
@@ -1739,18 +1750,58 @@ let voices=[],ac=null,lastU=null,unlocked=false;const ss=('speechSynthesis' in w
 const lv=()=>{try{voices=ss.getVoices()||[]}catch(e){}};if(ss){lv();try{ss.addEventListener('voiceschanged',lv)}catch(e){ss.onvoiceschanged=lv}}
 const voice=()=>{if(!voices.length)lv();return voices.find(v=>/zh[-_]TW/i.test(v.lang))||voices.find(v=>/^zh/i.test(v.lang)&&!/HK|yue/i.test(v.lang+v.name))||null};
 function utter(text){const u=new SpeechSynthesisUtterance(text),v=voice();if(v)u.voice=v;u.lang=v?v.lang:'zh-TW';u.rate=ST.slow?.5:.8;u.volume=1;return u}
-function unlock(){if(unlocked)return;unlocked=true;try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume();const b=ac.createBuffer(1,1,22050),src=ac.createBufferSource();src.buffer=b;src.connect(ac.destination);src.start(0)}catch(e){}
+function unlock(){if(unlocked)return;unlocked=true;setTimeout(()=>{if(ST.bgm)bgmStart()},50);try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume();const b=ac.createBuffer(1,1,22050),src=ac.createBufferSource();src.buffer=b;src.connect(ac.destination);src.start(0)}catch(e){}
  try{if(ss){const u=new SpeechSynthesisUtterance(' ');u.volume=0;ss.speak(u)}}catch(e){}}
 document.addEventListener('pointerdown',unlock,{capture:true});document.addEventListener('touchend',unlock,{capture:true});document.addEventListener('click',unlock,{capture:true});
-function speak(text,tones){if(!ss){hum(tones);return}
+function speak(text,tones){if(!ss){hum(tones);return}if(SEQ.on){listPlaying=false;stopSeq();markNow(-1);updPlayBtn()}bgmDuck(true);setTimeout(()=>{if(!listPlaying&&!(ss&&ss.speaking))bgmDuck(false)},2500);
  try{if(ss.speaking||ss.pending)ss.cancel();ss.resume();lastU=utter(text);lastU.onerror=e=>{if(e.error!='interrupted'&&e.error!='canceled')hum(tones)};ss.speak(lastU)}catch(e){hum(tones)}}
-function speakAll(texts){if(!ss)return;try{ss.cancel();ss.resume();window._q=texts.map(utter);window._q.forEach(u=>ss.speak(u))}catch(e){}}
+let SEQ={on:false};
+function stopSeq(){if(SEQ.on){SEQ.on=false;clearTimeout(SEQ.t);try{ss.cancel()}catch(e){}const d=SEQ.done;SEQ.done=null;d&&d()}}
+function playSeq(texts,onEach,onDone){if(!ss)return false;stopSeq();SEQ={on:true,i:0,texts,onEach,done:onDone,us:[]};try{if(ss.speaking||ss.pending)ss.cancel();ss.resume()}catch(e){}seqNext();return true}
+function seqNext(){const q=SEQ;if(!q.on)return;if(q.i>=q.texts.length){q.on=false;const d=q.done;q.done=null;d&&d();return}
+ const i=q.i++,u=utter(q.texts[i]);q.us.push(u);let fin=false;const go=()=>{if(fin||SEQ!==q)return;fin=true;clearTimeout(q.t);setTimeout(seqNext,300)};
+ u.onend=go;u.onerror=e=>{if(!q.on)return;go()};q.onEach&&q.onEach(i);try{ss.resume();ss.speak(u)}catch(e){go()}q.t=setTimeout(go,2000+q.texts[i].length*800)}
+function speakAll(texts){bgmDuck(true);playSeq(texts,null,()=>bgmDuck(false))}
 function hum(tones){try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume();let t0=ac.currentTime+.05;const fq=l=>160*Math.pow(2,(l-1)/5),k=ST.slow?1.5:1;
  tones.forEach(t=>{const pts=P[t]||[3],dur=(t==5?.2:t==3?.55:.42)*k,o=ac.createOscillator(),g=ac.createGain();o.type='triangle';
   o.frequency.setValueAtTime(fq(pts[0]),t0);pts.slice(1).forEach((l,j)=>o.frequency.linearRampToValueAtTime(fq(l),t0+dur*(j+1)/(pts.length-1)));
   g.gain.setValueAtTime(0,t0);g.gain.linearRampToValueAtTime(.3,t0+.03);g.gain.setValueAtTime(.3,t0+dur-.06);g.gain.linearRampToValueAtTime(0,t0+dur);
   o.connect(g).connect(ac.destination);o.start(t0);o.stop(t0+dur+.02);t0+=dur+.1})}catch(e){}}
 const sayW=w=>speak(w.h,w.sy.map(s=>s.t));
+
+/* --- BGM（五音音階のオルゴール風・その場で生成） --- */
+const BGM={on:false,timer:0,next:0,step:0,master:null,duck:1};
+const PENTA=[0,2,4,7,9];
+const midiHz=m=>440*Math.pow(2,(m-69)/12);
+const PROG=[{r:36,c:[60,64,67]},{r:43,c:[59,62,67]},{r:45,c:[60,64,69]},{r:41,c:[60,65,69]}];// C G Am F
+const MEL=[[72,0,76,79,0,76,74,0],[74,0,79,0,81,79,76,0],[76,0,72,76,0,79,81,79],[77,0,76,74,0,72,69,0]];
+const MEL2=[[84,0,81,79,0,76,79,0],[79,0,76,74,0,79,0,74],[76,0,79,81,0,84,81,0],[81,79,77,0,76,74,72,0]];
+function bgmVol(){return [0,.035,.06,.09][ST.bgmV||2]}
+let NOISE=null;
+function bgmNote(f,t,d,type,v,att=.005){const o=ac.createOscillator(),g=ac.createGain();o.type=type;o.frequency.value=f;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(v,t+att);g.gain.exponentialRampToValueAtTime(.0001,t+d);o.connect(g).connect(BGM.master);o.start(t);o.stop(t+d+.05)}
+function bgmKick(t){const o=ac.createOscillator(),g=ac.createGain();o.frequency.setValueAtTime(130,t);o.frequency.exponentialRampToValueAtTime(45,t+.12);g.gain.setValueAtTime(.55,t);g.gain.exponentialRampToValueAtTime(.0001,t+.22);o.connect(g).connect(BGM.master);o.start(t);o.stop(t+.25)}
+function bgmNoise(t,d,v,ftype,freq){if(!NOISE){NOISE=ac.createBuffer(1,ac.sampleRate*.5,ac.sampleRate);const c=NOISE.getChannelData(0);for(let i=0;i<c.length;i++)c[i]=Math.random()*2-1}
+ const src=ac.createBufferSource(),f=ac.createBiquadFilter(),g=ac.createGain();src.buffer=NOISE;f.type=ftype;f.frequency.value=freq;g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);src.connect(f).connect(g).connect(BGM.master);src.start(t);src.stop(t+d+.02)}
+function bgmTick(){if(!BGM.on||!ac)return;const e=60/104/2;
+ while(BGM.next<ac.currentTime+1){const t=BGM.next,s=BGM.step,k=s%8,bar=Math.floor(s/8)%4,cyc=Math.floor(s/32),P=PROG[bar];
+  if(k==0||k==4)bgmKick(t);
+  if(k==2||k==6)bgmNoise(t,.12,.18,'bandpass',1800);
+  if(k%2==1)bgmNoise(t,.04,.08,'highpass',7000);
+  if(k==0||k==3||k==4||k==6)bgmNote(midiHz(P.r+(k==6?12:0)),t,e*1.6,'triangle',.5,.01);
+  if(k==2||k==5)P.c.forEach(m=>bgmNote(midiHz(m),t,e*1.2,'square',.035,.005));
+  const m=(cyc%2?MEL2:MEL)[bar][k];if(m&&!(cyc%4==3&&Math.random()<.3))bgmNote(midiHz(m),t,e*2.4,'sine',.4,.004),bgmNote(midiHz(m+12),t,e*1.2,'triangle',.06,.004);
+  BGM.next+=e;BGM.step++}}
+function bgmStart(){try{ac=ac||new(window.AudioContext||window.webkitAudioContext)();ac.resume();if(!BGM.master){BGM.master=ac.createGain();BGM.master.connect(ac.destination)}BGM.master.gain.setTargetAtTime(bgmVol()*BGM.duck,ac.currentTime,.3);if(BGM.on)return;BGM.on=true;BGM.next=ac.currentTime+.1;BGM.step=0;clearInterval(BGM.timer);BGM.timer=setInterval(bgmTick,300);bgmTick()}catch(e){}}
+function bgmStop(){BGM.on=false;clearInterval(BGM.timer);try{BGM.master&&BGM.master.gain.setTargetAtTime(0,ac.currentTime,.2)}catch(e){}}
+function bgmDuck(d){BGM.duck=d?.3:1;try{if(BGM.on&&BGM.master)BGM.master.gain.setTargetAtTime(bgmVol()*BGM.duck,ac.currentTime,.15)}catch(e){}}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)bgmStop();else if(ST.bgm&&unlocked)bgmStart()});
+/* --- 一覧の全部再生 --- */
+let listPlaying=false;
+function playList(ws){if(listPlaying){listPlaying=false;stopSeq();bgmDuck(false);markNow(-1);updPlayBtn();return}
+ if(!ss){toast('この画面では読み上げが使えません','var(--t1)');return}
+ listPlaying=true;bgmDuck(true);updPlayBtn();playSeq(ws.map(w=>w.h),i=>markNow(S.set.w.indexOf(ws[i])),()=>{listPlaying=false;bgmDuck(false);markNow(-1);updPlayBtn()})}
+function markNow(i){document.querySelectorAll('.li.now').forEach(e=>e.classList.remove('now'));if(i<0)return;const e=document.querySelector(`.li[data-a="sayw"][data-i="${i}"]`);if(e){e.classList.add('now');try{e.scrollIntoView({block:'nearest',behavior:'smooth'})}catch(x){}}}
+function updPlayBtn(){const b=document.getElementById('plall');if(b)b.innerHTML=listPlaying?'■ 停止':`${ic.spk} 全部再生`}
 
 /* --- 状態と描画 --- */
 const app=document.getElementById('app');
@@ -1762,7 +1813,7 @@ gear:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="curren
 spk:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
 wave:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M3 12c2-6 4-6 6 0s4 6 6 0 4-6 6 0"/></svg>'};
 const top=(t,back)=>`<div class="top">${back?`<button class="ib" data-a="nav" data-v="${back}" aria-label="もどる">${ic.back}</button>`:''}<h1>${t}</h1><button class="ib" data-a="set" aria-label="設定">${ic.gear}</button></div>`;
-const legend=z=>`<div class="legend">${[1,2,3,4].concat(z.neu?[5]:[]).map(t=>`<span class="t${t}">${TN[t]}</span>`).join('')}</div>`;
+const legend=z=>'';
 const mn=(a,ico,col,t,s,extra='')=>`<button class="mn" ${a}><span class="ico hz" style="background:${col}">${ico}</span><span><b>${t}${extra}</b>${s?`<span class="s">${s}</span>`:''}</span><span class="chev">›</span></button>`;
 
 function cover(){const st=[['ㄅ',1,-10,0],['ㄆ',2,8,10],['ㄇ',3,-6,-4],['ㄈ',4,10,8]];
@@ -1773,8 +1824,7 @@ function cover(){const st=[['ㄅ',1,-10,0],['ㄆ',2,8,10],['ㄇ',3,-6,-4],['ㄈ'
 <div class="chips"><span>繁體字</span><span>注音</span><span>ピンイン</span></div>
 <div class="stk" aria-hidden="true">${st.map(([z,t,r,y])=>`<span class="t${t}" style="transform:rotate(${r}deg) translateY(${y}px)">${z}</span>`).join('')}</div>
 <div class="yomi">たいわん　かご</div><h1 lang="ja"><span style="color:#ff4d7d">台</span><span style="color:#fff">湾</span><span style="color:#18c29c">華</span><span style="color:#4c7dff">語</span></h1>
-<p class="lead">注音・発音・単語・文・会話<br>まるごと練習帳</p>
-<div class="chg">${[['1','注音','var(--t1)','data-a="nav" data-v="zhu"'],['2','発音','var(--t2)','data-a="nav" data-v="pron"'],['3','単語','var(--t3)','data-a="nav" data-v="cats"'],['4','文','var(--t4)','data-a="cat" data-c="sent"'],['5','会話','#ff8a5b','data-a="cat" data-c="talk"']].map(([i,l,c,a])=>`<button ${a}><span class="hz" style="background:${c}">${i}</span>${l}</button>`).join('')}</div>
+
 <button class="start" data-a="nav" data-v="toc">はじめる ▶</button></div></section>`}
 
 const I=(b)=>`<svg viewBox="0 0 48 48" width="52" height="52" fill="#fff" stroke="#2b2140" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${b}</svg>`;
@@ -1836,7 +1886,7 @@ function talkView(z){return`<div class="plays" style="margin:0 0 12px"><button c
 /* --- 注音 --- */
 const ZS=`ㄅ b 玻 bo1 声母|ㄆ p 坡 po1 声母|ㄇ m 摸 mo1 声母|ㄈ f 佛 fo2 声母|ㄉ d 得 de2 声母|ㄊ t 特 te4 声母|ㄋ n 你 ni3 声母|ㄌ l 樂 le4 声母|ㄍ g 哥 ge1 声母|ㄎ k 科 ke1 声母|ㄏ h 喝 he1 声母|ㄐ j 雞 ji1 声母|ㄑ q 七 qi1 声母|ㄒ x 西 xi1 声母|ㄓ zh 知 zhi1 声母|ㄔ ch 吃 chi1 声母|ㄕ sh 詩 shi1 声母|ㄖ r 日 ri4 声母|ㄗ z 字 zi4 声母|ㄘ c 詞 ci2 声母|ㄙ s 四 si4 声母|ㄧ i(y) 衣 yi1 介音|ㄨ u(w) 烏 wu1 介音|ㄩ ü(yu) 魚 yu2 介音|ㄚ a 八 ba1 韻母|ㄛ o 喔 o1 韻母|ㄜ e 鵝 e2 韻母|ㄝ ê 爺 ye2 韻母|ㄞ ai 愛 ai4 韻母|ㄟ ei 黑 hei1 韻母|ㄠ ao 好 hao3 韻母|ㄡ ou 歐 ou1 韻母|ㄢ an 安 an1 韻母|ㄣ en 恩 en1 韻母|ㄤ ang 湯 tang1 韻母|ㄥ eng 冷 leng3 韻母|ㄦ er 兒 er2 韻母`.split('|').map(r=>{const[s,p,h,x,g]=r.split(' ');return{s,p,h,b:x.slice(0,-1),t:+x.slice(-1),g}});
 const ZG={'声母':'var(--t1)','介音':'var(--t3)','韻母':'var(--t4)'};
-const ZQ=[['sym2py','記号を見てピンインを選ぶ','ㄅ→b'],['py2sym','ピンインを見て記号を選ぶ','b→ㄅ'],['listen','聞いて注音を選ぶ','音→ㄇㄚ'],['dict1','書き取り（1文字）','音→入力'],['dict2','書き取り（単語）','音→入力']];
+const ZQ=[['sym2py','注音を見てピンインを選ぶ','ㄅ→b'],['py2sym','ピンインを見て注音を選ぶ','b→ㄅ'],['zy2hz','注音を見て漢字を選ぶ','ㄇㄚ→媽'],['listen','聞いて注音を選ぶ','音→ㄇㄚ'],['dict1','書き取り（1文字）','音→入力'],['dict2','書き取り（単語）','音→入力']];
 const shuf=a=>a.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(x=>x[1]);
 const zw=w=>w.sy.map(s=>zy(s.b,s.t)).join(' ');
 const SWP=[['ㄓ','ㄗ'],['ㄔ','ㄘ'],['ㄕ','ㄙ'],['ㄋ','ㄌ'],['ㄢ','ㄤ'],['ㄣ','ㄥ'],['ㄅ','ㄆ'],['ㄉ','ㄊ'],['ㄍ','ㄎ'],['ㄐ','ㄑ'],['ㄧ','ㄩ'],['ㄛ','ㄡ'],['ㄞ','ㄟ']];
@@ -1847,10 +1897,10 @@ function variants(w){const ok=zw(w),out=new Set();let n=0;
   const v=parts.join(' ');if(v!=ok)out.add(v)}
  return shuf([ok,...out])}
 
-function zhu(){const ZI={sym2py:'<span class="bt zy" style="font-size:13px;padding:4px 5px">ㄅ→b</span>',py2sym:'<span class="bt zy" style="font-size:13px;padding:4px 5px">b→ㄅ</span>',listen:IC.sound,dict1:IC.key,dict2:IC.key};const ZT={sym2py:'記号→ピンイン',py2sym:'ピンイン→記号',listen:'聞き取り',dict1:'書き取り（1文字）',dict2:'書き取り（単語）'};
+function zhu(){const ZI={zy2hz:'<span class="bt rb" lang="zh-Hant-TW"><small>ㄇㄚ</small>媽</span>',sym2py:'<span class="bt zy" style="font-size:13px;padding:4px 5px">ㄅ→b</span>',py2sym:'<span class="bt zy" style="font-size:13px;padding:4px 5px">b→ㄅ</span>',listen:IC.sound,dict1:IC.key,dict2:IC.key};const ZT={sym2py:'注音→ピンイン',py2sym:'ピンイン→注音',zy2hz:'注音→漢字',listen:'聞き取り',dict1:'書き取り（1文字）',dict2:'書き取り（単語）'};
  const sr=k=>`<span class="stars" style="font-size:15px;margin-left:8px">${stars(bestS(k))}</span>`;
  return top('注音','toc')+`<p class="sec" style="margin-top:0">見る・書く</p>`+mn('data-a="nav" data-v="zlist"',IC.grid,'var(--t1)','注音一覧','')+mn('data-a="zwstart" data-k="trace"',IC.pencil,'var(--t3)','なぞり書き','')+mn('data-a="zwstart" data-k="test"',IC.test,'var(--t2)','手書きテスト','',sr('zq_write'))+
- `<p class="sec">クイズ</p>`+ZQ.map(([k],i)=>mn(`data-a="zstart" data-k="${k}"`,ZI[k],['var(--t4)','var(--t4)','#ff8a5b','var(--t1)','var(--t1)'][i],ZT[k],'',sr('zq_'+k))).join('')}
+ `<p class="sec">クイズ</p>`+ZQ.map(([k],i)=>mn(`data-a="zstart" data-k="${k}"`,ZI[k],['var(--t4)','var(--t4)','var(--t3)','#ff8a5b','var(--t1)','var(--t1)'][i],ZT[k],'',sr('zq_'+k))).join('')}
 
 function zlist(){return top('注音一覧','zhu')+['声母','介音','韻母'].map(g=>`<p class="sec">${g}${g=='声母'?'（子音）':g=='介音'?'（i・u・ü）':'（母音）'}</p><div class="zgrid">${ZS.filter(z=>z.g==g).map(z=>`<button class="zt" data-a="zsay" data-s="${z.s}" style="--g:${ZG[g]}"><span class="zy">${z.s}</span><b>${esc(z.p)}</b><small class="hz">${z.h} ${zy(z.b,z.t)}</small></button>`).join('')}</div>`).join('')+
  `<div class="note">注音（ㄅㄆㄇㄈ）は台湾で使われている発音記号です。声調は1聲が記号なし、2聲ˊ・3聲ˇ・4聲ˋ、輕聲は˙を前に付けます。ㄓㄔㄕㄖㄗㄘㄙ は単独で zhi・chi・shi・ri・zi・ci・si と読みます。</div>`}
@@ -1858,8 +1908,9 @@ function zlist(){return top('注音一覧','zhu')+['声母','介音','韻母'].m
 function zstart(k){const pool=k=='dict1'?LV[0].w:k=='dict2'?LV[1].w.concat(LV[2].w):LV[0].w.concat(LV[1].w);
  let items;
  if(k=='sym2py'||k=='py2sym')items=shuf(ZS).slice(0,10).map(z=>({z,opts:shuf([z,...shuf(ZS.filter(o=>o.g==z.g&&o!==z)).slice(0,3)])}));
+ else if(k=='zy2hz'){const P=LV[0].w.concat(LV[1].w,LV[2].w);items=shuf(P).slice(0,10).map(w=>{const same=P.filter(o=>o!==w&&o.sy.length==w.sy.length&&o.h!=w.h);const near=same.filter(o=>o.sy.some((s,k)=>w.sy[k]&&(s.b==w.sy[k].b||s.t==w.sy[k].t)));const d=shuf(near).concat(shuf(same)).filter((o,i,a)=>a.indexOf(o)==i).slice(0,3);return{w,opts:shuf([w,...d])}})}
  else items=shuf(pool).slice(0,10).map(w=>({w,opts:k=='listen'?variants(w):null}));
- go('zq',{zq:{k,t:ZQ.find(q=>q[0]==k)[1],items,i:0,sc:0,sel:null,inp:[],cur:'',done:false}});setTimeout(zplay,250)}
+ go('zq',{zq:{k,t:ZQ.find(q=>q[0]==k)[1],items,i:0,sc:0,sel:null,inp:[],cur:'',done:false}});if(k!='zy2hz')setTimeout(zplay,250)}
 function zplay(){const q=S.zq,it=q.items[q.i];if(it.w)sayW(it.w);else speak(it.z.h,[it.z.t])}
 function zfinish(ok){const q=S.zq;q.done=true;if(ok){q.sc++;confetti();award(10)}const it=q.items[q.i];if(!ok&&it.w)weakAdd(it.w);if(it.w)setTimeout(()=>sayW(it.w),300);else speak(it.z.h,[it.z.t])}
 const KB='ㄅㄆㄇㄈㄉㄊㄋㄌㄍㄎㄏㄐㄑㄒㄓㄔㄕㄖㄗㄘㄙㄧㄨㄩㄚㄛㄜㄝㄞㄟㄠㄡㄢㄣㄤㄥㄦ';
@@ -1871,6 +1922,12 @@ function zq(){const q=S.zq,it=q.items[q.i];let body='';
   ${q.done?`<div class="mean"><span class="hz">${z.h}</span>　<span class="zy">${zy(z.b,z.t)}</span>　${pyMark(z.b,z.t)}</div>`:''}
   <div class="plays"><button class="pb alt" data-a="zplay">${ic.spk}例の音</button></div></div>
   <div class="opts">${it.opts.map((o,j)=>{const st=q.done?(o===z?'good':q.sel===j?'bad':''):'';return`<button class="op ${st} ${sym?'':'zy'}" data-a="zopt" data-j="${j}" ${q.done?'disabled':''}>${sym?esc(o.p):o.s}</button>`}).join('')}</div>`}
+ else if(q.k=='zy2hz'){const w=it.w;
+  body=`<div class="card"><div class="meta"><span>${q.i+1} / ${q.items.length}</span><span>正解 ${q.sc}</span></div>
+  <div class="zbig zy" style="font-size:${w.sy.length>1?48:72}px;gap:14px">${w.sy.map(s=>`<span class="${q.done?'c'+s.t:''}">${zy(s.b,s.t)}</span>`).join('')}</div>
+  ${q.done?`<div class="py">${pyC(w)}</div><div class="mean">${esc(w.j)}</div>`:'<div class="dn">この注音の漢字はどれ？</div>'}
+  <div class="plays"><button class="pb alt" data-a="zplay">${ic.spk}音を聞く</button></div></div>
+  <div class="opts">${it.opts.map((o,j)=>{const st=q.done?(o===w?'good':q.sel===j?'bad':''):'';return`<button class="op hz ${st}" lang="zh-Hant-TW" data-a="zopt" data-j="${j}" ${q.done?'disabled':''}>${esc(o.h)}</button>`}).join('')}</div>`}
  else if(q.k=='listen'){const w=it.w,ok=zw(w);
   body=`<div class="card"><div class="meta"><span>${q.i+1} / ${q.items.length}</span><span>正解 ${q.sc}</span></div>
   ${q.done?`<div class="mean"><span class="hz" style="font-size:34px">${hzC(w)}</span></div><div class="py">${pyC(w)}</div>`:`<div class="zbig">${ic.spk.replace('width="22" height="22"','width="64" height="64"')}</div>`}
@@ -1897,7 +1954,7 @@ function zwJudge(){const q=S.zw,z=q.list[q.i];if(!q.strokes.length)return;const 
  const mk=f=>{const c=document.createElement('canvas');c.width=c.height=N;const x=c.getContext('2d');f(x);return x.getImageData(0,0,N,N).data};
  const core=mk(x=>glyph(x,N,z.s,'#000',2)),zone=mk(x=>glyph(x,N,z.s,'#000',N*.15)),ink=mk(x=>inkDraw(x,N,q.strokes,N*.05,'#000')),fat=mk(x=>inkDraw(x,N,q.strokes,N*.17,'#000'));
  let c=0,cc=0,k=0,kk=0;for(let i=3;i<core.length;i+=4){if(core[i]>100){c++;if(fat[i]>60)cc++}if(ink[i]>100){k++;if(zone[i]>60)kk++}}
- const cov=c?cc/c:0,pre=k?kk/k:0;q.res=cov>.8&&pre>.85?3:cov>.6&&pre>.7?2:1;if(q.res>1)award(10);if(q.mode=='test'&&q.res>1)q.sc++;if(q.res==3)confetti();render()}
+ const cov=c?cc/c:0,pre=k?kk/k:0;q.res=cov>.8&&pre>.85?3:cov>.6&&pre>.7?2:1;if(q.res>1)award(10);if(q.mode=='test'&&q.res>1)q.sc++;if(q.res>1)confetti();render()}
 let zwT=0;
 function zwInit(){const c=document.getElementById('wc'),g=document.getElementById('wg');if(!c)return;const q=S.zw,z=q.list[q.i],W=c.parentElement.clientWidth,dpr=window.devicePixelRatio||1;
  [c,g].forEach(e=>{e.width=e.height=W*dpr;e.getContext('2d').setTransform(dpr,0,0,dpr,0,0)});
@@ -1916,9 +1973,9 @@ function zwView(){const q=S.zw,z=q.list[q.i],tr=q.mode=='trace',last=q.i+1>=q.li
  return top(tr?'なぞり書き':'手書きテスト','zhu')+`<div class="prog"><i style="width:${(tr?q.i+1:q.i)/q.list.length*100}%"></i></div>
 <div class="card" style="padding-bottom:14px"><div class="meta"><span>${q.i+1} / ${q.list.length}</span><span>${tr?esc(z.g):'正解 '+q.sc}</span></div>
 <div class="winfo"><b>${esc(z.p)}</b><span class="hz">${z.h}</span>${tr||q.res?`<span class="zy">${zy(z.b,z.t)}</span>`:''}<button class="pb alt" data-a="zwsay" aria-label="例の音">${ic.spk}</button></div>
-<div class="wpad"><canvas id="wg"></canvas><canvas id="wc" aria-label="ここに書く"></canvas>${q.res?`<span id="wfb" class="wmk ${q.res==3?'t3':q.res==2?'t2':'t1'}" aria-label="${msg[q.res]}">${['','×','○','◎'][q.res]}</span>`:''}</div>
+<div class="wpad"><canvas id="wg"></canvas><canvas id="wc" aria-label="ここに書く"></canvas>${q.res?`<span id="wfb" class="wov" role="img" aria-label="${msg[q.res]}">${q.res>1?'<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="36" fill="none" stroke="#18c29c" stroke-width="9" opacity=".75"/></svg>':'<svg viewBox="0 0 100 100"><path d="M22 22L78 78M78 22L22 78" stroke="#4c7dff" stroke-width="9" stroke-linecap="round" opacity=".55"/></svg>'}</span>`:''}</div>
 
-<div class="wbtn">${tr?`<button class="btn" data-a="zwguide">お手本 ${q.guide?'ON':'OFF'}</button>`:''}<button class="btn" data-a="zwclear" ${q.mode=='test'&&q.res?'disabled':''}>消す</button><button class="btn hintb" id="whint" ${q.res?'disabled':''}>ヒント<small>押している間</small></button></div></div>
+<div class="wbtn">${tr?`<button class="btn" data-a="zwguide">お手本 ${q.guide?'ON':'OFF'}</button>`:''}<button class="btn" data-a="zwclear" ${q.mode=='test'&&q.res?'disabled':''}>消す</button><button class="btn hintb" id="whint" ${q.res?'disabled':''}>ヒント</button></div></div>
 <div class="row" style="padding-top:0">${tr?`<button class="btn" data-a="zwmove" data-d="-1" ${q.i?'':'disabled'}>◀ 前</button><button class="btn go" style="background:var(--t4)" data-a="zwmove" data-d="1" ${last?'disabled':''}>次 ▶</button>`:
  q.res?`<button class="btn go" style="background:var(--t4)" data-a="zwmove" data-d="1">${last?'結果を見る ▶':'次へ ▶'}</button>`:''}</div>
 <p class="dn" style="text-align:center;margin:10px 16px">${tr?'うすいお手本の上を指でなぞって書きます。':'ピンインと例の字を見て、注音の記号を書きます。'}書き終わって少し待つと自動で判定します。書き順の判定はありません。</p>`}
@@ -1929,7 +1986,7 @@ function zwMove(d){const q=S.zw;if(q.mode=='test'&&q.i+1>=q.list.length&&d>0){co
 function zres(){const q=S.zq,r=q.sc/q.items.length,st=r>=.9?3:r>=.7?2:r>=.5?1:0;
  return top('結果','zhu')+`<div class="card"><div style="font-weight:900">${q.t}</div><div class="big">${q.sc}<span style="font-size:28px"> / ${q.items.length}</span></div><div class="stars" style="font-size:34px;margin:0">${stars(st)}</div></div>
 <div class="row"><button class="btn" data-a="nav" data-v="zhu">もどる</button><button class="btn go" style="background:var(--t4)" data-a="zstart" data-k="${q.k}">もう一度 ▶</button></div>`}
-function znext(){const q=S.zq;if(q.i+1<q.items.length){Object.assign(q,{i:q.i+1,sel:null,inp:[],cur:'',done:false});render();setTimeout(zplay,200)}
+function znext(){const q=S.zq;if(q.i+1<q.items.length){Object.assign(q,{i:q.i+1,sel:null,inp:[],cur:'',done:false});render();if(q.k!='zy2hz')setTimeout(zplay,200)}
  else{const r=q.sc/q.items.length,st=r>=.9?3:r>=.7?2:r>=.5?1:0,k='zq_'+q.k;ST.best=ST.best||{};const b=ST.best[k]||{s:0,sc:0};ST.best[k]={s:Math.max(b.s,st),sc:Math.max(b.sc,q.sc)};if(st==3)s3add(k);save();go('zres')}}
 
 function base(){return top('レベル練習','pron')+LV.map(l=>`<div class="lv"><div class="lvh"><span class="badge" style="background:${l.col}">${l.id}</span><div><b>${l.t}</b></div><span class="stars" aria-label="ベスト星${bestS(l.k)}">${stars(bestS(l.k))}</span></div>
@@ -1954,14 +2011,14 @@ function learn(){const z=S.set;const sub=z.ab?`<div class="card" style="padding:
  const rows=L.map(w=>{const i=z.w.indexOf(w);const pat=w.sy.map(x=>x.t).join('');let h='';
   
   return h+`<button class="li ${z.sent?'sent':''}" data-a="sayw" data-i="${i}"><span class="hz" lang="zh-Hant-TW">${hzC(w)}</span><span class="tx">${lpy()?`<div>${pyC(w)}</div>`:''}<div class="zy">${zyS(w)}</div><small>${esc(w.j)}</small>${noteOf(w)?`<small class="n">${noteOf(w)}</small>`:''}</span></button>`}).join('');
- return top(z.t,z.par)+sub+tabs+(L.length?`<div class="row" style="padding:0 16px 12px"><button class="btn go" style="background:${z.col}" data-a="quiz" data-k="${z.k}">${z.levels?(S.lf<0?'すべて':LVN[S.lf])+'の':''}クイズ ▶</button></div>`:'')+legend(z)+pyBtn()+`<p class="sec" style="margin-top:0">漢字の色が声調です。タップで発音を聞けます</p>${z.note?`<div class="note" style="margin-top:0">${z.note}</div>`:''}${L.length?`<div class="list">${rows}</div>`:'<div class="note">この組み合わせの単語はまだありません。</div>'}`}
+ return top(z.t,z.par)+sub+tabs+(L.length?`<div class="row" style="padding:0 16px 12px"><button class="btn go" style="background:${z.col}" data-a="quiz" data-k="${z.k}">${z.levels?(S.lf<0?'すべて':LVN[S.lf])+'の':''}クイズ ▶</button></div>`:'')+legend(z)+`<div class="pyb"><button id="plall" class="" data-a="plall">${listPlaying?'■ 停止':ic.spk+' 全部再生'}</button>${pyBtn().replace('<div class="pyb">','').replace('</div>','')}</div>`+`<p class="sec" style="margin-top:0">漢字の色が声調です。タップで発音を聞けます</p>${z.note?`<div class="note" style="margin-top:0">${z.note}</div>`:''}${L.length?`<div class="list">${rows}</div>`:'<div class="note">この組み合わせの単語はまだありません。</div>'}`}
 
 function quiz(){const z=S.set,w=S.q[S.i],n=w.sy.length,done=S.p.length==n;
  const res=done?w.sy.map((s,k)=>S.p[k]==s.t):[];const allOk=done&&res.every(Boolean);
  return top(z.ta?z.t:z.t+' クイズ',z.par)+(z.ta?`<div class="tah"><span>残り <b id="tm">${Math.max(0,Math.ceil((S.taEnd-Date.now())/1000))}</b> 秒</span><span>正解 <b>${S.sc}</b></span><span>${S.combo>1?S.combo+'連続！':''}</span></div>`:`<div class="prog"><i style="width:${S.i/S.q.length*100}%"></i></div>`)+`
 <div class="card"><div class="meta"><span>${z.ta?(S.i+1)+'問目':(S.i+1)+' / '+S.q.length}</span><span>正解 ${S.sc}</span></div>
 <div class="word ${n>5?'cmp':''}" lang="zh-Hant-TW">${w.sy.map((s,k)=>{const p=S.p[k];return`<div class="syl"><div class="hz ${ST.chars||done?'':'q'} ${done?'c'+s.t:''}">${ST.chars||done?esc(w.ch[k]):'？'}</div>
-<div class="slot ${!done&&k==S.p.length?'cur':''} ${p?'t'+p:''}" ${p?`data-t="${p}"`:''}>${p?cv(p,n>5?40:60,n>5?28:40,4,p==2||p==3?'#2b2140':'#fff')+`<em>${TN[p]}</em>`:''}${done?`<span class="mk ${res[k]?'ok':'ng'}">${res[k]?'○':'×'}</span>`:''}</div>
+<div class="slot ${!done&&k==S.p.length?'cur':''} ${p?'t'+p:''}" ${p?`data-t="${p}"`:''}>${p?cv(p,n>5?40:60,n>5?28:40,4,p==2||p==3?'#2b2140':'#fff')+`<em>${TN[p]}</em>`:''}${done?`<span class="mk ${res[k]?'ok':'ng'}" aria-label="${res[k]?'正解':'不正解'}">${res[k]?'<svg viewBox="0 0 20 20"><circle cx="10" cy="10" r="5.5" fill="none" stroke="#fff" stroke-width="2.6"/></svg>':'<svg viewBox="0 0 20 20"><path d="M6 6l8 8M14 6l-8 8" stroke="#fff" stroke-width="2.6" stroke-linecap="round"/></svg>'}</span>`:''}</div>
 ${ST.py||done?`<div class="py ${done?'c'+s.t:''}">${done?pyMark(s.b,s.t):s.b}</div>`:''}
 ${ST.zy||done?`<div class="zy ${done?'c'+s.t:''}">${zy(s.b,done?s.t:1)}</div>`:''}
 ${done&&!res[k]?`<div class="fix c${s.t}">正解 ${TN[s.t]}</div>`:''}</div>`}).join('')}</div>
@@ -1980,7 +2037,7 @@ ${S.miss.length?`<p class="sec">まちがえた${z.sent?'文':'単語'}</p><div 
 
 function setSheet(){const v=voice();const o=(k,t)=>`<div class="opt"><span>${t}</span><button class="sw2" role="switch" aria-checked="${!!ST[k]}" aria-label="${t}" data-a="tog" data-k="${k}"></button></div>`;
  return`<div class="sheet" data-a="close"><div data-stop="1"><h3>設定</h3>${o('chars','クイズで漢字を先に表示')}${o('py','クイズでピンインを表示')}${o('zy','クイズで注音を表示')}${o('slow','ゆっくり再生')}
-<div class="opt"><span>音声テスト</span><button class="btn" style="min-height:40px;padding:4px 14px" data-a="stest">你好 を再生</button></div>
+<div class="opt"><span>BGM</span><button class="sw2" role="switch" aria-checked="${!!ST.bgm}" aria-label="BGM" data-a="bgm"></button></div>${ST.bgm?`<div class="opt"><span>BGMの音量</span><span class="segs">${['小','中','大'].map((l,i)=>`<button class="${(ST.bgmV||2)==i+1?'on':''}" data-a="bgmv" data-v="${i+1}">${l}</button>`).join('')}</span></div>`:''}<div class="opt"><span>音声テスト</span><button class="btn" style="min-height:40px;padding:4px 14px" data-a="stest">你好 を再生</button></div>
 <p class="vinfo">${!ss?'この画面では読み上げ機能が使えません。かわりにトーン音（声調の高さの電子音）で再生します。Safari や Chrome でこのページを開くと読み上げが使える場合があります。':v?'読み上げ音声：'+esc(v.name)+'（'+esc(v.lang)+'）'+(/TW/i.test(v.lang)?'':' ※台湾の音声が見つからないため代わりの音声を使用中'):'中国語の音声が見つかりません（音声リスト '+voices.length+' 件）。端末の設定で中国語（台湾）の音声を追加してください。iPhone：設定 > アクセシビリティ > 読み上げコンテンツ > 声 > 中国語（台湾）'}</p>
 <div class="opt" style="border:0"><span>記録のバックアップ</span><button class="btn" style="min-height:40px;padding:4px 14px" data-a="bk">コピー</button></div><textarea id="rs" class="rs" placeholder="ここにバックアップのコードを貼り付けて「復元」"></textarea><div style="text-align:right"><button class="btn" style="min-height:40px;padding:4px 14px" data-a="rs">復元</button></div>
 <p class="vinfo">音が出ないとき：iPhone はマナーモード（消音スイッチ）を解除し、音量を上げてください。</p>
@@ -2106,7 +2163,7 @@ const findSet=k=>LV.find(l=>l.k==k)||GS.find(c=>c.k==k)||Object.values(CB).find(
 const tcmp=(a,b)=>a.sy.length-b.sy.length||a.sy.map(x=>x.t).join('').localeCompare(b.sy.map(x=>x.t).join(''));
 [...LV.slice(1),...GS.filter(z=>!z.sent&&!z.sandhi)].forEach(z=>{z.w=z.w.slice().sort(tcmp);if(z.levels)z.levels=z.levels.map(a=>a.slice().sort(tcmp))});
 function render(){app.innerHTML=({cover,toc,pron,cats,cat,base,combos,basics,learn,quiz,result,zhu,zlist,zq,zres,zw:zwView,weak,sandhi:sandhiView,my,tares})[S.v]()+(sheet?setSheet():'');if(S.v=='zw')zwInit();}
-function go(v,o={}){S={...S,...o,v};render();window.scrollTo(0,0)}
+function go(v,o={}){if(SEQ.on){listPlaying=false;stopSeq();bgmDuck(false)}S={...S,...o,v};render();window.scrollTo(0,0)}
 function startQuiz(k){const set=k=='weak'||k=='weakall'?weakSet(k=='weakall'):k=='today'?todaySet():k=='ta'?taSet():findSet(k);if(!set.w.length){go(k.startsWith('weak')?'weak':S.v);return}if(S.set!==set)S.lf=set.levels?0:-1;const w=curList(set).slice().sort(()=>Math.random()-.5).slice(0,set.ta?200:10);go('quiz',{set,q:w,i:0,p:[],sc:0,miss:[],combo:0});if(set.ta)taStart();setTimeout(()=>sayW(S.q[0]),250)}
 function confetti(){const c=document.createElement('div');c.className='conf';c.innerHTML=Array.from({length:28},(_,i)=>`<i style="left:${Math.random()*100}%;background:var(--t${i%4+1});animation-delay:${Math.random()*.3}s"></i>`).join('');document.body.appendChild(c);setTimeout(()=>c.remove(),1600)}
 function pick(t){const w=S.q[S.i];if(S.p.length>=w.sy.length)return;S.p.push(t);hum([t]);
@@ -2122,12 +2179,12 @@ app.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)retu
  else if(a=='play')sayW(S.q[S.i]);else if(a=='humq')hum(S.q[S.i].sy.map(s=>s.t));
  else if(a=='slow'){ST.slow=!ST.slow;save();render()}
  else if(a=='pick')pick(+d.t);else if(a=='undo'){S.p.pop();render()}else if(a=='next')next();
- else if(a=='set'){sheet=true;lv();render()}else if(a=='stest'){speak('你好',[3,3])}else if(a=='lpy'){ST.lpy=!lpy();save();const y=scrollY;render();scrollTo(0,y)}else if(a=='pet'){G().pet=d.p;save();render()}else if(a=='bk'){const c=bkCode(),t=document.getElementById('rs');if(t)t.value=c;try{navigator.clipboard.writeText(c).then(()=>toast('バックアップをコピーしました'),()=>toast('下の欄のコードを長押ししてコピーしてください','var(--t2)'))}catch(e){toast('下の欄のコードを長押ししてコピーしてください','var(--t2)')}}else if(a=='rs'){const t=document.getElementById('rs');if(t&&t.value.trim()&&restore(t.value)){toast('記録を復元しました');sheet=false;render()}else toast('コードが正しくありません','var(--t1)')}else if(a=='close'){sheet=false;render()}
+ else if(a=='set'){sheet=true;lv();render()}else if(a=='stest'){speak('你好',[3,3])}else if(a=='plall'){playList(curList(S.set))}else if(a=='bgm'){ST.bgm=!ST.bgm;save();if(ST.bgm)bgmStart();else bgmStop();render()}else if(a=='bgmv'){ST.bgmV=+d.v;save();if(ST.bgm)bgmStart();render()}else if(a=='lpy'){ST.lpy=!lpy();save();const y=scrollY;render();scrollTo(0,y)}else if(a=='pet'){G().pet=d.p;save();render()}else if(a=='bk'){const c=bkCode(),t=document.getElementById('rs');if(t)t.value=c;try{navigator.clipboard.writeText(c).then(()=>toast('バックアップをコピーしました'),()=>toast('下の欄のコードを長押ししてコピーしてください','var(--t2)'))}catch(e){toast('下の欄のコードを長押ししてコピーしてください','var(--t2)')}}else if(a=='rs'){const t=document.getElementById('rs');if(t&&t.value.trim()&&restore(t.value)){toast('記録を復元しました');sheet=false;render()}else toast('コードが正しくありません','var(--t1)')}else if(a=='close'){sheet=false;render()}
  else if(a=='tog'){ST[d.k]=!ST[d.k];save();render()}
  else if(a=='playall'){if(ss)speakAll(S.set.w.map(w=>w.h));else hum(S.set.w.flatMap(w=>w.sy.map(s=>s.t)))}
  else if(a=='zstart')zstart(d.k);else if(a=='zwstart')zwStart(d.k);else if(a=='zwjudge')zwJudge();else if(a=='zwclear'){clearTimeout(zwT);S.zw.strokes=[];S.zw.res=null;render()}else if(a=='zwguide'){S.zw.guide=!S.zw.guide;render()}else if(a=='zwmove')zwMove(+d.d);else if(a=='zwsay'){const z=S.zw.list[S.zw.i];speak(z.h,[z.t])}else if(a=='zplay')zplay();else if(a=='znext')znext();
  else if(a=='zsay'){const z=ZS.find(x=>x.s==d.s);speak(z.h,[z.t])}
- else if(a=='zopt'){const q=S.zq,it=q.items[q.i];if(q.done)return;q.sel=+d.j;const o=it.opts[+d.j];zfinish(it.z?o===it.z:o==zw(it.w));render()}
+ else if(a=='zopt'){const q=S.zq,it=q.items[q.i];if(q.done)return;q.sel=+d.j;const o=it.opts[+d.j];zfinish(it.z?o===it.z:q.k=='zy2hz'?o===it.w:o==zw(it.w));render()}
  else if(a=='zk'){const q=S.zq;if(q.done||q.cur.length>=4)return;q.cur+=d.c;render()}
  else if(a=='zdel'){const q=S.zq;if(q.done)return;if(q.cur)q.cur=Array.from(q.cur).slice(0,-1).join('');else if(q.inp.length)q.cur=q.inp.pop().replace(/[ˊˇˋ˙]/g,'');render()}
  else if(a=='ztone'){const q=S.zq,it=q.items[q.i];if(q.done||!q.cur)return;q.inp.push(q.cur+(['','','ˊ','ˇ','ˋ'][+d.t]));q.cur='';if(q.inp.length==it.w.sy.length){const ans=it.w.sy.map(s=>zy(s.b,s.t));zfinish(q.inp.every((v,k)=>v==ans[k]))}render()}});
