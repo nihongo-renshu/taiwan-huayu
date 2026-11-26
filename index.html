@@ -19,7 +19,7 @@
 /* VOICE: 明るく元気、ゲームのように軽快な練習帳
    IDEA: 夜市の屋台の色札とシールが貼られた単語カード
    PICTURE: 声調ごとに色分けされた漢字と、音の高さの軌跡
-   COLOUR and TYPE: 1聲ピンク・2聲イエロー・3聲ミント・4聲ブルー / Zen Maru Gothic + Noto Sans TC
+   COLOUR and TYPE: 一聲ピンク・二聲イエロー・三聲ミント・四聲ブルー / Zen Maru Gothic + Noto Sans TC
    LAYOUT: スマホ1カラム、上にカード、下に大きな声調ボタン */
 :root{color-scheme:light dark;
 --bg:light-dark(#fff8ec,#1c1826);--card:light-dark(#ffffff,#2a2537);--ink:light-dark(#2b2140,#f6f1ff);--sub:light-dark(#7a6f8e,#b9b0cc);
@@ -328,6 +328,9 @@ background:#fff linear-gradient(#0000 calc(50% - 1px),#2b214022 calc(50% - 1px) 
 .bt.rb{display:inline-flex;flex-direction:column;align-items:center;gap:1px;padding:3px 7px 4px;font:900 20px/1 "Noto Sans TC",sans-serif}.bt.rb small{font:700 10px/1 "Noto Sans TC",sans-serif;letter-spacing:1px}
 .cover .start{margin-top:44px}
 .cover:not(.tocp){padding-bottom:calc(env(safe-area-inset-bottom) + 16vh)}
+.zl{font-size:12px;font-weight:900;margin-top:2px}.zl.okl{color:var(--k3)}.zl.ngl{color:var(--k1)}
+.zin.bad s{text-decoration-thickness:3px}
+.kt .k .km{min-height:22px;display:block;line-height:22px}
 </style>
 </head>
 <body>
@@ -1707,7 +1710,7 @@ const GS=[];
 CAT.forEach(c=>{c.sets=c.g.map(([k,n,l,note])=>{if(LVX[k])l=l+' | '+LVX[k];const z={k:'g_'+k,t:n,col:c.col,par:'cat:'+c.k,note,sent:c.sent||c.talk,talk:c.talk,
  w:c.talk?l.split('\n').map(r=>{const i=r.indexOf('|');const w=parse(r.slice(i+1),1);w.sp=r.slice(0,i);return w}):c.sent?l.split('\n').map(r=>parse(r,1)):l.replace(/\|/g,' ').split(/\s+/).filter(Boolean).map(h=>DICT[h]).filter(Boolean)};if(!c.sent&&!c.talk&&l.includes('|')){z.levels=l.split('|').map(x=>x.trim().split(/\s+/).filter(Boolean).map(h=>DICT[h]).filter(Boolean))}GS.push(z);return z})});
 const ALL=Object.values(DICT);
-const CB={};for(let a=1;a<5;a++)for(let b=1;b<5;b++){const w=ALL.filter(x=>x.sy.length==2&&x.sy[0].t==a&&x.sy[1].t==b);CB[a+''+b]={k:'cb'+a+b,t:`${a}聲＋${b}聲`,par:'combos',col:`var(--t${a})`,w,ab:[a,b]}}
+const CB={};for(let a=1;a<5;a++)for(let b=1;b<5;b++){const w=ALL.filter(x=>x.sy.length==2&&x.sy[0].t==a&&x.sy[1].t==b);CB[a+''+b]={k:'cb'+a+b,t:`${'一二三四'[a-1]}聲＋${'一二三四'[b-1]}聲`,par:'combos',col:`var(--t${a})`,w,ab:[a,b]}}
 const sandhi=w=>w.sy.some((s,k)=>k&&s.t==3&&w.sy[k-1].t==3);
 const neuN=w=>w.sy.some(s=>s.n);
 
@@ -1725,13 +1728,13 @@ function zy(b,t){let s=b.replace('ü','v'),i='',f;
   if(['zh','ch','sh','r','z','c','s'].includes(i)&&f=='i')f=''}
  const z=(IN[i]||'')+(FI[f]??'?');
  return t==5?'˙'+z:z+(['','','ˊ','ˇ','ˋ'][t]||'')}
-const TN=['','1聲','2聲','3聲','4聲','輕聲'];
+const TN=['','一聲','二聲','三聲','四聲','輕聲'];
 const TD=['','高く平らに','下から上へ上がる','低く抑える','高いところから一気に下がる','軽く短く（助詞など）'];
 const MKS=['','記号なし','ˊ','ˇ','ˋ','˙'];
 const hzC=w=>{let k=0;return Array.from(w.h).map(c=>isH(c)?`<span class="c${w.sy[k++].t}">${esc(c)}</span>`:`<span class="c5">${esc(c)}</span>`).join('')};
 const pyC=w=>w.sy.map(s=>`<span class="c${s.t}">${pyMark(s.b,s.t)}</span>`).join(' ');
 const zyS=w=>w.sy.map(s=>`<span class="c${s.t}">${zy(s.b,s.t)}</span>`).join(' ');
-const noteOf=w=>w.orig?`辞書の表記：${w.orig}（${w.origZ}）`:w.sandhiNo?'声調は変わりません':[neuN(w)?(w.sy.length>4?`辞典では輕聲の字：${w.ch.filter((c,k)=>w.sy[k].n).join('・')}`:`辞典では輕聲：${w.sy.map(s=>s.n?zy(s.b,5):zy(s.b,s.t)).join(' ')}`):'',w.sy.some(s=>s.t==5)?'的・嗎・吧などの助詞は台湾でも輕聲':'',sandhi(w)?'3聲が続くところは前が2聲で発音':'',w.ch.includes('不')&&w.h!='不'?'不は4聲の前で2聲に変わります（不要 búyào など）':'',w.h!='一'&&w.ch.includes('一')?'一は後ろの声調で読み方が変わります（一百 yìbǎi など）':w.h=='一'?'単独や数を数えるときは1聲。後ろの声調で変わります':''].filter(Boolean).join('／');
+const noteOf=w=>w.orig?`辞書の表記：${w.orig}（${w.origZ}）`:w.sandhiNo?'声調は変わりません':[neuN(w)?(w.sy.length>4?`辞典では輕聲の字：${w.ch.filter((c,k)=>w.sy[k].n).join('・')}`:`辞典では輕聲：${w.sy.map(s=>s.n?zy(s.b,5):zy(s.b,s.t)).join(' ')}`):'',w.sy.some(s=>s.t==5)?'的・嗎・吧などの助詞は台湾でも輕聲':'',sandhi(w)?'三聲が続くところは前が二聲で発音':'',w.ch.includes('不')&&w.h!='不'?'不は四聲の前で二聲に変わります（不要 búyào など）':'',w.h!='一'&&w.ch.includes('一')?'一は後ろの声調で読み方が変わります（一百 yìbǎi など）':w.h=='一'?'単独や数を数えるときは一聲。後ろの声調で変わります':''].filter(Boolean).join('／');
 
 /* --- 声調の線 --- */
 const P={1:[5,5],2:[3,5],3:[2,1,4],4:[5,1],5:[3]};
@@ -1903,7 +1906,7 @@ function zhu(){const ZI={zy2hz:'<span class="bt rb" lang="zh-Hant-TW"><small>ㄇ
  `<p class="sec">クイズ</p>`+ZQ.map(([k],i)=>mn(`data-a="zstart" data-k="${k}"`,ZI[k],['var(--t4)','var(--t4)','var(--t3)','#ff8a5b','var(--t1)','var(--t1)'][i],ZT[k],'',sr('zq_'+k))).join('')}
 
 function zlist(){return top('注音一覧','zhu')+['声母','介音','韻母'].map(g=>`<p class="sec">${g}${g=='声母'?'（子音）':g=='介音'?'（i・u・ü）':'（母音）'}</p><div class="zgrid">${ZS.filter(z=>z.g==g).map(z=>`<button class="zt" data-a="zsay" data-s="${z.s}" style="--g:${ZG[g]}"><span class="zy">${z.s}</span><b>${esc(z.p)}</b><small class="hz">${z.h} ${zy(z.b,z.t)}</small></button>`).join('')}</div>`).join('')+
- `<div class="note">注音（ㄅㄆㄇㄈ）は台湾で使われている発音記号です。声調は1聲が記号なし、2聲ˊ・3聲ˇ・4聲ˋ、輕聲は˙を前に付けます。ㄓㄔㄕㄖㄗㄘㄙ は単独で zhi・chi・shi・ri・zi・ci・si と読みます。</div>`}
+ `<div class="note">注音（ㄅㄆㄇㄈ）は台湾で使われている発音記号です。声調は一聲が記号なし、二聲ˊ・三聲ˇ・四聲ˋ、輕聲は˙を前に付けます。ㄓㄔㄕㄖㄗㄘㄙ は単独で zhi・chi・shi・ri・zi・ci・si と読みます。</div>`}
 
 function zstart(k){const pool=k=='dict1'?LV[0].w:k=='dict2'?LV[1].w.concat(LV[2].w):LV[0].w.concat(LV[1].w);
  let items;
@@ -1935,12 +1938,12 @@ function zq(){const q=S.zq,it=q.items[q.i];let body='';
   <div class="opts one">${it.opts.map((o,j)=>{const st=q.done?(o==ok?'good':q.sel===j?'bad':''):'';return`<button class="op zy ${st}" data-a="zopt" data-j="${j}" ${q.done?'disabled':''}>${o}</button>`}).join('')}</div>`}
  else{const w=it.w,n=w.sy.length,ans=w.sy.map(s=>zy(s.b,s.t));
   const boxes=Array.from({length:n},(_,k)=>{const v=k<q.inp.length?q.inp[k]:k==q.inp.length?q.cur:'';const cls=q.done?(q.inp[k]==ans[k]?'good':'bad'):k==q.inp.length?'cur':'';
-   return`<div class="zbox"><div class="zin zy ${cls}">${v||'&nbsp;'}</div>${q.done&&q.inp[k]!=ans[k]?`<div class="fix zy c${w.sy[k].t}">${ans[k]}</div>`:''}${q.done?`<div class="hz c${w.sy[k].t}" style="font-size:26px;font-weight:900">${esc(w.ch[k])}</div>`:''}</div>`}).join('');
+   return`<div class="zbox">${!q.done?`<div class="zin zy ${cls}">${v||'&nbsp;'}</div>`:q.inp[k]==ans[k]?`<div class="zl okl">正解！</div><div class="zin zy good">${v}</div>`:`<div class="zl ngl">あなたの答え</div><div class="zin zy bad"><s>${v||'－'}</s></div><div class="zl okl">正解</div><div class="zin zy good">${ans[k]}</div>`}${q.done?`<div class="hz" style="font-size:26px;font-weight:900">${esc(w.ch[k])}</div>`:''}</div>`}).join('');
   body=`<div class="card"><div class="meta"><span>${q.i+1} / ${q.items.length}</span><span>正解 ${q.sc}</span></div>
   <div class="mean">${esc(w.j)}</div><div class="zboxes">${boxes}</div>
   <div class="plays"><button class="pb" data-a="zplay">${ic.spk}もう一度</button><button class="pb alt" data-a="slow">${ST.slow?'ゆっくり ON':'ゆっくり OFF'}</button></div></div>
   ${q.done?'':`<div class="kb">${Array.from(KB).map(c=>`<button class="k zy" style="--g:${ZG[zgOf(c)]}" data-a="zk" data-c="${c}">${c}</button>`).join('')}<button class="k del" data-a="zdel" aria-label="1文字消す">⌫</button></div>
-  <div class="kt">${[1,2,3,4].map(t=>`<button class="k t${t}" data-a="ztone" data-t="${t}">${t==1?'1聲':MKS[t]}<small>${t==1?'記号なし':TN[t]}</small></button>`).join('')}</div>
+  <div class="kt">${[1,2,3,4].map(t=>`<button class="k t${t}" data-a="ztone" data-t="${t}"><span class="km">${t==1?'&nbsp;':MKS[t]}</span><small>${TN[t]}</small></button>`).join('')}</div>
   <p class="dn" style="text-align:center;margin:8px 16px">記号を入れたら最後に声調キーで1文字が確定します</p>`}`}
  return top(q.t,'zhu')+`<div class="prog"><i style="width:${q.i/q.items.length*100}%"></i></div>`+body+
  (q.done?`<div class="row" style="padding-top:0"><button class="btn go" style="background:var(--t4)" data-a="znext">${q.i+1<q.items.length?'次へ ▶':'結果を見る ▶'}</button></div>`:'')}
@@ -2005,10 +2008,10 @@ function base(){return top('レベル練習','pron')+LV.map(l=>`<div class="lv">
 function combos(){return top('声調の組み合わせ','pron')+`<p class="sec" style="margin-top:0">左が1文字目、上が2文字目の声調です</p>
 <div class="grid"><span></span>${[1,2,3,4].map(b=>`<span class="gh c${b}">${TN[b]}</span>`).join('')}
 ${[1,2,3,4].map(a=>`<span class="gh c${a}">${a}</span>`+[1,2,3,4].map(b=>{const c=CB[a+''+b];return`<button class="cell" data-a="open" data-k="${c.k}" aria-label="${c.t} ${c.w.length}語"><span class="bar"><i class="t${a}"></i><i class="t${b}"></i></span><span class="nm"><b>${a}+${b}</b><small>${c.w.length}語</small></span></button>`}).join('')).join('')}</div>
-<div class="note" style="margin-top:16px">2音節の単語を声調の並びで分けています。3聲＋3聲は、実際には前の3聲が2聲に変わって発音されます。</div>`}
+<div class="note" style="margin-top:16px">2音節の単語を声調の並びで分けています。三聲＋三聲は、実際には前の三聲が二聲に変わって発音されます。</div>`}
 
 function basics(){return top('四聲のきほん','pron')+[1,2,3,4].map(t=>`<button class="tone" data-a="hum" data-t="${t}"><span class="sw t${t}">${cv(t,56,40,5,t==2||t==3?'#2b2140':'#fff')}</span><span style="flex:1"><b class="c${t}">${TN[t]}</b> <span class="zy">注音 <span class="c${t}">${MKS[t]}</span></span><p>${TD[t]}</p></span><span class="ib" style="width:40px;height:40px">${ic.wave}</span></button>`).join('')+`
-<div class="note"><b>台湾華語のポイント</b><br>・3聲は「低く抑える」だけで終わることが多く、最後まで上がりきらない発音が一般的です。<br>・輕聲：台湾では日常会話で輕聲になる語は大陸より少なく、謝謝・桌子なども本来の声調で読むのが普通です。このアプリの答えは本来の声調で、教育部の辞典で輕聲になっている語には注記を付けています（例 媽媽：辞典では <span class="zy">ㄇㄚ ˙ㄇㄚ</span>）。<br>・的・嗎・吧などの助詞は台湾でも輕聲で、注音では「˙」を前に付けます（文の練習で出てきます）。<br>・3聲が続くと前が2聲に変わります（你好 → ní hǎo）。答えは元の声調です。</div>
+<div class="note"><b>台湾華語のポイント</b><br>・三聲は「低く抑える」だけで終わることが多く、最後まで上がりきらない発音が一般的です。<br>・輕聲：台湾では日常会話で輕聲になる語は大陸より少なく、謝謝・桌子なども本来の声調で読むのが普通です。このアプリの答えは本来の声調で、教育部の辞典で輕聲になっている語には注記を付けています（例 媽媽：辞典では <span class="zy">ㄇㄚ ˙ㄇㄚ</span>）。<br>・的・嗎・吧などの助詞は台湾でも輕聲で、注音では「˙」を前に付けます（文の練習で出てきます）。<br>・三聲が続くと前が二聲に変わります（你好 → ní hǎo）。答えは元の声調です。</div>
 <p class="sec">波マークは声調の高さを音にした「トーン音」です。</p>`}
 
 const LVN=['初級','中級','上級'];
@@ -2036,7 +2039,7 @@ ${done&&!res[k]?`<div class="fix c${s.t}">正解 ${TN[s.t]}</div>`:''}</div>`}).
 <div class="plays"><button class="pb" data-a="play">${ic.spk}もう一度</button><button class="pb alt" data-a="slow">${ST.slow?'ゆっくり ON':'ゆっくり OFF'}</button><button class="pb alt" data-a="humq" aria-label="トーン音">${ic.wave}</button></div></div>
 ${done&&z.ta?`<div class="fb ${allOk?'t3':'t1'}" style="color:${allOk?'#2b2140':'#fff'}">${allOk?'正解！':'残念…'}</div>`:done?`<div class="fb ${allOk?'t3':'t1'}" style="color:${allOk?'#2b2140':'#fff'}">${allOk?'正解！ 好棒！':'おしい！ 正しい声調を聞いてみよう'}</div>
 <div class="row" style="padding-top:0"><button class="btn go" style="background:var(--t4)" data-a="next">${S.i+1<S.q.length?'次へ ▶':'結果を見る ▶'}</button></div>`:
-`<div class="pad ${z.neu?'five':''}">${[1,2,3,4].concat(z.neu?[5]:[]).map(t=>`<button class="tb t${t}" data-a="pick" data-t="${t}" aria-label="${TN[t]}">${cv(t,40,26,4,t==2||t==3?'#2b2140':'#fff')}${TN[t]}<small>${t==1?'－':MKS[t]}</small></button>`).join('')}</div>
+`<div class="pad ${z.neu?'five':''}">${[1,2,3,4].concat(z.neu?[5]:[]).map(t=>`<button class="tb t${t}" data-a="pick" data-t="${t}" aria-label="${TN[t]}">${cv(t,40,26,4,t==2||t==3?'#2b2140':'#fff')}${TN[t]}<small>${t==1?'&nbsp;':MKS[t]}</small></button>`).join('')}</div>
 <div class="row"><button class="btn" data-a="undo" ${S.p.length?'':'disabled'}>1つ消す</button></div>`}`}
 
 function result(){const z=S.set,r=S.sc/S.q.length,st=r>=.9?3:r>=.7?2:r>=.5?1:0;
@@ -2105,9 +2108,9 @@ function actual(w){const t=w.sy.map(s=>s.t),h=w.ch,o=t.slice();
  return t}
 function sclone(w){const t=actual(w),ch=t.some((x,k)=>x!=w.sy[k].t);return{...w,sy:w.sy.map((s,k)=>({...s,t:t[k]})),orig:!ch?'':w.sy.map(s=>pyMark(s.b,s.t)).join(' '),origZ:w.sy.map(s=>zy(s.b,s.t)).join(' '),sandhiNo:!ch}}
 const SAN=[
- {k:'sd3',t:'3聲＋3聲',col:'var(--t3)',rule:'3聲が2つ続くと、前の3聲は2聲で読みます。3つ続くときは、最後以外が2聲になることが多いです（我很好 → wó hén hǎo）。',l:'你好 很好 水果 手錶 洗澡 洗手 可以 老闆 老虎 雨傘 好久 所以 也許 演講 螞蟻 表姊 打掃 診所 我很好'},
- {k:'sdyi',t:'「一」の変化',col:'var(--t1)',rule:'「一」は単独・数の最後・順番（第一、十一）では1聲。後ろが4聲なら2聲（一定 yídìng）、1・2・3聲なら4聲（一天 yìtiān）で読みます。',l:'一 第一 十一 星期一 統一發票 一天 一千 一年 一直 一起 一點 一百 一定 一半 一樣 一下 一個 一共'},
- {k:'sdbu',t:'「不」の変化',col:'var(--t4)',rule:'「不」はふつう4聲。後ろが4聲のときだけ2聲で読みます（不要 búyào）。',l:'不好 不忙 不吃 不冷 不能 不好意思 不要 不是 不對 不會 不去 不錯 不用 不客氣'}];
+ {k:'sd3',t:'三聲＋三聲',col:'var(--t3)',rule:'三聲が2つ続くと、前の三聲は二聲で読みます。3つ続くときは、最後以外が二聲になることが多いです（我很好 → wó hén hǎo）。',l:'你好 很好 水果 手錶 洗澡 洗手 可以 老闆 老虎 雨傘 好久 所以 也許 演講 螞蟻 表姊 打掃 診所 我很好'},
+ {k:'sdyi',t:'「一」の変化',col:'var(--t1)',rule:'「一」は単独・数の最後・順番（第一、十一）では一聲。後ろが四聲なら二聲（一定 yídìng）、1・2・三聲なら四聲（一天 yìtiān）で読みます。',l:'一 第一 十一 星期一 統一發票 一天 一千 一年 一直 一起 一點 一百 一定 一半 一樣 一下 一個 一共'},
+ {k:'sdbu',t:'「不」の変化',col:'var(--t4)',rule:'「不」はふつう四聲。後ろが四聲のときだけ二聲で読みます（不要 búyào）。',l:'不好 不忙 不吃 不冷 不能 不好意思 不要 不是 不對 不會 不去 不錯 不用 不客氣'}];
 SAN.forEach(z=>{z.par='sandhi';z.sandhi=1;z.w=z.l.split(' ').map(h=>{if(!DICT[h]&&h=='我很好')parse('我很好|wo3 hen3 hao3|私は元気です');return DICT[h]}).filter(Boolean).map(sclone);z.neu=false;GS.push(z)});
 function sandhiView(){return top('声調の変化','pron')+`<div class="note" style="margin-top:0">辞書や教科書に書かれる声調と、実際に読むときの声調がちがう場合の練習です。クイズでは<b>実際に読む声調</b>を答えます。</div>`+SAN.map(z=>`<div class="lv"><div class="lvh"><span class="badge" style="background:${z.col};font-size:15px">${z.k=='sd3'?'3+3':z.k=='sdyi'?'一':'不'}</span><div><b>${z.t}</b></div><span class="stars">${stars(bestS(z.k))}</span></div>
 <p class="dn" style="margin:0 16px 12px">${z.rule}</p><div class="lvb"><button class="btn" data-a="open" data-k="${z.k}">単語を見る</button><button class="btn go" style="background:${z.col}" data-a="quiz" data-k="${z.k}">クイズ ▶</button></div></div>`).join('')}
