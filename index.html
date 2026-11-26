@@ -314,6 +314,9 @@ background:#fff linear-gradient(#0000 calc(50% - 1px),#2b214022 calc(50% - 1px) 
 @keyframes pop{from{transform:scale(.7);opacity:0}}
 .rs{width:100%;min-height:64px;margin:6px 0;border-radius:12px;border:2px solid var(--line);font:14px/1.4 monospace;padding:8px;background:var(--card);color:var(--ink)}
 .wmk{position:absolute;top:8px;right:8px;width:44px;height:44px;border-radius:50%;border:3px solid #2b2140;display:grid;place-items:center;font:900 24px/1 "Zen Maru Gothic",sans-serif;color:#2b2140;pointer-events:none;z-index:2}.wmk.t1{color:#fff}
+.pyb{display:flex;justify-content:flex-end;padding:0 16px 10px;margin-top:-4px}
+.pyb button{min-height:40px;border-radius:20px;border:2.5px solid var(--line);background:var(--card);font-weight:900;font-size:14px;padding:4px 16px;box-shadow:0 3px 0 var(--line)}
+.pyb button.on{background:var(--ink);color:var(--bg)}
 </style>
 </head>
 <body>
@@ -1826,7 +1829,9 @@ function cats(){return top('単語','toc')+CAT.filter(c=>!c.sent&&!c.talk).map(c
 function cat(){const c=S.cat;return top(c.n,c.sent||c.talk?'toc':'cats')+c.sets.map((z,i)=>{const col=c.talk?'#ff8a5b':c.col;return`<div class="lv"><div class="lvh"><span class="badge" style="background:${col}">${IC[CIC[c.k]]}</span><div><b>${z.t}</b></div><span class="stars" aria-label="ベスト星${bestS(z.k)}">${stars(bestS(z.k))}</span></div>
 <div class="lvb"><button class="btn" data-a="open" data-k="${z.k}">${c.talk?'会話を見る':c.sent?'文を見る':'単語を見る'}</button><button class="btn go" style="background:${col};${c.talk?'color:#2b2140':''}" data-a="quiz" data-k="${z.k}">クイズ ▶</button></div></div>`}).join('')}
 
-function talkView(z){return`<div class="plays" style="margin:0 0 12px"><button class="pb" data-a="playall">${ic.spk}会話を通して聞く</button></div><div class="chat">${z.w.map((w,i)=>`<button class="bub ${w.sp=='由美'?'r':''}" data-a="sayw" data-i="${i}"><small class="sp">${esc(w.sp)}</small><span class="hz" lang="zh-Hant-TW">${hzC(w)}</span><span class="py">${pyC(w)}</span><span class="zy">${zyS(w)}</span><small class="ja">${esc(w.j)}</small></button>`).join('')}</div>`}
+const lpy=()=>ST.lpy!==false;
+const pyBtn=()=>`<div class="pyb"><button class="${lpy()?'on':''}" data-a="lpy" aria-pressed="${lpy()}">ピンイン ${lpy()?'表示中':'非表示'}</button></div>`;
+function talkView(z){return`<div class="plays" style="margin:0 0 12px"><button class="pb" data-a="playall">${ic.spk}会話を通して聞く</button></div><div class="chat">${z.w.map((w,i)=>`<button class="bub ${w.sp=='由美'?'r':''}" data-a="sayw" data-i="${i}"><small class="sp">${esc(w.sp)}</small><span class="hz" lang="zh-Hant-TW">${hzC(w)}</span>${lpy()?`<span class="py">${pyC(w)}</span>`:''}<span class="zy">${zyS(w)}</span><small class="ja">${esc(w.j)}</small></button>`).join('')}</div>`}
 
 /* --- 注音 --- */
 const ZS=`ㄅ b 玻 bo1 声母|ㄆ p 坡 po1 声母|ㄇ m 摸 mo1 声母|ㄈ f 佛 fo2 声母|ㄉ d 得 de2 声母|ㄊ t 特 te4 声母|ㄋ n 你 ni3 声母|ㄌ l 樂 le4 声母|ㄍ g 哥 ge1 声母|ㄎ k 科 ke1 声母|ㄏ h 喝 he1 声母|ㄐ j 雞 ji1 声母|ㄑ q 七 qi1 声母|ㄒ x 西 xi1 声母|ㄓ zh 知 zhi1 声母|ㄔ ch 吃 chi1 声母|ㄕ sh 詩 shi1 声母|ㄖ r 日 ri4 声母|ㄗ z 字 zi4 声母|ㄘ c 詞 ci2 声母|ㄙ s 四 si4 声母|ㄧ i(y) 衣 yi1 介音|ㄨ u(w) 烏 wu1 介音|ㄩ ü(yu) 魚 yu2 介音|ㄚ a 八 ba1 韻母|ㄛ o 喔 o1 韻母|ㄜ e 鵝 e2 韻母|ㄝ ê 爺 ye2 韻母|ㄞ ai 愛 ai4 韻母|ㄟ ei 黑 hei1 韻母|ㄠ ao 好 hao3 韻母|ㄡ ou 歐 ou1 韻母|ㄢ an 安 an1 韻母|ㄣ en 恩 en1 韻母|ㄤ ang 湯 tang1 韻母|ㄥ eng 冷 leng3 韻母|ㄦ er 兒 er2 韻母`.split('|').map(r=>{const[s,p,h,x,g]=r.split(' ');return{s,p,h,b:x.slice(0,-1),t:+x.slice(-1),g}});
@@ -1943,13 +1948,13 @@ const LVN=['初級','中級','上級'];
 const curList=z=>z.levels&&S.lf>=0?z.levels[S.lf]:z.w;
 const qkey=z=>z.levels&&S.lf>=0?z.k+'_'+S.lf:z.k;
 function learn(){const z=S.set;const sub=z.ab?`<div class="card" style="padding:14px"><div style="display:flex;justify-content:center;gap:10px;align-items:center">${z.ab.map(t=>`<span class="tone" style="margin:0;width:auto;padding:8px 12px;box-shadow:none"><span class="sw t${t}" style="width:60px;height:44px">${cv(t,44,30,5,t==2||t==3?'#2b2140':'#fff')}</span><b class="c${t}">${TN[t]}</b></span>`).join('<b>＋</b>')}</div><div class="plays"><button class="pb alt" data-a="humab">${ic.wave}トーン音</button></div></div>`:'';
- if(z.talk)return top(z.t,z.par)+`<div class="row" style="padding:0 16px 12px"><button class="btn go" style="background:#ff8a5b;color:#2b2140" data-a="quiz" data-k="${z.k}">クイズ ▶</button></div>`+legend(z)+talkView(z);
+ if(z.talk)return top(z.t,z.par)+`<div class="row" style="padding:0 16px 12px"><button class="btn go" style="background:#ff8a5b;color:#2b2140" data-a="quiz" data-k="${z.k}">クイズ ▶</button></div>`+legend(z)+pyBtn()+talkView(z);
  const L=curList(z);let prev='';
  const tabs=z.levels?`<div class="tabs" role="tablist">${z.levels.map((a,i)=>`<button role="tab" aria-selected="${S.lf==i}" class="${S.lf==i?'on':''}" data-a="lf" data-i="${i}">${LVN[i]}<small>${a.length}語</small><span class="bst2">${stars(bestS(z.k+'_'+i))}</span></button>`).join('')}<button role="tab" aria-selected="${S.lf<0}" class="${S.lf<0?'on':''}" data-a="lf" data-i="-1">すべて<small>${z.w.length}語</small><span class="bst2">${stars(bestS(z.k))}</span></button></div>`:'';
  const rows=L.map(w=>{const i=z.w.indexOf(w);const pat=w.sy.map(x=>x.t).join('');let h='';
   
-  return h+`<button class="li ${z.sent?'sent':''}" data-a="sayw" data-i="${i}"><span class="hz" lang="zh-Hant-TW">${hzC(w)}</span><span class="tx"><div>${pyC(w)}</div><div class="zy">${zyS(w)}</div><small>${esc(w.j)}</small>${noteOf(w)?`<small class="n">${noteOf(w)}</small>`:''}</span></button>`}).join('');
- return top(z.t,z.par)+sub+tabs+(L.length?`<div class="row" style="padding:0 16px 12px"><button class="btn go" style="background:${z.col}" data-a="quiz" data-k="${z.k}">${z.levels?(S.lf<0?'すべて':LVN[S.lf])+'の':''}クイズ ▶</button></div>`:'')+legend(z)+`<p class="sec" style="margin-top:0">漢字の色が声調です。タップで発音を聞けます</p>${z.note?`<div class="note" style="margin-top:0">${z.note}</div>`:''}${L.length?`<div class="list">${rows}</div>`:'<div class="note">この組み合わせの単語はまだありません。</div>'}`}
+  return h+`<button class="li ${z.sent?'sent':''}" data-a="sayw" data-i="${i}"><span class="hz" lang="zh-Hant-TW">${hzC(w)}</span><span class="tx">${lpy()?`<div>${pyC(w)}</div>`:''}<div class="zy">${zyS(w)}</div><small>${esc(w.j)}</small>${noteOf(w)?`<small class="n">${noteOf(w)}</small>`:''}</span></button>`}).join('');
+ return top(z.t,z.par)+sub+tabs+(L.length?`<div class="row" style="padding:0 16px 12px"><button class="btn go" style="background:${z.col}" data-a="quiz" data-k="${z.k}">${z.levels?(S.lf<0?'すべて':LVN[S.lf])+'の':''}クイズ ▶</button></div>`:'')+legend(z)+pyBtn()+`<p class="sec" style="margin-top:0">漢字の色が声調です。タップで発音を聞けます</p>${z.note?`<div class="note" style="margin-top:0">${z.note}</div>`:''}${L.length?`<div class="list">${rows}</div>`:'<div class="note">この組み合わせの単語はまだありません。</div>'}`}
 
 function quiz(){const z=S.set,w=S.q[S.i],n=w.sy.length,done=S.p.length==n;
  const res=done?w.sy.map((s,k)=>S.p[k]==s.t):[];const allOk=done&&res.every(Boolean);
@@ -1994,8 +1999,8 @@ function weak(){const all=weakAll(),due=weakDue(),db=weakDB();
  return top('復習','toc')+`<div class="card"><div class="wst"><div><b>${due.length}</b><span>今日の復習</span></div><div><b>${all.length}</b><span>苦手単語</span></div></div>
  ${due.length?`<button class="btn go" style="background:var(--t1);width:100%;margin-top:12px" data-a="quiz" data-k="weak">今日の復習をはじめる ▶</button>`:all.length?`<p class="dn" style="margin:12px 0 0">今日の復習はおわりました。次は${new Date(nx).toLocaleDateString('ja-JP',{month:'numeric',day:'numeric'})}に出題します。</p>`:`<p class="dn" style="margin:12px 0 0">クイズでまちがえた単語がここに集まります。</p>`}
  ${all.length?`<button class="btn" style="width:100%;margin-top:10px" data-a="quiz" data-k="weakall">苦手単語を全部練習</button>`:''}</div>
- <div class="note" style="margin-top:0">クイズでまちがえた単語は、すぐここで復習できます。正解するたびに次の出題までの間隔が 1日→3日→7日 と延び、4回正解すると卒業です。</div>
- ${all.length?`<div class="list">${all.sort((a,b)=>db[a.h].d-db[b.h].d).map(w=>`<button class="li" data-a="sayx" data-h="${esc(w.h)}" data-t="${w.sy.map(s=>s.t).join('')}"><span class="hz" lang="zh-Hant-TW">${hzC(w)}</span><span class="tx"><div>${pyC(w)}</div><div class="zy">${zyS(w)}</div><small>${esc(w.j)}</small></span><span class="boxd" aria-label="卒業まであと${BOX.length-db[w.h].b}回">${BOX.map((_,i)=>`<i class="${i<db[w.h].b?'on':''}"></i>`).join('')}</span></button>`).join('')}</div>`:''}`}
+ ${all.length?pyBtn():''}<div class="note" style="margin-top:0">クイズでまちがえた単語は、すぐここで復習できます。正解するたびに次の出題までの間隔が 1日→3日→7日 と延び、4回正解すると卒業です。</div>
+ ${all.length?`<div class="list">${all.sort((a,b)=>db[a.h].d-db[b.h].d).map(w=>`<button class="li" data-a="sayx" data-h="${esc(w.h)}" data-t="${w.sy.map(s=>s.t).join('')}"><span class="hz" lang="zh-Hant-TW">${hzC(w)}</span><span class="tx">${lpy()?`<div>${pyC(w)}</div>`:''}<div class="zy">${zyS(w)}</div><small>${esc(w.j)}</small></span><span class="boxd" aria-label="卒業まであと${BOX.length-db[w.h].b}回">${BOX.map((_,i)=>`<i class="${i<db[w.h].b?'on':''}"></i>`).join('')}</span></button>`).join('')}</div>`:''}`}
 
 /* --- 声調の変化 --- */
 const EX7=`洗手|xi3 shou3|手を洗う
@@ -2117,7 +2122,7 @@ app.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)retu
  else if(a=='play')sayW(S.q[S.i]);else if(a=='humq')hum(S.q[S.i].sy.map(s=>s.t));
  else if(a=='slow'){ST.slow=!ST.slow;save();render()}
  else if(a=='pick')pick(+d.t);else if(a=='undo'){S.p.pop();render()}else if(a=='next')next();
- else if(a=='set'){sheet=true;lv();render()}else if(a=='stest'){speak('你好',[3,3])}else if(a=='pet'){G().pet=d.p;save();render()}else if(a=='bk'){const c=bkCode(),t=document.getElementById('rs');if(t)t.value=c;try{navigator.clipboard.writeText(c).then(()=>toast('バックアップをコピーしました'),()=>toast('下の欄のコードを長押ししてコピーしてください','var(--t2)'))}catch(e){toast('下の欄のコードを長押ししてコピーしてください','var(--t2)')}}else if(a=='rs'){const t=document.getElementById('rs');if(t&&t.value.trim()&&restore(t.value)){toast('記録を復元しました');sheet=false;render()}else toast('コードが正しくありません','var(--t1)')}else if(a=='close'){sheet=false;render()}
+ else if(a=='set'){sheet=true;lv();render()}else if(a=='stest'){speak('你好',[3,3])}else if(a=='lpy'){ST.lpy=!lpy();save();const y=scrollY;render();scrollTo(0,y)}else if(a=='pet'){G().pet=d.p;save();render()}else if(a=='bk'){const c=bkCode(),t=document.getElementById('rs');if(t)t.value=c;try{navigator.clipboard.writeText(c).then(()=>toast('バックアップをコピーしました'),()=>toast('下の欄のコードを長押ししてコピーしてください','var(--t2)'))}catch(e){toast('下の欄のコードを長押ししてコピーしてください','var(--t2)')}}else if(a=='rs'){const t=document.getElementById('rs');if(t&&t.value.trim()&&restore(t.value)){toast('記録を復元しました');sheet=false;render()}else toast('コードが正しくありません','var(--t1)')}else if(a=='close'){sheet=false;render()}
  else if(a=='tog'){ST[d.k]=!ST[d.k];save();render()}
  else if(a=='playall'){if(ss)speakAll(S.set.w.map(w=>w.h));else hum(S.set.w.flatMap(w=>w.sy.map(s=>s.t)))}
  else if(a=='zstart')zstart(d.k);else if(a=='zwstart')zwStart(d.k);else if(a=='zwjudge')zwJudge();else if(a=='zwclear'){clearTimeout(zwT);S.zw.strokes=[];S.zw.res=null;render()}else if(a=='zwguide'){S.zw.guide=!S.zw.guide;render()}else if(a=='zwmove')zwMove(+d.d);else if(a=='zwsay'){const z=S.zw.list[S.zw.i];speak(z.h,[z.t])}else if(a=='zplay')zplay();else if(a=='znext')znext();
