@@ -337,7 +337,7 @@ background:#fff linear-gradient(#0000 calc(50% - 1px),#2b214022 calc(50% - 1px) 
 /* 書式：漢字|ピンイン（数字＝声調、*＝教育部辞典では輕聲）|意味 */
 const LV=[
 {n:'ひとつの音',s:'一音節で四聲の基本',col:'var(--t1)',d:`媽|ma1|お母さん
-麻|ma2|麻
+麻|ma2|しびれる・麻
 馬|ma3|馬
 罵|ma4|叱る
 八|ba1|8
@@ -348,12 +348,12 @@ const LV=[
 糖|tang2|砂糖
 躺|tang3|横になる
 燙|tang4|熱い・やけどする
-衣|yi1|服
-姨|yi2|おば
-椅|yi3|いす
-意|yi4|意味
+衣|yi1|服（単語では「衣服」）
+姨|yi2|おば（単語では「阿姨」）
+椅|yi3|いす（単語では「椅子」）
+意|yi4|意味（単語では「意思」）
 書|shu1|本
-鼠|shu3|ねずみ
+鼠|shu3|ねずみ（単語では「老鼠」）
 樹|shu4|木
 花|hua1|花
 滑|hua2|すべる
@@ -1950,11 +1950,21 @@ function zwStart(mode){const list=mode=='trace'?shuf(ZS):shuf(ZS).slice(0,10);go
 const ZWF=`"Noto Sans TC","PingFang TC","Microsoft JhengHei",sans-serif`;
 function glyph(x,W,s,fill,stroke){x.font=`700 ${W*.7}px ${ZWF}`;x.textAlign='center';x.textBaseline='middle';if(stroke){x.lineWidth=stroke;x.lineJoin='round';x.strokeStyle=fill;x.strokeText(s,W/2,W*.53)}x.fillStyle=fill;x.fillText(s,W/2,W*.53)}
 function inkDraw(x,W,strokes,lw,col){x.lineCap=x.lineJoin='round';x.lineWidth=lw;x.strokeStyle=col;x.fillStyle=col;strokes.forEach(st=>{if(st.length==1){x.beginPath();x.arc(st[0][0]*W,st[0][1]*W,lw/2,0,7);x.fill();return}x.beginPath();x.moveTo(st[0][0]*W,st[0][1]*W);st.slice(1).forEach(p=>x.lineTo(p[0]*W,p[1]*W));x.stroke()})}
-function zwJudge(){const q=S.zw,z=q.list[q.i];if(!q.strokes.length)return;const N=100;
- const mk=f=>{const c=document.createElement('canvas');c.width=c.height=N;const x=c.getContext('2d');f(x);return x.getImageData(0,0,N,N).data};
- const core=mk(x=>glyph(x,N,z.s,'#000',2)),zone=mk(x=>glyph(x,N,z.s,'#000',N*.15)),ink=mk(x=>inkDraw(x,N,q.strokes,N*.05,'#000')),fat=mk(x=>inkDraw(x,N,q.strokes,N*.17,'#000'));
- let c=0,cc=0,k=0,kk=0;for(let i=3;i<core.length;i+=4){if(core[i]>100){c++;if(fat[i]>60)cc++}if(ink[i]>100){k++;if(zone[i]>60)kk++}}
- const cov=c?cc/c:0,pre=k?kk/k:0;q.res=cov>.8&&pre>.85?3:cov>.6&&pre>.7?2:1;if(q.res>1)award(10);if(q.mode=='test'&&q.res>1)q.sc++;if(q.res>1)confetti();render()}
+/* 形の比較：大きさと位置をそろえてから、線どうしの距離で比べる */
+function zwNorm(draw,G=64,B=50){const S=256,c=document.createElement('canvas');c.width=c.height=S;const x=c.getContext('2d');draw(x,S);const d=x.getImageData(0,0,S,S).data;
+ let x0=S,y0=S,x1=-1,y1=-1;for(let y=0;y<S;y++)for(let xx=0;xx<S;xx++)if(d[(y*S+xx)*4+3]>90){if(xx<x0)x0=xx;if(xx>x1)x1=xx;if(y<y0)y0=y;if(y>y1)y1=y}
+ if(x1<0)return null;const w=x1-x0+1,h=y1-y0+1,k=B/Math.max(w,h),o=document.createElement('canvas');o.width=o.height=G;const ox=o.getContext('2d');
+ ox.drawImage(c,x0,y0,w,h,(G-w*k)/2,(G-h*k)/2,w*k,h*k);const e=ox.getImageData(0,0,G,G).data,m=new Uint8Array(G*G);for(let j=0;j<G*G;j++)m[j]=e[j*4+3]>70?1:0;return{m,ar:w/h}}
+function zwDT(m,G){const D=new Float32Array(G*G);for(let j=0;j<G*G;j++)D[j]=m[j]?0:1e9;
+ for(let y=0;y<G;y++)for(let x=0;x<G;x++){const j=y*G+x;if(x)D[j]=Math.min(D[j],D[j-1]+1);if(y)D[j]=Math.min(D[j],D[j-G]+1);if(x&&y)D[j]=Math.min(D[j],D[j-G-1]+1.4);if(y&&x<G-1)D[j]=Math.min(D[j],D[j-G+1]+1.4)}
+ for(let y=G-1;y>=0;y--)for(let x=G-1;x>=0;x--){const j=y*G+x;if(x<G-1)D[j]=Math.min(D[j],D[j+1]+1);if(y<G-1)D[j]=Math.min(D[j],D[j+G]+1);if(x<G-1&&y<G-1)D[j]=Math.min(D[j],D[j+G+1]+1.4);if(y<G-1&&x)D[j]=Math.min(D[j],D[j+G-1]+1.4)}return D}
+function zwScore(strokes,sym){const G=64;const A=zwNorm((x,S)=>inkDraw(x,S,strokes,S*.045,'#000'),G),Bm=zwNorm((x,S)=>{x.font=`400 ${S*.8}px ${ZWF}`;x.textAlign='center';x.textBaseline='middle';x.fillStyle='#000';x.fillText(sym,S/2,S*.52)},G);
+ if(!A||!Bm)return{res:1,p:0,r:0};const dA=zwDT(A.m,G),dB=zwDT(Bm.m,G),T=3.2;let na=0,pa=0,nb=0,rb=0,sa=0;
+ for(let j=0;j<G*G;j++){if(A.m[j]){na++;sa+=dB[j];if(dB[j]<=T)pa++}if(Bm.m[j]){nb++;if(dA[j]<=T)rb++}}
+ const p=pa/na,r=rb/nb,ar=Math.max(A.ar,Bm.ar)/Math.min(A.ar,Bm.ar),mean=sa/na;
+ const mm=Math.min(p,r),res=ar<1.8&&mm>=.85?3:ar<2.2&&mm>=.75?2:1;return{res,p,r,ar,mean}}
+function zwJudge(){const q=S.zw,z=q.list[q.i];if(!q.strokes.length)return;
+ q.res=zwScore(q.strokes,z.s).res;if(q.res>1)award(10);if(q.mode=='test'&&q.res>1)q.sc++;if(q.res>1)confetti();render()}
 let zwT=0;
 function zwInit(){const c=document.getElementById('wc'),g=document.getElementById('wg');if(!c)return;const q=S.zw,z=q.list[q.i],W=c.parentElement.clientWidth,dpr=window.devicePixelRatio||1;
  [c,g].forEach(e=>{e.width=e.height=W*dpr;e.getContext('2d').setTransform(dpr,0,0,dpr,0,0)});
