@@ -3,14 +3,6 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<link rel="manifest" href="manifest.webmanifest">
-<meta name="theme-color" content="#ffd23f">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="台湾華語">
-<link rel="apple-touch-icon" href="icon-180.png">
-<link rel="icon" type="image/png" href="icon-192.png">
 <title>台湾華語 練習帳</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -332,6 +324,14 @@ background:#fff linear-gradient(#0000 calc(50% - 1px),#2b214022 calc(50% - 1px) 
 .zin.bad s{text-decoration-thickness:3px}
 .kt .k .km{min-height:22px;display:block;line-height:22px}
 </style>
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#ffd23f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="台湾華語">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" href="icon-192.png">
 </head>
 <body>
 <div id="app"></div>
@@ -1700,12 +1700,484 @@ CAT.splice(CAT.findIndex(c=>c.k=='verb'),0,
 {k:'tech',n:'スマホ・ネット',ic:'phone',col:'var(--t3)',g:[['net','スマホ・ネット','手機 電腦 網路 上網 照片 影片 耳機 充電 密碼 網站 | 帳號 充電器 下載 傳訊息 螢幕 鍵盤 滑鼠 軟體 截圖 留言 分享 | 行動電源 應用程式 無線網路 按讚 追蹤 登入 更新 當機']]},
 {k:'earth',n:'自然・地理',ic:'mountain',col:'var(--t3)',g:[['geo','自然・地理','山 海 河 湖 島 花 樹 草 天空 星星 月亮 海邊 石頭 | 森林 沙灘 瀑布 地球 火山 海浪 日出 夕陽 溫泉 | 山谷 平原 海峽 珊瑚 環境 污染 氣候']]},
 {k:'words',n:'疑問詞・よく使う言葉',ic:'q',col:'#ff8a5b',g:[['basicw','疑問詞・よく使う言葉','什麼 誰 哪裡 怎麼 為什麼 幾點 多少 對 沒有 好的 真的 請 謝謝 對不起 不客氣 沒關係 再見 | 哪個 怎麼樣 多久 多遠 應該 已經 還是 所以 但是 因為 非常 一起 不好意思 | 一定 也許 如果 比較']]});
+const EX8=`煮飯|zhu3 fan4|ごはんを作る
+洗碗|xi3 wan3|皿を洗う
+洗衣服|xi3 yi1 fu2*|洗濯する
+掃地|sao3 di4|床を掃く
+拖地|tuo1 di4|床をモップでふく
+買菜|mai3 cai4|食材を買う
+倒垃圾|dao4 le4 se4|ごみを出す
+曬衣服|shai4 yi1 fu2*|洗濯物を干す
+收衣服|shou1 yi1 fu2*|洗濯物を取り込む
+擦桌子|ca1 zhuo1 zi3*|机をふく
+做家事|zuo4 jia1 shi4|家事をする
+整理|zheng3 li3|片付ける
+修理|xiu1 li3|修理する
+換床單|huan4 chuang2 dan1|シーツを替える
+垃圾車|le4 se4 che1|ごみ収集車
+資源回收|zi1 yuan2 hui2 shou1|資源ごみ回収
+洗衣精|xi3 yi1 jing1|洗濯洗剤
+洗碗精|xi3 wan3 jing1|食器用洗剤
+熨衣服|yun4 yi1 fu2*|アイロンをかける
+歌手|ge1 shou3|歌手
+演員|yan3 yuan2|俳優
+農夫|nong2 fu1|農家の人
+作家|zuo4 jia1|作家
+畫家|hua4 jia1|画家
+設計師|she4 ji4 shi1|デザイナー
+外送員|wai4 song4 yuan2|配達員
+保全|bao3 quan2|警備員
+空服員|kong1 fu2 yuan2|客室乗務員
+導演|dao3 yan3|映画監督
+攝影師|she4 ying3 shi1|カメラマン
+美髮師|mei3 fa3 shi1|美容師
+消防員|xiao1 fang2 yuan2|消防士
+軍人|jun1 ren2|軍人
+老闆娘|lao3 ban3 niang2|おかみさん
+早餐店|zao3 can1 dian4|朝ごはん屋
+便當店|bian4 dang1 dian4|弁当屋
+手搖飲|shou3 yao2 yin3|ドリンクスタンド
+書局|shu1 ju2|本屋・文具店
+文具店|wen2 ju4 dian4|文房具屋
+洗衣店|xi3 yi1 dian4|クリーニング店
+自助餐|zi4 zhu4 can1|量り売りのおかず屋
+藥妝店|yao4 zhuang1 dian4|ドラッグストア
+量販店|liang4 fan4 dian4|大型スーパー
+眼鏡行|yan3 jing4 hang2|めがね屋
+理髮店|li3 fa3 dian4|床屋
+寵物店|chong3 wu4 dian4|ペットショップ
+網咖|wang3 ka1|ネットカフェ
+檳榔攤|bin1 lang2 tan1|ビンロウ売りの屋台
+夾娃娃機|jia2 wa2 wa2 ji1|クレーンゲーム
+修車廠|xiu1 che1 chang3|自動車修理工場
+很|hen3|とても
+太|tai4|〜すぎる
+最|zui4|いちばん
+都|dou1|みんな・どれも
+也|ye3|〜も
+還|hai2|まだ・さらに
+只|zhi3|〜だけ
+再|zai4|また・もう一度
+常常|chang2 chang2|よく・しょっちゅう
+馬上|ma3 shang4|すぐに
+更|geng4|もっと
+才|cai2|やっと・〜したばかり
+就|jiu4|すぐ・もう
+又|you4|また（くり返し）
+有時候|you3 shi2 hou4*|ときどき
+大概|da4 gai4|たぶん・だいたい
+好像|hao3 xiang4|〜みたい
+當然|dang1 ran2|もちろん
+終於|zhong1 yu2|ついに
+突然|tu2 ran2|突然
+其實|qi2 shi2|実は
+竟然|jing4 ran2|意外にも
+幾乎|ji1 hu1|ほとんど
+尤其|you2 qi2|とりわけ
+仍然|reng2 ran2|依然として
+長|chang2|長い
+短|duan3|短い
+高|gao1|高い
+矮|ai3|（背が）低い
+胖|pang4|太っている
+瘦|shou4|やせている
+遠|yuan3|遠い
+近|jin4|近い
+早|zao3|早い
+晚|wan3|遅い（時間）
+輕|qing1|軽い
+重|zhong4|重い
+厚|hou4|厚い
+薄|bao2|薄い
+寬|kuan1|広い（幅）
+窄|zhai3|狭い
+深|shen1|深い・濃い
+淺|qian3|浅い・薄い（色）
+亮|liang4|明るい
+暗|an4|暗い
+乾|gan1|乾いている
+濕|shi1|濡れている
+硬|ying4|かたい
+軟|ruan3|やわらかい
+錯|cuo4|まちがっている
+個|ge4|〜個（いちばん広く使う）
+本|ben3|〜冊
+張|zhang1|〜枚（紙・切符）
+杯|bei1|〜杯
+件|jian4|〜着・〜件
+雙|shuang1|〜足・〜膳（ペア）
+隻|zhi1|〜匹・〜羽
+次|ci4|〜回
+位|wei4|〜名様（丁寧）
+條|tiao2|〜本（細長いもの）
+支|zhi1|〜本（ペンなど）
+瓶|ping2|〜本（びん）
+份|fen4|〜人前・〜部
+間|jian1|〜軒・〜部屋
+台|tai2|〜台（機械・車）
+包|bao1|〜袋・〜箱
+輛|liang4|〜台（車両）
+頂|ding3|〜つ（帽子）
+盒|he2|〜箱
+片|pian4|〜枚（薄いもの）
+種|zhong3|〜種類`;
+CAT.find(c=>c.k=='life').g.push(['chores','家事','煮飯 洗碗 洗衣服 打掃 掃地 拖地 買菜 倒垃圾 | 曬衣服 收衣服 擦桌子 做家事 整理 修理 換床單 垃圾車 | 資源回收 洗衣精 洗碗精 熨衣服']);
+CAT.find(c=>c.k=='people').g.push(['jobs','職業','老師 學生 醫生 護士 警察 司機 廚師 歌手 演員 農夫 | 律師 工程師 記者 作家 畫家 導遊 設計師 外送員 保全 空服員 | 導演 攝影師 美髮師 消防員 軍人 老闆娘']);
+CAT.find(c=>c.k=='town').g.push(['shops','台湾のお店','早餐店 便當店 手搖飲 夜市 書局 文具店 洗衣店 | 自助餐 藥妝店 量販店 眼鏡行 理髮店 寵物店 網咖 | 檳榔攤 夾娃娃機 修車廠']);
+CAT.find(c=>c.k=='words').g.push(['adv','副詞','很 太 最 都 也 還 只 再 常常 馬上 一起 已經 非常 | 更 才 就 又 有時候 大概 好像 當然 終於 | 突然 其實 竟然 幾乎 尤其 仍然']);
+CAT.find(c=>c.k=='verb').g.push(['opp','反対の意味','長 短 高 矮 胖 瘦 遠 近 早 晚 | 輕 重 厚 薄 寬 窄 深 淺 | 亮 暗 乾 濕 硬 軟 錯']);
+CAT.splice(CAT.findIndex(c=>c.k=='verb'),0,{k:'measure',n:'量詞（数え方）',s:'',ic:'量',col:'var(--t2)',g:[['meas','量詞（数え方）','個 本 張 杯 件 雙 隻 次 | 位 條 支 瓶 份 間 台 包 | 輛 頂 盒 片 種']]});
+const EX9=`聲音|sheng1 yin1|声・音
+有空|you3 kong4|ひまがある
+永遠|yong3 yuan3|永遠に
+感謝|gan3 xie4|感謝する
+活動|huo2 dong4|活動・イベント
+日期|ri4 qi2|日付
+出生|chu1 sheng1|生まれる
+關係|guan1 xi4|関係
+影響|ying3 xiang3|影響する
+進步|jin4 bu4|上達する
+停|ting2|止まる・止める
+轉|zhuan3|曲がる
+夠|gou4|足りる
+歌|ge1|歌
+大聲|da4 sheng1|大声で
+政治|zheng4 zhi4|政治
+麵|mian4|麺
+菜|cai4|料理・おかず
+肉|rou4|肉
+蛋|dan4|たまご
+鹽|yan2|塩
+食物|shi2 wu4|食べ物
+油|you2|油
+飲料|yin3 liao4|飲み物
+茶|cha2|お茶
+酒|jiu3|お酒
+三明治|san1 ming2 zhi4|サンドイッチ
+點心|dian3 xin1|点心・軽食
+味道|wei4 dao4|味・におい
+嚐|chang2|味見する
+刀子|dao1 zi3*|ナイフ
+叉子|cha1 zi3*|フォーク
+新鮮|xin1 xian1|新鮮な
+騎|qi2|（自転車・バイクに）乗る
+搭|da1|（乗り物に）乗る
+地鐵|di4 tie3|地下鉄
+交通|jiao1 tong1|交通
+座位|zuo4 wei4|座席
+起飛|qi3 fei1|離陸する
+出發|chu1 fa1|出発する
+救護車|jiu4 hu4 che1|救急車
+國家|guo2 jia1|国
+外國|wai4 guo2|外国
+世界|shi4 jie4|世界
+男人|nan2 ren2|男の人
+女人|nv3 ren2|女の人
+大人|da4 ren2|おとな
+老人|lao3 ren2|お年寄り
+小姐|xiao3 jie3|〜さん（女性）・お嬢さん
+父親|fu4 qin1|父親
+母親|mu3 qin1|母親
+家庭|jia1 ting2|家庭
+年紀|nian2 ji4|年齢
+男生|nan2 sheng1|男子・男の子
+女生|nv3 sheng1|女子・女の子
+別人|bie2 ren2|ほかの人
+自己|zi4 ji3|自分
+工人|gong1 ren2|作業員・工員
+服務生|fu2 wu4 sheng1|ウェイター・店員
+教師|jiao4 shi1|教師
+顧客|gu4 ke4|顧客
+小偷|xiao3 tou1|どろぼう
+公斤|gong1 jin1|キログラム
+公里|gong1 li3|キロメートル
+許多|xu3 duo1|たくさんの
+全部|quan2 bu4|全部
+所有|suo3 you3|すべての
+月|yue4|月・〜月
+分|fen1|〜分
+禮拜|li3 bai4|週・曜日（口語）
+禮拜天|li3 bai4 tian1|日曜日（口語）
+新年|xin1 nian2|新年
+鐘頭|zhong1 tou2|〜時間
+夜|ye4|夜
+剛剛|gang1 gang1|さっき
+後來|hou4 lai2|その後
+最後|zui4 hou4|最後
+從前|cong2 qian2|昔
+過去|guo4 qu4|過去
+本來|ben3 lai2|もともと
+不久|bu4 jiu3|まもなく
+雪|xue3|雪
+溫度|wen1 du4|温度
+空氣|kong1 qi4|空気
+動物|dong4 wu4|動物
+虎|hu3|トラ
+腿|tui3|脚（もも〜すね）
+病|bing4|病気
+痛|tong4|痛い
+咳嗽|ke2 sou4|せき・せきをする
+看病|kan4 bing4|診察を受ける
+病人|bing4 ren2|病人
+疼|teng2|痛い（ずきずき）
+救命|jiu4 ming4|助けて！
+燈|deng1|あかり・電灯
+牆|qiang2|壁
+門口|men2 kou3|入り口・玄関先
+書桌|shu1 zhuo1|勉強机
+洗手間|xi3 shou3 jian1|お手洗い
+臥室|wo4 shi4|寝室
+家具|jia1 ju4|家具
+公寓|gong1 yu4|マンション・アパート
+盒子|he2 zi3*|箱
+生活|sheng1 huo2|生活
+穿|chuan1|着る・はく
+戴|dai4|（帽子・めがねを）身につける
+毛衣|mao2 yi1|セーター
+大衣|da4 yi1|コート
+皮包|pi2 bao1|かばん・財布
+牙刷|ya2 shua1|歯ブラシ
+內衣|nei4 yi1|下着
+洗|xi3|洗う
+收|shou1|しまう・受け取る
+搬|ban1|運ぶ・引っ越す
+丟|diu1|捨てる・なくす
+剪|jian3|切る（はさみで）
+店|dian4|店
+街|jie1|通り・街
+樓|lou2|建物・〜階
+路|lu4|道
+旅館|lv3 guan3|旅館・ホテル
+城市|cheng2 shi4|都市
+大樓|da4 lou2|ビル
+藥房|yao4 fang2|薬局
+工廠|gong1 chang3|工場
+花園|hua1 yuan2|庭園
+鄉下|xiang1 xia4|いなか
+教堂|jiao4 tang2|教会
+中心|zhong1 xin1|中心・センター
+這邊|zhe4 bian1|こちら
+那邊|na4 bian1|あちら
+右|you4|右
+方向|fang1 xiang4|方向
+東部|dong1 bu4|東部
+西部|xi1 bu4|西部
+南部|nan2 bu4|南部
+北部|bei3 bu4|北部
+火|huo3|火
+橋|qiao2|橋
+跑|pao3|走る
+跳|tiao4|跳ぶ
+唱|chang4|歌う
+踢|ti1|ける
+比賽|bi3 sai4|試合
+輸|shu1|負ける
+贏|ying2|勝つ
+照相|zhao4 xiang4|写真を撮る
+散步|san4 bu4|散歩する
+表演|biao3 yan3|上演する・パフォーマンス
+吉他|ji2 ta1|ギター
+鋼琴|gang1 qin2|ピアノ
+爬|pa2|登る・はう
+節目|jie2 mu4|番組
+照相機|zhao4 xiang4 ji1|カメラ
+樂器|yue4 qi4|楽器
+笑|xiao4|笑う
+哭|ku1|泣く
+怕|pa4|こわがる
+餓|e4|おなかがすいた
+渴|ke3|のどがかわいた
+飽|bao3|おなかいっぱい
+傷心|shang1 xin1|悲しい
+心情|xin1 qing2|気分
+興趣|xing4 qu4|興味
+希望|xi1 wang4|希望する
+感覺|gan3 jue2|感じる・感覚
+愉快|yu2 kuai4|楽しい
+害羞|hai4 xiu1|恥ずかしがる
+著急|zhao2 ji2|あせる
+可憐|ke3 lian2|かわいそう
+關心|guan1 xin1|気にかける
+滿意|man3 yi4|満足する
+上學|shang4 xue2|学校へ行く
+課|ke4|授業
+課本|ke4 ben3|教科書
+作業|zuo4 ye4|宿題
+小學|xiao3 xue2|小学校
+中學|zhong1 xue2|中学・高校
+年級|nian2 ji2|〜年生
+班|ban1|クラス
+英文|ying1 wen2|英語
+數學|shu4 xue2|数学
+讀書|du2 shu1|勉強する
+小學生|xiao3 xue2 sheng1|小学生
+大學生|da4 xue2 sheng1|大学生
+宿舍|su4 she4|寮
+操場|cao1 chang3|運動場
+校園|xiao4 yuan2|キャンパス
+開學|kai1 xue2|学期が始まる
+學費|xue2 fei4|学費
+歷史|li4 shi3|歴史
+科學|ke1 xue2|科学
+漢字|han4 zi4|漢字
+句子|ju4 zi3*|文
+語言|yu3 yan2|言語
+華語|hua2 yu3|華語・中国語
+美術|mei3 shu4|美術
+體育|ti3 yu4|体育
+學院|xue2 yuan4|学部・カレッジ
+語法|yu3 fa3|文法
+努力|nu3 li4|努力する
+職業|zhi2 ye4|職業
+經驗|jing1 yan4|経験
+機會|ji1 hui4|機会・チャンス
+成功|cheng2 gong1|成功する
+服務|fu2 wu4|サービス・勤める
+計畫|ji4 hua4|計画
+管理|guan3 li3|管理する
+票|piao4|切符・チケット
+元|yuan2|〜元
+付|fu4|払う
+租|zu1|借りる（有料）
+請客|qing3 ke4|おごる
+價格|jia4 ge2|価格
+保險|bao3 xian3|保険
+旅遊|lv3 you2|旅行する
+風景|feng1 jing3|景色
+參觀|can1 guan1|見学する
+明信片|ming2 xin4 pian4|はがき・ポストカード
+地址|di4 zhi3|住所
+禮物|li3 wu4|プレゼント
+結婚|jie2 hun1|結婚する
+卡片|ka3 pian4|カード
+慶祝|qing4 zhu4|祝う
+晚會|wan3 hui4|夜のパーティー
+藝術|yi4 shu4|芸術
+信|xin4|手紙
+寄|ji4|送る（郵便）
+紙|zhi3|紙
+雜誌|za2 zhi4|雑誌
+圖片|tu2 pian4|画像・図
+小說|xiao3 shuo1|小説
+故事|gu4 shi4|物語
+信封|xin4 feng1|封筒
+消息|xiao1 xi2*|知らせ・ニュース
+文章|wen2 zhang1|文章
+通知|tong1 zhi1|知らせる・通知
+一些|yi1 xie1|いくつか
+一點|yi1 dian3|少し
+這些|zhe4 xie1|これら
+那些|na4 xie1|それら
+地方|di4 fang1|場所
+意思|yi4 si1*|意味
+一樣|yi1 yang4|同じ
+其他|qi2 ta1|そのほか
+事情|shi4 qing2*|こと・用事
+不同|bu4 tong2|ちがう
+差不多|cha4 bu4 duo1|だいたい同じ
+辦法|ban4 fa3|方法・手だて
+方法|fang1 fa3|方法
+姓名|xing4 ming2|氏名
+可能|ke3 neng2|〜かもしれない
+一直|yi1 zhi2|ずっと・まっすぐ
+一共|yi1 gong4|全部で
+然後|ran2 hou4|それから
+總是|zong3 shi4|いつも
+經常|jing1 chang2|しょっちゅう
+正在|zheng4 zai4|ちょうど〜している
+特別|te4 bie2|特に・特別な
+原來|yuan2 lai2|なんだ〜だったのか
+雖然|sui1 ran2|〜だけれども
+而且|er2 qie3|しかも
+必須|bi4 xu1|〜しなければならない
+只好|zhi3 hao3|〜するしかない
+要是|yao4 shi4|もし〜なら
+不但|bu4 dan4|〜だけでなく
+遍|bian4|〜回（はじめから終わりまで）
+盤|pan2|〜皿
+拿|na2|持つ・取る
+帶|dai4|持っていく・連れていく
+送|song4|贈る・送る
+換|huan4|替える
+懂|dong3|わかる
+忘|wang4|忘れる
+借|jie4|借りる・貸す
+接|jie1|迎えに行く・受ける
+關|guan1|閉める・消す
+用|yong4|使う
+放|fang4|置く
+叫|jiao4|呼ぶ・〜という名前だ
+幫|bang1|手伝う
+說話|shuo1 hua4|話す
+走路|zou3 lu4|歩く
+起床|qi3 chuang2|起きる
+回答|hui2 da2|答える
+告訴|gao4 su4*|知らせる・伝える
+打開|da3 kai1|開ける
+看見|kan4 jian4|見える
+進來|jin4 lai2|入ってくる
+出去|chu1 qu4|出ていく
+回去|hui2 qu4|帰っていく
+試|shi4|試す
+變|bian4|変わる
+交|jiao1|提出する・（友達を）作る
+掛|gua4|かける
+注意|zhu4 yi4|注意する
+小心|xiao3 xin1|気をつける
+相信|xiang1 xin4|信じる
+認為|ren4 wei2|〜と思う
+打算|da3 suan4|〜するつもり
+習慣|xi2 guan4|慣れる・習慣
+需要|xu1 yao4|必要とする
+見面|jian4 mian4|会う
+聊天|liao2 tian1|おしゃべりする
+遲到|chi2 dao4|遅刻する
+離開|li2 kai1|離れる・去る
+聽說|ting1 shuo1|〜だそうだ
+出來|chu1 lai2|出てくる
+進去|jin4 qu4|入っていく
+了解|liao3 jie3|理解する
+發現|fa1 xian4|気づく・発見する
+同意|tong2 yi4|同意する
+解釋|jie3 shi4|説明する
+照顧|zhao4 gu4|世話をする
+經過|jing1 guo4|通過する・経る
+願意|yuan4 yi4|〜したいと思う
+結束|jie2 shu4|終わる
+發生|fa1 sheng1|起こる
+出現|chu1 xian4|現れる
+壞|huai4|悪い・壊れた
+老|lao3|年をとった・古い
+髒|zang1|汚い
+吵|chao3|うるさい
+美|mei3|美しい
+不錯|bu4 cuo4|なかなかいい
+有趣|you3 qu4|おもしろい
+簡單|jian3 dan1|簡単な
+聰明|cong1 ming2*|かしこい
+安全|an1 quan2|安全な
+清楚|qing1 chu3*|はっきりした
+可怕|ke3 pa4|こわい
+美麗|mei3 li4|美しい
+有用|you3 yong4|役に立つ
+客氣|ke4 qi4*|遠慮する・丁寧な
+麻煩|ma2 fan2*|面倒な・面倒をかける
+暖和|nuan3 huo2*|暖かい
+勇敢|yong3 gan3|勇敢な
+流行|liu2 xing2|流行している
+平常|ping2 chang2|ふだん・普通の
+一般|yi1 ban1|一般的な
+禮貌|li3 mao4|礼儀`;
+const ADDW={"dish:1": "麵 菜 湯", "ingr:1": "肉 蛋 鹽 食物 糖", "ingr:2": "油", "drink:1": "飲料 茶 酒", "snack:1": "三明治 點心", "tastes:1": "味道 嚐 刀子 叉子 杯子 盤子", "tastes:2": "新鮮", "trans:1": "騎 搭 地鐵", "trans:2": "交通 座位 起飛 出發 救護車", "country:1": "國家 外國", "country:2": "世界", "family:1": "男人 女人 大人 老人 小姐", "family:2": "父親 母親 家庭 年紀", "friend:1": "男生 女生 別人 自己", "jobs:1": "工人 服務生", "jobs:2": "教師", "work:2": "顧客", "work:3": "小偷", "number:1": "公斤 公里 號", "number:2": "許多 全部 所有", "time:1": "月 分 禮拜 禮拜天 新年 鐘頭 天 時間 生日", "time:2": "夜 剛剛 後來 最後 從前 過去", "time:3": "本來 不久", "weather:1": "雪 雨", "weather:2": "溫度 空氣", "animal:1": "動物 虎", "bodyp:1": "腿", "health:1": "病 痛 咳嗽 看病 病人", "health:2": "疼 救命 檢查", "home:1": "燈 牆 門口 書桌 洗手間", "home:2": "臥室 家具 公寓 盒子 生活", "wear:1": "穿 戴 毛衣 大衣 皮包 牙刷", "wear:2": "內衣", "chores:1": "洗 收", "chores:2": "搬 丟 剪", "place2:1": "店 街 樓 路 旅館 城市 商店", "place2:2": "大樓 藥房 工廠 花園 鄉下", "place2:3": "教堂 中心", "dir:1": "這邊 那邊 右", "dir:2": "方向 東部 西部 南部 北部", "geo:1": "火 橋", "sport:1": "跑 跳 唱 踢 比賽 輸 贏 照相 散步 音樂", "sport:2": "表演 吉他 鋼琴 爬 節目 照相機", "sport:3": "樂器", "feel:1": "笑 哭 怕 餓 渴 飽 傷心", "feel:2": "心情 興趣 希望 感覺 愉快 害羞 著急", "feel:3": "可憐 關心 滿意", "study:1": "上學 課 課本 作業 小學 中學 年級 班 英文 數學 讀書 小學生 大學生", "study:2": "宿舍 操場 校園 開學 學費 歷史 科學 漢字 句子 語言 華語 美術 體育 中文 毛筆", "study:3": "學院 語法", "job:1": "努力 職業", "job:2": "經驗 機會 成功 服務 計畫", "job:3": "管理", "money:1": "票 元 付 租 請客", "money:2": "價格", "money:3": "保險", "trip:1": "旅遊 風景 參觀", "trip:2": "明信片 地址", "fest:1": "禮物 結婚 卡片", "fest:2": "慶祝 晚會 文化", "fest:3": "藝術", "net:1": "信 寄 紙 雜誌 圖片", "net:2": "小說 故事 信封 消息 文章 新聞 報紙", "net:3": "通知", "basicw:1": "一些 一點 這些 那些 地方 意思 一樣", "basicw:2": "其他 事情 不同 差不多 辦法 方法 姓名", "adv:1": "可能 一直 一共 然後", "adv:2": "總是 經常 正在 特別 原來 雖然 而且", "adv:3": "必須 只好 要是 不但", "meas:2": "遍 盤", "verb:1": "拿 帶 送 換 懂 忘 借 接 關 用 放 叫 幫 說話 走路 起床 回答 告訴 打開 看見 進來 出去 回去 開始 歡迎", "verb:2": "試 變 交 掛 注意 小心 相信 認為 打算 習慣 需要 見面 聊天 遲到 離開 聽說 出來 進去 了解 發現 躺", "verb:3": "同意 解釋 照顧 經過 願意 結束 發生 出現", "adj:1": "壞 老 髒 吵 美 不錯 有趣 簡單 聰明", "adj:2": "安全 清楚 可怕 美麗 有用 客氣 麻煩 暖和 認真", "adj:3": "勇敢 流行 平常 一般 禮貌", "animal:2": "動物園"};
+const ADDW2={"sport:1": "歌", "time:2": "日期", "job:2": "活動", "adv:3": "永遠", "verb:1": "停 轉", "verb:2": "感謝 出生 影響 進步", "adj:1": "夠 大聲", "basicw:2": "聲音 關係 有空", "net:3": "政治"};for(const kt in ADDW2)ADDW[kt]=((ADDW[kt]||'')+' '+ADDW2[kt]).trim();
+for(const kt in ADDW){const [k,t]=kt.split(':');for(const c of CAT)for(const g of c.g)if(g[0]==k){if(LVX[k]){g[2]=g[2]+' | '+LVX[k];delete LVX[k]}const p=g[2].split('|').map(x=>x.trim());while(p.length<3)p.push('');p[t-1]=(p[t-1]+' '+ADDW[kt]).trim();while(p.length&&!p[p.length-1])p.pop();g[2]=p.join(' | ')}}
+CAT.forEach(c=>c.g.forEach(g=>{if(g[0]=='net')g[1]='スマホ・ネット・読み物'}));
 /* --- 単語の解析 --- */
 const DICT={};
 const isH=c=>/[㐀-鿿]/.test(c);
 const parse=(r,keep)=>{const[h,p,j]=r.split('|');const sy=p.split(' ').map(x=>{const n=x.endsWith('*');x=x.replace('*','');return{b:x.slice(0,-1).replace('v','ü'),t:+x.slice(-1),n}});const w={h,ch:Array.from(h).filter(isH),sy,j};if(!keep)DICT[h]=DICT[h]||w;return w};
 LV.forEach((l,i)=>{l.k='lv'+(i+1);l.id=i+1;l.t=`Lv.${i+1} ${l.n}`;l.par='base';l.w=l.d.split('\n').map(r=>parse(r))});
-[EX,EX2,EX3,EX4,EX5,EX6].forEach(x=>x.split('\n').forEach(r=>parse(r)));
+[EX,EX2,EX3,EX4,EX5,EX6,EX8,EX9].forEach(x=>x.split('\n').forEach(r=>parse(r)));
 const GS=[];
 CAT.forEach(c=>{c.sets=c.g.map(([k,n,l,note])=>{if(LVX[k])l=l+' | '+LVX[k];const z={k:'g_'+k,t:n,col:c.col,par:'cat:'+c.k,note,sent:c.sent||c.talk,talk:c.talk,
  w:c.talk?l.split('\n').map(r=>{const i=r.indexOf('|');const w=parse(r.slice(i+1),1);w.sp=r.slice(0,i);return w}):c.sent?l.split('\n').map(r=>parse(r,1)):l.replace(/\|/g,' ').split(/\s+/).filter(Boolean).map(h=>DICT[h]).filter(Boolean)};if(!c.sent&&!c.talk&&l.includes('|')){z.levels=l.split('|').map(x=>x.trim().split(/\s+/).filter(Boolean).map(h=>DICT[h]).filter(Boolean))}GS.push(z);return z})});
@@ -1743,8 +2215,9 @@ function cv(t,w=44,h=30,sw=4,col='currentColor'){const pts=P[t],y=l=>4+(5-l)/4*(
  return`<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" aria-hidden="true" preserveAspectRatio="none"><path d="${d}" fill="none" stroke="${col}" stroke-width="${sw}" stroke-linecap="round"/></svg>`}
 
 /* --- 保存 --- */
-const ST={chars:true,py:true,zy:true,slow:false,best:{}};
+const ST={chars:true,py:false,zy:true,slow:false,best:{}};
 try{Object.assign(ST,JSON.parse(localStorage.getItem('sisheng')||'{}'))}catch(e){}
+if(!ST.pyOff1){ST.py=false;ST.lpy=false;ST.pyOff1=1}
 const save=()=>{try{localStorage.setItem('sisheng',JSON.stringify(ST))}catch(e){}};
 const bestS=k=>(ST.best&&ST.best[k]&&ST.best[k].s)||0;
 
@@ -1876,13 +2349,13 @@ function toc(){const bl=(h,py,a)=>{const sy=py.split(' ');return`<button class="
 function pron(){return top('発音','toc')+mn('data-a="nav" data-v="sandhi"','<span class="bt" style="font-size:14px;padding:4px 6px">3→2</span>','var(--t1)','声調の変化','')+mn('data-a="nav" data-v="basics"',IC.tone,'var(--t2)','四聲のきほん','')+mn('data-a="nav" data-v="base"',IC.stairs,'var(--t3)','レベル練習','')+mn('data-a="nav" data-v="combos"',IC.combo,'var(--t4)','声調の組み合わせ','')}
 
 const PAL=['var(--t1)','var(--t2)','var(--t3)','var(--t4)','#ff8a5b'];
-const CIC={travel:'plane',culture:'lantern',taste:'bowl2',tech:'phone',earth:'mountain',words:'q',num:'clock',nature:'sun',body:'heart',life:'house',town:'building',hobby:'ball',school:'book',shop:'wallet',food:'food',trans:'bus',place:'pin',people:'people',verb:'spark',sent:'doc',talk:'talk'};
+const CIC={measure:'grid',travel:'plane',culture:'lantern',taste:'bowl2',tech:'phone',earth:'mountain',words:'q',num:'clock',nature:'sun',body:'heart',life:'house',town:'building',hobby:'ball',school:'book',shop:'wallet',food:'food',trans:'bus',place:'pin',people:'people',verb:'spark',sent:'doc',talk:'talk'};
 function cats(){return top('単語','toc')+CAT.filter(c=>!c.sent&&!c.talk).map(c=>mn(`data-a="cat" data-c="${c.k}"`,IC[CIC[c.k]],c.col,c.n,'',c.tag?'<span class="tag">試作</span>':'')).join('')}
 
 function cat(){const c=S.cat;return top(c.n,c.sent||c.talk?'toc':'cats')+c.sets.map((z,i)=>{const col=c.talk?'#ff8a5b':c.col;return`<div class="lv"><div class="lvh"><span class="badge" style="background:${col}">${IC[CIC[c.k]]}</span><div><b>${z.t}</b></div><span class="stars" aria-label="ベスト星${bestS(z.k)}">${stars(bestS(z.k))}</span></div>
 <div class="lvb"><button class="btn" data-a="open" data-k="${z.k}">${c.talk?'会話を見る':c.sent?'文を見る':'単語を見る'}</button><button class="btn go" style="background:${col};${c.talk?'color:#2b2140':''}" data-a="quiz" data-k="${z.k}">クイズ ▶</button></div></div>`}).join('')}
 
-const lpy=()=>ST.lpy!==false;
+const lpy=()=>ST.lpy===true;
 const pyBtn=()=>`<div class="pyb"><button class="${lpy()?'on':''}" data-a="lpy" aria-pressed="${lpy()}">ピンイン ${lpy()?'表示中':'非表示'}</button></div>`;
 function talkView(z){return`<div class="plays" style="margin:0 0 12px"><button class="pb" data-a="playall">${ic.spk}会話を通して聞く</button></div><div class="chat">${z.w.map((w,i)=>`<button class="bub ${w.sp=='由美'?'r':''}" data-a="sayw" data-i="${i}"><small class="sp">${esc(w.sp)}</small><span class="hz" lang="zh-Hant-TW">${hzC(w)}</span>${lpy()?`<span class="py">${pyC(w)}</span>`:''}<span class="zy">${zyS(w)}</span><small class="ja">${esc(w.j)}</small></button>`).join('')}</div>`}
 
