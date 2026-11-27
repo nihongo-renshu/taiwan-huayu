@@ -2623,7 +2623,189 @@ const EX11=`嘴|zui3|口
 龍|long2|竜
 可以|ke3 yi3|〜してよい・できる`;
 const ADDW4={"bodyp:1": "嘴", "bodyp:2": "個子", "bodyp:3": "皮", "wear:1": "傘", "verb:1": "出門 刷牙", "verb:2": "改 記 說明 做夢 使用 猜 幫助 明白 聞 抱 開玩笑 按 救 修 變成 道歉", "verb:3": "醉 打架 承認 交流 要求 選擇 確定 問候 握手 確認 看不起 嘗試", "adj:1": "笨 乖", "adj:2": "涼 困難 順利 亂", "adj:3": "標準 假 溫柔 細心 正常", "adv:2": "大約 完全 快要 隨便 到處", "adv:3": "同時 從來 不必 萬一 到底 往往 隨時 從小", "basicw:1": "姓 恭喜 可以", "basicw:2": "不過 原因", "basicw:3": "同樣 方式 程度 來不及 錯誤 意見 情況 缺點 看法 差別", "study:1": "本子 國語", "study:2": "詞 題目 留學生 聲調", "study:3": "文學 文字 預習", "time:1": "白天 天天", "time:2": "平時", "time:3": "時代 現代 一生", "trans:2": "巴士 電車 位子", "dir:2": "位置", "dir:3": "南方 北方", "tastes:2": "淡", "chores:1": "擦", "feel:2": "夢 安心 嚇", "feel:3": "愛情 精神", "friend:1": "小朋友", "friend:3": "青年 單身", "sport:1": "玩具 球", "sport:2": "歌曲", "sport:3": "角色", "job:2": "設計 文件", "job:3": "發表 處理 企業 條件", "money:1": "逛", "money:2": "有錢 出租 簽名", "money:3": "費用", "trip:2": "旅客", "trip:3": "特色", "place2:2": "酒吧 上街", "place2:3": "郊區", "home:1": "大門 垃圾", "home:2": "屋子", "net:2": "作者", "net:3": "出版 廣播 系統", "geo:3": "環保 人口 地區", "ingr:3": "材料", "fest:2": "除夕", "fest:3": "作品", "jobs:3": "市長", "meas:2": "頁", "animal:2": "龍"};
-const ADDW2={"sport:1": "歌", "time:2": "日期", "job:2": "活動", "adv:3": "永遠", "verb:1": "停 轉", "verb:2": "感謝 出生 影響 進步", "adj:1": "夠 大聲", "basicw:2": "聲音 關係 有空", "net:3": "政治"};for(const kt in ADDW2)ADDW[kt]=((ADDW[kt]||'')+' '+ADDW2[kt]).trim();for(const kt in ADDW3)ADDW[kt]=((ADDW[kt]||'')+' '+ADDW3[kt]).trim();for(const kt in ADDW4)ADDW[kt]=((ADDW[kt]||'')+' '+ADDW4[kt]).trim();
+const EX12=`還有|hai2 you3|それから・まだある
+拜託|bai4 tuo1|お願い
+或者|huo4 zhe3|あるいは
+不然|bu4 ran2|さもないと
+區別|qu1 bie2|区別
+過程|guo4 cheng2|過程
+細節|xi4 jie2|細かい点
+關鍵|guan1 jian4|かぎ・ポイント
+比方|bi3 fang1|たとえ・たとえば
+順序|shun4 xu4|順番
+社會|she4 hui4|社会
+首先|shou3 xian1|まず
+剛好|gang1 hao3|ちょうど
+通常|tong1 chang2|ふつうは
+難道|nan2 dao4|まさか〜ではあるまい
+千萬|qian1 wan4|くれぐれも
+即使|ji2 shi3|たとえ〜でも
+無論|wu2 lun4|〜にかかわらず
+並且|bing4 qie3|そのうえ
+然而|ran2 er2|しかしながら
+基本上|ji1 ben3 shang4|基本的に
+拼命|pin1 ming4|必死に
+偶然|ou3 ran2|偶然
+四處|si4 chu4|あちこち
+國中|guo2 zhong1|中学校（台湾）
+放學|fang4 xue2|学校がひける
+文具|wen2 ju4|文房具
+班長|ban1 zhang3|学級委員長
+詞典|ci2 dian3|辞典
+初級|chu1 ji2|初級
+文法|wen2 fa3|文法
+春假|chun1 jia4|春休み
+筆記|bi3 ji4|ノート・メモ
+測試|ce4 shi4|テストする
+詞彙|ci2 hui4|語彙
+口試|kou3 shi4|口頭試験
+動詞|dong4 ci2|動詞
+筆試|bi3 shi4|筆記試験
+實驗|shi2 yan4|実験
+報到|bao4 dao4|到着を届け出る
+口語|kou3 yu3|話し言葉
+成為|cheng2 wei2|〜になる
+點頭|dian3 tou2|うなずく
+排|pai2|並ぶ・並べる
+提|ti2|（手に）提げる・持ち出す
+記住|ji4 zhu4|しっかり覚える
+騙|pian4|だます
+尊重|zun1 zhong4|尊重する
+商量|shang1 liang2*|相談する
+招手|zhao1 shou3|手招きする
+誤會|wu4 hui4|誤解する
+遵守|zun1 shou3|守る（規則を）
+轉身|zhuan3 shen1|振り向く
+允許|yun3 xu3|許可する
+調整|tiao2 zheng3|調整する
+保存|bao3 cun2|保存する
+放棄|fang4 qi4|あきらめる
+逃|tao2|逃げる
+閉|bi4|閉じる
+安慰|an1 wei4|なぐさめる
+防止|fang2 zhi3|防止する
+包括|bao1 kuo4|含む
+保留|bao3 liu2|保留する・取っておく
+實現|shi2 xian4|実現する
+停止|ting2 zhi3|停止する
+報警|bao4 jing3|警察に通報する
+模仿|mo2 fang3|まねる
+碰見|peng4 jian4|ばったり会う
+對待|dui4 dai4|（人に）接する
+說服|shuo1 fu2|説得する
+粗心|cu1 xin1|そそっかしい
+適合|shi4 he2|ふさわしい
+糟糕|zao1 gao1|ひどい・しまった
+熱情|re4 qing2|熱心な・親切な
+流利|liu2 li4|流ちょうな
+傻|sha3|ばかな・ぼんやりした
+友好|you3 hao3|友好的な
+合理|he2 li3|合理的な
+黑暗|hei1 an4|真っ暗な
+高級|gao1 ji2|高級な
+便利|bian4 li4|便利な
+相似|xiang1 si4|似ている
+耐心|nai4 xin1|忍耐強い・根気
+公平|gong1 ping2|公平な
+夢想|meng4 xiang3|夢（目標）
+感到|gan3 dao4|感じる
+倒楣|dao3 mei2|ついてない
+難受|nan2 shou4|つらい・気分が悪い
+印象|yin4 xiang4|印象
+感情|gan3 qing2|感情・情
+感受|gan3 shou4|感じとる・感想
+表情|biao3 qing2|表情
+氣氛|qi4 fen1|雰囲気
+恨|hen4|恨む
+花生|hua1 sheng1|ピーナッツ
+火腿|huo3 tui3|ハム
+麵粉|mian4 fen3|小麦粉
+夾|jia2|（箸で）はさむ
+濃|nong2|濃い
+泡|pao4|（お茶を）いれる・浸す
+醫師|yi1 shi1|医師
+專家|zhuan1 jia1|専門家
+人員|ren2 yuan2|スタッフ・要員
+影本|ying3 ben3|コピー（複写）
+表格|biao3 ge2|表・書類の様式
+目標|mu4 biao1|目標
+申請|shen1 qing3|申請する
+工資|gong1 zi1|賃金
+名單|ming2 dan1|名簿
+規定|gui1 ding4|規定
+接待|jie1 dai4|応対する
+行業|hang2 ye4|業種
+經營|jing1 ying2|経営する
+外行|wai4 hang2|素人
+出席|chu1 xi2|出席する
+分析|fen1 xi1|分析する
+技術|ji4 shu4|技術
+國際|guo2 ji4|国際
+首都|shou3 du1|首都
+外交|wai4 jiao1|外交
+收入|shou1 ru4|収入
+日用品|ri4 yong4 pin3|日用品
+損失|sun3 shi1|損失
+印章|yin4 zhang1|はんこ
+金額|jin1 e2|金額
+包裝|bao1 zhuang1|包装
+風險|feng1 xian3|リスク
+門票|men2 piao4|入場券
+夜景|ye4 jing3|夜景
+身分證|shen1 fen4 zheng4|身分証
+元旦|yuan2 dan4|元日
+過節|guo4 jie2|祝日を過ごす
+氣象|qi4 xiang4|気象
+水災|shui3 zai1|水害
+災難|zai1 nan4|災難
+地面|di4 mian4|地面
+港口|gang3 kou3|港
+天然|tian1 ran2|天然の
+商場|shang1 chang3|ショッピングモール
+窗口|chuang1 kou3|窓口
+建築|jian4 zhu2|建物・建築
+郊外|jiao1 wai4|郊外
+地下|di4 xia4|地下
+外頭|wai4 tou2*|外
+中央|zhong1 yang1|中央
+乘客|cheng2 ke4|乗客
+人行道|ren2 xing2 dao4|歩道
+道路|dao4 lu4|道路
+電扇|dian4 shan4|扇風機
+床單|chuang2 dan1|シーツ
+玻璃|bo1 li2*|ガラス
+地毯|di4 tan3|じゅうたん
+扇子|shan4 zi3*|扇子・うちわ
+尺寸|chi3 cun4|サイズ
+家事|jia1 shi4|家事
+沖|chong1|（水で）流す・すすぐ
+刷|shua1|ブラシでこする
+吐|tu4|吐く（もどす）
+傷|shang1|けが・傷
+維他命|wei2 ta1 ming4|ビタミン
+手術|shou3 shu4|手術
+汗|han4|汗
+身材|shen1 cai2|スタイル・体つき
+遊戲|you2 xi4|ゲーム・遊び
+愛好|ai4 hao4|趣味・好む
+裁判|cai2 pan4|審判
+少年|shao4 nian2|少年
+郵件|you2 jian4|メール・郵便物
+傳單|chuan2 dan1|チラシ
+標題|biao1 ti2|見出し・タイトル
+放大|fang4 da4|拡大する
+收看|shou1 kan4|（テレビを）見る
+電視台|dian4 shi4 tai2|テレビ局
+事件|shi4 jian4|事件
+詩|shi1|詩
+悲劇|bei1 ju4|悲劇
+當時|dang1 shi2|当時
+定期|ding4 qi2|定期的な
+提前|ti2 qian2|前倒しする
+時期|shi2 qi2|時期
+套|tao4|〜セット・〜着（スーツ）`;
+const ADDW5={"basicw:1": "還有 拜託", "basicw:2": "或者 不然", "basicw:3": "區別 過程 細節 關鍵 比方 順序 社會", "adv:2": "首先 剛好 通常", "adv:3": "難道 千萬 即使 無論 並且 然而 基本上 拼命 偶然 四處", "study:1": "國中 放學 文具", "study:2": "班長 詞典 初級 文法 春假 筆記", "study:3": "測試 詞彙 口試 動詞 筆試 實驗 報到 口語", "verb:2": "成為 點頭 排 提 記住 騙", "verb:3": "尊重 商量 招手 誤會 遵守 轉身 允許 調整 保存 放棄 逃 閉 安慰 防止 包括 保留 實現 停止 報警 模仿 碰見 對待 說服", "adj:2": "粗心 適合 糟糕 熱情 流利 傻", "adj:3": "友好 合理 黑暗 高級 便利 相似 耐心 公平", "feel:2": "夢想 感到 倒楣 難受", "feel:3": "印象 感情 感受 表情 氣氛 恨", "ingr:2": "花生 火腿", "ingr:3": "麵粉", "tastes:2": "夾 濃 泡", "jobs:2": "醫師", "jobs:3": "專家", "work:3": "人員", "job:2": "影本 表格 目標 申請", "job:3": "工資 名單 規定 接待 行業 經營 外行 出席 分析 技術", "country:2": "國際 首都", "country:3": "外交", "money:2": "收入 日用品", "money:3": "損失 印章 金額 包裝 風險", "trip:1": "門票", "trip:2": "夜景 身分證", "fest:1": "元旦", "fest:2": "過節", "weather:3": "氣象 水災 災難", "geo:2": "地面", "geo:3": "港口 天然", "place2:2": "商場", "place2:3": "窗口 建築 郊外", "dir:2": "地下 外頭", "dir:3": "中央", "trans:2": "乘客 人行道", "trans:3": "道路", "home:2": "電扇 床單", "home:3": "玻璃 地毯", "wear:2": "扇子", "wear:3": "尺寸", "chores:1": "家事", "chores:2": "沖 刷", "health:2": "吐 傷 維他命", "health:3": "手術", "bodyp:2": "汗", "bodyp:3": "身材", "sport:1": "遊戲", "sport:2": "愛好", "sport:3": "裁判", "friend:3": "少年", "net:2": "郵件", "net:3": "傳單 標題 放大 收看 電視台 事件 詩 悲劇", "time:2": "當時", "time:3": "定期 提前 時期", "meas:3": "套"};
+const ADDW2={"sport:1": "歌", "time:2": "日期", "job:2": "活動", "adv:3": "永遠", "verb:1": "停 轉", "verb:2": "感謝 出生 影響 進步", "adj:1": "夠 大聲", "basicw:2": "聲音 關係 有空", "net:3": "政治"};for(const kt in ADDW2)ADDW[kt]=((ADDW[kt]||'')+' '+ADDW2[kt]).trim();for(const kt in ADDW3)ADDW[kt]=((ADDW[kt]||'')+' '+ADDW3[kt]).trim();for(const kt in ADDW4)ADDW[kt]=((ADDW[kt]||'')+' '+ADDW4[kt]).trim();for(const kt in ADDW5)ADDW[kt]=((ADDW[kt]||'')+' '+ADDW5[kt]).trim();
 for(const kt in ADDW){const [k,t]=kt.split(':');for(const c of CAT)for(const g of c.g)if(g[0]==k){if(LVX[k]){g[2]=g[2]+' | '+LVX[k];delete LVX[k]}const p=g[2].split('|').map(x=>x.trim());while(p.length<3)p.push('');p[t-1]=(p[t-1]+' '+ADDW[kt]).trim();while(p.length&&!p[p.length-1])p.pop();g[2]=p.join(' | ')}}
 CAT.forEach(c=>c.g.forEach(g=>{if(g[0]=='net')g[1]='スマホ・ネット・読み物'}));
 /* --- 単語の解析 --- */
@@ -2631,7 +2813,7 @@ const DICT={};
 const isH=c=>/[㐀-鿿]/.test(c);
 const parse=(r,keep)=>{const[h,p,j]=r.split('|');const sy=p.split(' ').map(x=>{const n=x.endsWith('*');x=x.replace('*','');return{b:x.slice(0,-1).replace('v','ü'),t:+x.slice(-1),n}});const w={h,ch:Array.from(h).filter(isH),sy,j};if(!keep)DICT[h]=DICT[h]||w;return w};
 LV.forEach((l,i)=>{l.k='lv'+(i+1);l.id=i+1;l.t=`Lv.${i+1} ${l.n}`;l.par='base';l.w=l.d.split('\n').map(r=>parse(r))});
-[EX,EX2,EX3,EX4,EX5,EX6,EX8,EX9,EX10,EX11].forEach(x=>x.split('\n').forEach(r=>parse(r)));
+[EX,EX2,EX3,EX4,EX5,EX6,EX8,EX9,EX10,EX11,EX12].forEach(x=>x.split('\n').forEach(r=>parse(r)));
 const GS=[];
 CAT.forEach(c=>{c.sets=c.g.map(([k,n,l,note])=>{if(LVX[k])l=l+' | '+LVX[k];const z={k:'g_'+k,t:n,col:c.col,par:'cat:'+c.k,note,sent:c.sent||c.talk,talk:c.talk,
  w:c.talk?l.split('\n').map(r=>{const i=r.indexOf('|');const w=parse(r.slice(i+1),1);w.sp=r.slice(0,i);return w}):c.sent?l.split('\n').map(r=>parse(r,1)):l.replace(/\|/g,' ').split(/\s+/).filter(Boolean).map(h=>DICT[h]).filter(Boolean)};if(!c.sent&&!c.talk&&l.includes('|')){z.levels=l.split('|').map(x=>x.trim().split(/\s+/).filter(Boolean).map(h=>DICT[h]).filter(Boolean))}GS.push(z);return z})});
