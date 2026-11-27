@@ -312,6 +312,27 @@ background:#fff linear-gradient(#0000 calc(50% - 1px),#2b214022 calc(50% - 1px) 
 .wov{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;z-index:2;opacity:0;animation:wfade 1.3s ease-out forwards}@keyframes wfade{0%{opacity:0;transform:scale(.7)}15%{opacity:1;transform:scale(1)}65%{opacity:1}100%{opacity:0;transform:scale(1.05)}}.wov svg{width:86%;height:86%}
 .op.hz{font:900 30px/1 "Noto Sans TC",sans-serif;letter-spacing:2px}
 .pyb{gap:8px;flex-wrap:wrap}
+.srbtn{display:flex;align-items:center;gap:10px;width:100%;min-height:50px;margin:0 0 14px;padding:8px 16px;background:var(--card);border:2.5px solid var(--line);border-radius:25px;box-shadow:0 3px 0 var(--line);color:var(--sub);font-weight:800;font-size:15px;text-align:left}
+.srbtn svg{color:var(--ink);flex:none}
+.srbox{position:relative;margin:0 16px 12px}
+.srbox input{width:100%;box-sizing:border-box;min-height:54px;border:2.5px solid var(--line);border-radius:27px;padding:8px 48px 8px 48px;font:inherit;font-size:19px;font-weight:800;background:var(--card);color:var(--ink);box-shadow:0 3px 0 var(--line);-webkit-appearance:none;appearance:none}
+.srbox input::-webkit-search-cancel-button{display:none}
+.srbox input:focus{outline:3px solid var(--t4);outline-offset:2px}
+.srico{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--sub);display:flex}
+.srclr{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;border:none;background:var(--line);color:var(--bg);font-size:20px;font-weight:900;line-height:1}
+.srh{margin:8px 16px;text-align:center}
+.srh p{font-weight:700;margin:8px 0}
+.srx{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin:12px 0}
+.srx button{min-height:44px;padding:4px 16px;border-radius:22px;border:2.5px solid var(--line);background:var(--sun);font-weight:900;font-size:17px;box-shadow:0 3px 0 var(--line);color:#2b2140}
+.srbar{display:flex;gap:8px;padding:0 16px 6px;align-items:stretch}
+.srbar .pb{flex:none}
+.srbar .srq{flex:1;margin:0;min-height:48px}
+.srt{display:flex;align-items:baseline;gap:8px;margin:16px 18px 8px;font-size:16px;font-weight:900}
+.srt small{color:var(--sub);font-size:13px}
+.li .hz .hl{text-decoration:underline;text-decoration-thickness:3px;text-underline-offset:5px}
+.srl{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.srl em{font-style:normal;font-size:11.5px;font-weight:800;color:var(--sub);border:1.5px solid currentColor;border-radius:10px;padding:0 7px;line-height:1.6}
+
 #plall{display:inline-flex;align-items:center;gap:6px;background:var(--sun);color:#2b2140;margin-right:auto}
 #plall svg{width:18px;height:18px}
 .li.now{background:light-dark(#fff3c4,#3a3348);outline:3px solid var(--t2);outline-offset:-3px}
@@ -2276,7 +2297,7 @@ let listPlaying=false;
 function playList(ws){if(listPlaying){listPlaying=false;stopSeq();bgmDuck(false);markNow(-1);updPlayBtn();return}
  if(!ss){toast('この画面では読み上げが使えません','var(--t1)');return}
  listPlaying=true;bgmDuck(true);updPlayBtn();playSeq(ws.map(w=>w.h),i=>markNow(S.set.w.indexOf(ws[i])),()=>{listPlaying=false;bgmDuck(false);markNow(-1);updPlayBtn()})}
-function markNow(i){document.querySelectorAll('.li.now').forEach(e=>e.classList.remove('now'));if(i<0)return;const e=document.querySelector(`.li[data-a="sayw"][data-i="${i}"]`);if(e){e.classList.add('now');try{e.scrollIntoView({block:'nearest',behavior:'smooth'})}catch(x){}}}
+function markNow(i){document.querySelectorAll('.li.now').forEach(e=>e.classList.remove('now'));if(i<0)return;const e=document.querySelector(`.li[data-a="sayw"][data-i="${i}"],.li[data-a="sayr"][data-i="${i}"]`);if(e){e.classList.add('now');try{e.scrollIntoView({block:'nearest',behavior:'smooth'})}catch(x){}}}
 function updPlayBtn(){const b=document.getElementById('plall');if(b)b.innerHTML=listPlaying?'■ 停止':`${ic.spk} 全部再生`}
 
 /* --- 状態と描画 --- */
@@ -2284,7 +2305,7 @@ const app=document.getElementById('app');
 let S={v:'cover'},sheet=false;
 const esc=s=>String(s).replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
 const stars=n=>'★'.repeat(n)+`<i>${'★'.repeat(3-n)}</i>`;
-const ic={back:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+const ic={search:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5L21 21"/></svg>',back:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
 gear:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/></svg>',
 spk:'<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M4 9h4l5-4v14l-5-4H4z"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
 wave:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M3 12c2-6 4-6 6 0s4 6 6 0 4-6 6 0"/></svg>'};
@@ -2344,6 +2365,7 @@ const grid=(h)=>`<div class="blks">${h}</div>`;
 function toc(){const bl=(h,py,a)=>{const sy=py.split(' ');return`<button class="blk wb" ${a} aria-label="${h}"><span class="cw" lang="zh-Hant-TW">${Array.from(h).map((c,k)=>{const x=sy[k],t=+x.slice(-1),bb=x.slice(0,-1);return`<span class="c${t}"><i>${zy(bb,t)}</i>${c}</span>`}).join('')}</span></button>`};
  return`<section class="cover tocp"><div class="dots"></div><div class="zrib" aria-hidden="true">ㄅㄆㄇㄈ ㄉㄊㄋㄌ ㄍㄎㄏ</div><div class="cin">
 <div class="tbar"><button class="ib" data-a="nav" data-v="cover" aria-label="表紙へ">${ic.back}</button><h1>目次</h1><button class="ib" data-a="set" aria-label="設定">${ic.gear}</button></div>${status()}
+<button class="srbtn" data-a="srgo">${ic.search}<span>漢字・意味・ピンインで検索</span></button>
 <div class="blks">${bl('注音','zhu4 yin1','data-a="nav" data-v="zhu"')+bl('發音','fa1 yin1','data-a="nav" data-v="pron"')+bl('單字','dan1 zi4','data-a="nav" data-v="cats"')+bl('句子','ju4 zi5','data-a="cat" data-c="sent"')+bl('會話','hui4 hua4','data-a="cat" data-c="talk"')+bl('複習','fu4 xi2','data-a="nav" data-v="weak"').replace('</button>',(()=>{const n=weakDue().length;return n?`<span class="due">${n}</span></button>`:'</button>'})())}</div></div></section>`}
 
 function pron(){return top('発音','toc')+mn('data-a="nav" data-v="sandhi"','<span class="bt" style="font-size:14px;padding:4px 6px">3→2</span>','var(--t1)','声調の変化','')+mn('data-a="nav" data-v="basics"',IC.tone,'var(--t2)','四聲のきほん','')+mn('data-a="nav" data-v="base"',IC.stairs,'var(--t3)','レベル練習','')+mn('data-a="nav" data-v="combos"',IC.combo,'var(--t4)','声調の組み合わせ','')}
@@ -2648,9 +2670,52 @@ const findSet=k=>LV.find(l=>l.k==k)||GS.find(c=>c.k==k)||Object.values(CB).find(
 [...LV,...GS,...Object.values(CB)].forEach(z=>z.neu=z.w.some(w=>w.sy.some(s=>s.t==5)));
 const tcmp=(a,b)=>a.sy.length-b.sy.length||a.sy.map(x=>x.t).join('').localeCompare(b.sy.map(x=>x.t).join(''));
 [...LV.slice(1),...GS.filter(z=>!z.sent&&!z.sandhi)].forEach(z=>{z.w=z.w.slice().sort(tcmp);if(z.levels)z.levels=z.levels.map(a=>a.slice().sort(tcmp))});
-function render(){app.innerHTML=({cover,toc,pron,cats,cat,base,combos,basics,learn,quiz,result,zhu,zlist,zq,zres,zw:zwView,weak,sandhi:sandhiView,my,tares})[S.v]()+(sheet?setSheet():'');if(S.v=='zw')zwInit();}
+/* --- 検索 --- */
+const JTW=(()=>{const m={};`亜亞 悪惡 圧壓 囲圍 医醫 壱壹 隠隱 栄榮 営營 駅驛 円圓 塩鹽 応應 欧歐 殴毆 桜櫻 奥奧 横橫 温溫 穏穩 仮假 価價 画畫 会會 壊壞 懐懷 絵繪 拡擴 殻殼 覚覺 学學 岳嶽 楽樂 渇渴 巻卷 陥陷 寛寬 歓歡 勧勸 観觀 関關 缶罐 気氣 帰歸 亀龜 戯戲 犠犧 旧舊 拠據 挙舉 峡峽 狭狹 暁曉 区區 駆驅 径徑 茎莖 恵惠 渓溪 経經 継繼 蛍螢 軽輕 鶏雞 芸藝 撃擊 欠缺 県縣 倹儉 剣劍 険險 圏圈 検檢 権權 献獻 験驗 厳嚴 広廣 効效 恒恆 黄黃 鉱礦 号號 国國 黒黑 済濟 砕碎 斎齋 剤劑 歳歲 雑雜 参參 桟棧 蚕蠶 惨慘 賛贊 残殘 糸絲 歯齒 児兒 辞辭 湿濕 実實 写寫 釈釋 寿壽 収收 衆眾 従從 渋澀 獣獸 縦縱 粛肅 処處 叙敘 奨獎 将將 焼燒 称稱 証證 乗乘 浄淨 剰剩 条條 状狀 畳疊 嬢孃 譲讓 醸釀 触觸 嘱囑 寝寢 尽盡 図圖 粋粹 酔醉 随隨 髄髓 数數 枢樞 瀬瀨 声聲 斉齊 静靜 窃竊 摂攝 専專 浅淺 戦戰 践踐 銭錢 潜潛 繊纖 禅禪 双雙 壮壯 争爭 荘莊 捜搜 挿插 巣巢 装裝 総總 騒騷 増增 層層 蔵藏 臓臟 属屬 続續 堕墮 対對 体體 帯帶 滞滯 台臺 滝瀧 択擇 沢澤 担擔 単單 胆膽 団團 断斷 弾彈 遅遲 痴癡 昼晝 虫蟲 鋳鑄 庁廳 聴聽 逓遞 鉄鐵 転轉 点點 伝傳 灯燈 当當 党黨 盗盜 稲稻 闘鬥 徳德 独獨 読讀 届屆 弐貳 悩惱 脳腦 覇霸 廃廢 売賣 麦麥 発發 髪髮 抜拔 蛮蠻 秘祕 浜濱 払拂 仏佛 辺邊 変變 弁辦辯瓣 舗鋪 歩步 宝寶 豊豐 没沒 万萬 満滿 黙默 薬藥 訳譯 予預 余餘 与與 誉譽 揺搖 様樣 謡謠 来來 頼賴 乱亂 覧覽 竜龍 両兩 猟獵 緑綠 塁壘 涙淚 励勵 礼禮 霊靈 齢齡 恋戀 炉爐 労勞 楼樓 録錄 湾灣 毎每 着著 説說 税稅 鋭銳 脱脫 閲閱 悦悅 内內 呉吳 娯娛 晩晚 戻戾 姫姬 隣鄰 郷鄉 曽曾 掲揭 渉涉 歴歷 暦曆 顔顏 産產 嘆歎 麺麵 携攜 縄繩 弥彌 即卽 既旣 概槪 器器 突突 臭臭 類類 黒黑 都都 塚塚 祝祝 神神 福福 練練 謹謹 勤勤 難難 漢漢 館館 飲飲 飯飯 們們 们們 这這 么麼 个個 说說 话話 时時 间間 问問 门門 见見 东東 车車 长長 书書 买買 卖賣 钱錢 电電 认認 识識 谢謝 请請 语語 习習 欢歡 饭飯 吗嗎 过過 还還 边邊 对對 开開 关關 发發 后後 业業 华華 爱愛 红紅 绿綠 蓝藍 鸡雞 鱼魚 鸟鳥 马馬 龙龍 头頭 脑腦 药藥 场場 厅廳 园園 视視 听聽 读讀 写寫 气氣 热熱 风風 云雲 节節 乐樂 运運 动動 产產 实實 现現 给給 让讓 应應 该該 觉覺 点點 两兩 几幾 岁歲 亿億 体體 报報 纸紙 杂雜 网網 脸臉 难難 机機 飞飛 铁鐵 号號 钟鐘 级級 师師 爷爺 妈媽 儿兒 孙孫 亲親 东東 汤湯 菜菜 面麵 饺餃 饮飲 馆館 铺鋪 鞋鞋 衣衣 帮幫 带帶 进進 远遠 近近 选選 错錯 问問 题題 词詞 汉漢 字字 课課 试試 纪紀 线線 结結 经經 给給 绍紹 细細 终終 总總 讲講 记記 论論 设設 许許 诉訴 诗詩 调調 谈談 谁誰 课課 贵貴 费費 资資 赛賽 输輸 赢贏 轻輕 较較 辆輛 运運 选選 钥鑰 银銀 错錯 长長 闹鬧 阳陽 阴陰 际際 难難 页頁 顶頂 顾顧 领領 颜顏 风風 饿餓 饱飽 馒饅`.split(/\s+/).forEach(t=>{const a=Array.from(t);if(a.length>1)m[a[0]]=(m[a[0]]||'')+a.slice(1).join('')});return m})();
+const kata2hira=s=>s.replace(/[ァ-ヶ]/g,c=>String.fromCharCode(c.charCodeAt(0)-0x60));
+let SIDX=null;
+function srIndex(){if(SIDX)return SIDX;const W=new Map(),T=[];
+ for(const z of GS){if(!z.k.startsWith('g_'))continue;
+  if(z.sent){for(const w of z.w)T.push({w,lab:z.t,s:1});continue}
+  (z.levels||[z.w]).forEach((L,li)=>L.forEach(w=>{const lab=z.t+(z.levels?'・'+LVN[li]:'');if(!W.has(w.h))W.set(w.h,{w,lab:[lab]});else{const r=W.get(w.h);if(!r.lab.includes(lab))r.lab.push(lab)}}))}
+ const pre=r=>{const w=r.w;r.pyb=w.sy.map(s=>s.b).join('');r.pyt=w.sy.map(s=>s.b+s.t).join('');r.zys=w.sy.map(s=>zy(s.b,s.t)).join('');r.zyn=r.zys.replace(/[ˊˇˋ˙]/g,'');r.jj=kata2hira(w.j||'');return r};
+ SIDX={W:[...W.values()].map(pre),T:T.map(pre)};return SIDX}
+function srCands(q){let c=[''];for(const ch of Array.from(q)){const alt=[...new Set([ch,...Array.from(JTW[ch]||'')])];const n=[];for(const p of c)for(const a of alt)n.push(p+a);c=n.slice(0,64)}return c}
+function srRun(q0){const q=(q0||'').trim();if(!q)return null;const I=srIndex(),res={q,hz:[],mean:[],sent:[],cands:[]};
+ const hasH=Array.from(q).some(isH),isZ=/^[ㄅ-ㄩˊˇˋ˙\s]+$/.test(q),isL=/^[a-zA-Züüǖǘǚǜāáǎàēéěèīíǐìōóǒòūúǔù0-9\s]+$/.test(q);
+ if(hasH){const cs=srCands(q.replace(/\s/g,''));res.cands=cs;const hit=h=>cs.find(c=>h.includes(c));
+  res.hz=I.W.filter(r=>hit(r.w.h)).sort((a,b)=>(cs.includes(b.w.h)-cs.includes(a.w.h))||(!!cs.find(c=>b.w.h.startsWith(c))-!!cs.find(c=>a.w.h.startsWith(c)))||a.w.h.length-b.w.h.length);
+  res.sent=I.T.filter(r=>hit(r.w.h))}
+ else if(isZ){const z=q.replace(/\s/g,''),tm=/[ˊˇˋ˙]/.test(z);res.hz=I.W.filter(r=>(tm?r.zys:r.zyn).includes(z)).sort((a,b)=>((tm?a.zys:a.zyn).indexOf(z)!==0)-((tm?b.zys:b.zyn).indexOf(z)!==0)||a.w.h.length-b.w.h.length)}
+ else if(isL){let p=q.toLowerCase().replace(/[ü]/g,'v').normalize('NFD');const tone={'̄':1,'́':2,'̌':3,'̀':4};
+  // 声調記号つきのピンインは数字に置き換える（音節の最後に付ける）
+  if(/[̄́̌̀]/.test(p)){p=p.split(/\s+/).map(sy=>{let t='';const b=sy.replace(/[̄́̌̀]/g,m=>{t=tone[m];return''}).replace(/̈/g,'');return b.replace(/ü/g,'v')+t}).join('')}else p=p.replace(/̈/g,'').replace(/u(?=$|[^a-z])/g,'u');
+  p=p.replace(/\s/g,'');const dg=/\d/.test(p);res.hz=I.W.filter(r=>(dg?r.pyt:r.pyb).includes(p)).sort((a,b)=>((dg?a.pyt:a.pyb).indexOf(p)!==0)-((dg?b.pyt:b.pyb).indexOf(p)!==0)||a.w.h.length-b.w.h.length);
+  const jq=kata2hira(q);res.mean=I.W.filter(r=>r.jj.toLowerCase().includes(jq.toLowerCase())&&!res.hz.includes(r))}
+ if(!isZ&&!isL){const jq=kata2hira(q);res.mean=I.W.filter(r=>r.jj.includes(jq)&&!res.hz.includes(r)).sort((a,b)=>a.jj.length-b.jj.length);const st=jq.length>=3&&/[うくぐすつぬぶむるい]$/.test(jq)?jq.slice(0,-1):'';if(st)res.mean=res.mean.concat(I.W.filter(r=>r.jj.includes(st)&&!res.hz.includes(r)&&!res.mean.includes(r)).sort((a,b)=>a.jj.length-b.jj.length))}
+ return res}
+const srHz=(w,cs)=>{const c=(cs||[]).find(c=>w.h.includes(c));if(!c)return hzC(w);let k=0;const a=Array.from(w.h),st=w.h.indexOf(c),st2=Array.from(w.h.slice(0,st)).length,len=Array.from(c).length;
+ return a.map((ch,i)=>{const cls=isH(ch)?'c'+w.sy[k++].t:'c5';return`<span class="${cls}${i>=st2&&i<st2+len?' hl':''}">${esc(ch)}</span>`}).join('')};
+let SRW=[];
+function srRows(list,cs,off,sent){return list.map((r,i)=>{const w=r.w;return`<button class="li ${sent?'sent':''}" data-a="sayr" data-i="${off+i}"><span class="hz" lang="zh-Hant-TW">${srHz(w,cs)}</span><span class="tx">${lpy()?`<div>${pyC(w)}</div>`:''}<div class="zy">${zyS(w)}</div><small>${esc(w.j||'')}</small>${noteOf(w)?`<small class="n">${noteOf(w)}</small>`:''}<span class="srl">${(Array.isArray(r.lab)?r.lab.slice(0,2):[r.lab]).map(l=>`<em>${esc(l)}</em>`).join('')}${Array.isArray(r.lab)&&r.lab.length>2?`<em>ほか${r.lab.length-2}</em>`:''}</span></span></button>`}).join('')}
+function srHTML(){const r=srRun(S.sq);if(!r){SRW=[];return`<div class="srh"><p>漢字・意味・ピンイン・注音で探せます</p><div class="srx">${['學','食べる','xue','ㄒㄩㄝ','気'].map(x=>`<button data-a="srex" data-q="${esc(x)}">${esc(x)}</button>`).join('')}</div><p class="dn">日本の漢字（学・気・売 など）は台湾の字体（學・氣・賣）に読み替えて探します。</p></div>`}
+ const CAP=150,hz=r.hz.slice(0,CAP),mean=r.mean.slice(0,CAP),sent=r.sent.slice(0,40);SRW=[...hz,...mean,...sent].map(x=>x.w);
+ const words=[...hz,...mean].map(x=>x.w);S.srSet={k:'srch',t:'検索「'+r.q+'」',w:words,par:'srch',col:'var(--t4)',neu:words.some(x=>x.sy.some(y=>y.t==5))};
+ const tot=r.hz.length+r.mean.length;
+ if(!tot&&!r.sent.length)return`<div class="srh"><p>「${esc(r.q)}」は見つかりませんでした。</p><p class="dn">別の漢字や、ひらがなの意味でも試してみてください。</p></div>`;
+ const head=(t,n)=>`<h3 class="srt">${t}<small>${n}件</small></h3>`;
+ return(tot?`<div class="srbar"><button class="pb" id="plall" data-a="srplay">${ic.spk} 全部再生</button><button class="btn go srq" style="background:var(--t4)" data-a="quiz" data-k="srch">この結果でクイズ ▶</button></div>`:'')
+ +(hz.length?head(Array.from(r.q).some(isH)?'漢字が一致':'読みが一致',r.hz.length)+`<div class="list">${srRows(hz,r.cands,0)}</div>`:'')
+ +(mean.length?head('意味が一致',r.mean.length)+`<div class="list">${srRows(mean,null,hz.length)}</div>`:'')
+ +(sent.length?head('文・会話',r.sent.length)+`<div class="list">${srRows(sent,r.cands,hz.length+mean.length,1)}</div>`:'')
+ +(tot>CAP*2?`<p class="dn" style="text-align:center">多いので一部だけ表示しています。もう少し詳しく入力してください。</p>`:'')}
+function srch(){return top('検索','toc')+`<div class="srbox"><span class="srico" aria-hidden="true">${ic.search}</span><input id="sq" type="search" inputmode="search" enterkeyhint="search" autocomplete="off" placeholder="例：學・食べる・xue・ㄒㄩㄝ" value="${esc(S.sq||'')}" aria-label="検索"><button class="srclr" data-a="srclr" aria-label="消す" ${S.sq?'':'hidden'}>×</button></div>${pyBtn()}<div id="sr">${srHTML()}</div>`}
+function srInit(){const i=document.getElementById('sq');if(!i)return;if(!S.sq||S.srFocus){i.focus();S.srFocus=0}
+ let tm;i.oninput=()=>{clearTimeout(tm);tm=setTimeout(()=>{S.sq=i.value;document.getElementById('sr').innerHTML=srHTML();const c=document.querySelector('.srclr');if(c)c.hidden=!S.sq},120)};
+ i.onkeydown=e=>{if(e.key=='Enter')i.blur()}}
+function render(){app.innerHTML=({srch,cover,toc,pron,cats,cat,base,combos,basics,learn,quiz,result,zhu,zlist,zq,zres,zw:zwView,weak,sandhi:sandhiView,my,tares})[S.v]()+(sheet?setSheet():'');if(S.v=='zw')zwInit();if(S.v=='srch')srInit();}
 function go(v,o={}){if(SEQ.on){listPlaying=false;stopSeq();bgmDuck(false)}S={...S,...o,v};render();window.scrollTo(0,0)}
-function startQuiz(k){const set=k=='weak'||k=='weakall'?weakSet(k=='weakall'):k=='today'?todaySet():k=='ta'?taSet():findSet(k);if(!set.w.length){go(k.startsWith('weak')?'weak':S.v);return}if(S.set!==set)S.lf=set.levels?0:-1;const w=curList(set).slice().sort(()=>Math.random()-.5).slice(0,set.ta?200:10);go('quiz',{set,q:w,i:0,p:[],sc:0,miss:[],combo:0});if(set.ta)taStart();setTimeout(()=>sayW(S.q[0]),250)}
+function startQuiz(k){const set=k=='srch'?S.srSet:k=='weak'||k=='weakall'?weakSet(k=='weakall'):k=='today'?todaySet():k=='ta'?taSet():findSet(k);if(!set.w.length){go(k.startsWith('weak')?'weak':S.v);return}if(S.set!==set)S.lf=set.levels?0:-1;const w=curList(set).slice().sort(()=>Math.random()-.5).slice(0,set.ta?200:10);go('quiz',{set,q:w,i:0,p:[],sc:0,miss:[],combo:0});if(set.ta)taStart();setTimeout(()=>sayW(S.q[0]),250)}
 function confetti(){const c=document.createElement('div');c.className='conf';c.innerHTML=Array.from({length:28},(_,i)=>`<i style="left:${Math.random()*100}%;background:var(--t${i%4+1});animation-delay:${Math.random()*.3}s"></i>`).join('');document.body.appendChild(c);setTimeout(()=>c.remove(),1600)}
 function pick(t){const w=S.q[S.i];if(S.p.length>=w.sy.length)return;S.p.push(t);hum([t]);
  if(S.p.length==w.sy.length){const ok=w.sy.every((s,k)=>S.p[k]==s.t);if(ok){S.sc++;award(10);if(!S.set.ta)confetti();if(S.set.weak)weakHit(w)}else{S.miss.push(w);if(!S.set.sandhi)weakAdd(w)}if(S.set.ta){S.combo=ok?(S.combo||0)+1:0;const i0=S.i;setTimeout(()=>{if(S.v=='quiz'&&S.set.ta&&S.i==i0&&Date.now()<S.taEnd){S.i++;S.p=[];render()}},ok?380:1100)}else setTimeout(()=>sayW(w),350)}render()}
@@ -2661,7 +2726,7 @@ app.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)retu
  const a=b.dataset.a,d=b.dataset;
  if(a=='nav'){if(d.v.startsWith('cat:'))go('cat',{cat:CAT.find(c=>c.k==d.v.slice(4))});else go(d.v)}else if(a=='cat')go('cat',{cat:CAT.find(c=>c.k==d.c)});else if(a=='open'){const z=findSet(d.k);go('learn',{set:z,lf:z.levels?0:-1})}else if(a=='lf'){S.lf=+d.i;render()}else if(a=='quiz')startQuiz(d.k);
  else if(a=='say1')speak(d.h,[+d.t]);else if(a=='hum')hum([+d.t]);else if(a=='humab')hum(S.set.ab);
- else if(a=='sayw')sayW(S.set.w[+d.i]);else if(a=='saym')sayW(S.miss[+d.i]);
+ else if(a=='sayw')sayW(S.set.w[+d.i]);else if(a=='sayr')sayW(SRW[+d.i]);else if(a=='srgo'){S.srFocus=1;go('srch')}else if(a=='srex'){S.sq=d.q;render()}else if(a=='srclr'){S.sq='';S.srFocus=1;render()}else if(a=='srplay'){if(S.srSet){S.set=S.srSet;playList(S.srSet.w)}}else if(a=='saym')sayW(S.miss[+d.i]);
  else if(a=='play')sayW(S.q[S.i]);else if(a=='humq')hum(S.q[S.i].sy.map(s=>s.t));
  else if(a=='slow'){ST.slow=!ST.slow;save();render()}
  else if(a=='pick')pick(+d.t);else if(a=='undo'){S.p.pop();render()}else if(a=='next')next();
