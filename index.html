@@ -2190,7 +2190,299 @@ const EX9=`聲音|sheng1 yin1|声・音
 一般|yi1 ban1|一般的な
 禮貌|li3 mao4|礼儀`;
 const ADDW={"dish:1": "麵 菜 湯", "ingr:1": "肉 蛋 鹽 食物 糖", "ingr:2": "油", "drink:1": "飲料 茶 酒", "snack:1": "三明治 點心", "tastes:1": "味道 嚐 刀子 叉子 杯子 盤子", "tastes:2": "新鮮", "trans:1": "騎 搭 地鐵", "trans:2": "交通 座位 起飛 出發 救護車", "country:1": "國家 外國", "country:2": "世界", "family:1": "男人 女人 大人 老人 小姐", "family:2": "父親 母親 家庭 年紀", "friend:1": "男生 女生 別人 自己", "jobs:1": "工人 服務生", "jobs:2": "教師", "work:2": "顧客", "work:3": "小偷", "number:1": "公斤 公里 號", "number:2": "許多 全部 所有", "time:1": "月 分 禮拜 禮拜天 新年 鐘頭 天 時間 生日", "time:2": "夜 剛剛 後來 最後 從前 過去", "time:3": "本來 不久", "weather:1": "雪 雨", "weather:2": "溫度 空氣", "animal:1": "動物 虎", "bodyp:1": "腿", "health:1": "病 痛 咳嗽 看病 病人", "health:2": "疼 救命 檢查", "home:1": "燈 牆 門口 書桌 洗手間", "home:2": "臥室 家具 公寓 盒子 生活", "wear:1": "穿 戴 毛衣 大衣 皮包 牙刷", "wear:2": "內衣", "chores:1": "洗 收", "chores:2": "搬 丟 剪", "place2:1": "店 街 樓 路 旅館 城市 商店", "place2:2": "大樓 藥房 工廠 花園 鄉下", "place2:3": "教堂 中心", "dir:1": "這邊 那邊 右", "dir:2": "方向 東部 西部 南部 北部", "geo:1": "火 橋", "sport:1": "跑 跳 唱 踢 比賽 輸 贏 照相 散步 音樂", "sport:2": "表演 吉他 鋼琴 爬 節目 照相機", "sport:3": "樂器", "feel:1": "笑 哭 怕 餓 渴 飽 傷心", "feel:2": "心情 興趣 希望 感覺 愉快 害羞 著急", "feel:3": "可憐 關心 滿意", "study:1": "上學 課 課本 作業 小學 中學 年級 班 英文 數學 讀書 小學生 大學生", "study:2": "宿舍 操場 校園 開學 學費 歷史 科學 漢字 句子 語言 華語 美術 體育 中文 毛筆", "study:3": "學院 語法", "job:1": "努力 職業", "job:2": "經驗 機會 成功 服務 計畫", "job:3": "管理", "money:1": "票 元 付 租 請客", "money:2": "價格", "money:3": "保險", "trip:1": "旅遊 風景 參觀", "trip:2": "明信片 地址", "fest:1": "禮物 結婚 卡片", "fest:2": "慶祝 晚會 文化", "fest:3": "藝術", "net:1": "信 寄 紙 雜誌 圖片", "net:2": "小說 故事 信封 消息 文章 新聞 報紙", "net:3": "通知", "basicw:1": "一些 一點 這些 那些 地方 意思 一樣", "basicw:2": "其他 事情 不同 差不多 辦法 方法 姓名", "adv:1": "可能 一直 一共 然後", "adv:2": "總是 經常 正在 特別 原來 雖然 而且", "adv:3": "必須 只好 要是 不但", "meas:2": "遍 盤", "verb:1": "拿 帶 送 換 懂 忘 借 接 關 用 放 叫 幫 說話 走路 起床 回答 告訴 打開 看見 進來 出去 回去 開始 歡迎", "verb:2": "試 變 交 掛 注意 小心 相信 認為 打算 習慣 需要 見面 聊天 遲到 離開 聽說 出來 進去 了解 發現 躺", "verb:3": "同意 解釋 照顧 經過 願意 結束 發生 出現", "adj:1": "壞 老 髒 吵 美 不錯 有趣 簡單 聰明", "adj:2": "安全 清楚 可怕 美麗 有用 客氣 麻煩 暖和 認真", "adj:3": "勇敢 流行 平常 一般 禮貌", "animal:2": "動物園"};
-const ADDW2={"sport:1": "歌", "time:2": "日期", "job:2": "活動", "adv:3": "永遠", "verb:1": "停 轉", "verb:2": "感謝 出生 影響 進步", "adj:1": "夠 大聲", "basicw:2": "聲音 關係 有空", "net:3": "政治"};for(const kt in ADDW2)ADDW[kt]=((ADDW[kt]||'')+' '+ADDW2[kt]).trim();
+const EX10=`梨子|li2 zi3*|なし
+桃子|tao2 zi3*|もも
+藍莓|lan2 mei2|ブルーベリー
+柳丁|liu3 ding1|オレンジ（台湾の柑橘）
+枇杷|pi2 pa2|びわ
+文旦|wen2 dan4|ブンタン
+金桔|jin1 ju2|キンカン
+蔓越莓|man4 yue4 mei2|クランベリー
+炒青菜|chao3 qing1 cai4|青菜炒め
+蛋花湯|dan4 hua1 tang1|卵スープ
+排骨飯|pai2 gu3 fan4|排骨（スペアリブ）ごはん
+蚵仔煎|he2 zai3 jian1|カキオムレツ
+鍋燒意麵|guo1 shao1 yi4 mian4|鍋焼き意麺
+蝦仁炒飯|xia1 ren2 chao3 fan4|エビチャーハン
+白斬雞|bai2 zhan3 ji1|ゆで鶏
+蔥爆牛肉|cong1 bao4 niu2 rou4|牛肉のネギ炒め
+梅干扣肉|mei2 gan1 kou4 rou4|梅干菜と豚肉の蒸し煮
+臭豆腐|chou4 dou4 fu3|臭豆腐
+茶葉蛋|cha2 ye4 dan4|茶葉卵
+蚵仔麵線|he2 zai3 mian4 xian4|カキ入り麺線
+碗粿|wan3 guo3|碗粿（米の蒸し料理）
+割包|ge1 bao1|台湾風バーガー（刈包）
+豬血糕|zhu1 xie3 gao1|豚の血のもち米ケーキ
+筒仔米糕|tong3 zai3 mi3 gao1|竹筒おこわ
+水|shui3|水
+熱水|re4 shui3|お湯
+礦泉水|kuang4 quan2 shui3|ミネラルウォーター
+大杯|da4 bei1|Lサイズ
+中杯|zhong1 bei1|Mサイズ
+檸檬汁|ning2 meng2 zhi1|レモンジュース
+優酪乳|you1 lao4 ru3|飲むヨーグルト
+全糖|quan2 tang2|甘さ100%
+米|mi3|米
+豆腐|dou4 fu3|豆腐
+薑|jiang1|しょうが
+醋|cu4|酢
+胡椒|hu2 jiao1|こしょう
+麻油|ma2 you2|ごま油
+沙茶醬|sha1 cha2 jiang4|サーチャージャン
+豆瓣醬|dou4 ban4 jiang4|豆板醤
+冰棒|bing1 bang4|アイスキャンディー
+果凍|guo3 dong4|ゼリー
+甜甜圈|tian2 tian2 quan1|ドーナツ
+雪花冰|xue3 hua1 bing1|ふわふわかき氷
+麻糬|ma2 shu3|おもち（大福）
+牛軋糖|niu2 ga2 tang2|ヌガー
+摩托車|mo2 tuo1 che1|オートバイ
+車廂|che1 xiang1|車両（客車）
+售票機|shou4 piao4 ji1|券売機
+時刻表|shi2 ke4 biao3|時刻表
+駕照|jia4 zhao4|運転免許
+微笑單車|wei2 xiao4 dan1 che1|YouBike（シェアサイクル）
+讓座|rang4 zuo4|席をゆずる
+罰單|fa2 dan1|違反切符
+北投|bei3 tou2|北投
+陽明山|yang2 ming2 shan1|陽明山
+三峽|san1 xia2|三峡
+鶯歌|ying1 ge1|鶯歌
+礁溪|jiao1 xi1|礁渓
+太平山|tai4 ping2 shan1|太平山
+東京巨蛋|dong1 jing1 ju4 dan4|東京ドーム
+迪士尼樂園|di2 shi4 ni2 le4 yuan2|ディズニーランド
+明治神宮|ming2 zhi4 shen2 gong1|明治神宮
+北韓|bei3 han2|北朝鮮
+奧地利|ao4 di4 li4|オーストリア
+丹麥|dan1 mai4|デンマーク
+比利時|bi3 li4 shi2|ベルギー
+秘魯|bi4 lu3|ペルー
+智利|zhi4 li4|チリ
+蒙古|meng2 gu3|モンゴル
+緬甸|mian3 dian4|ミャンマー
+寮國|liao2 guo2|ラオス
+嬸嬸|shen3 shen3|おば（父の弟の妻）
+嫂嫂|sao3 sao3|兄の妻
+孫女|sun1 nv3|孫娘
+姪子|zhi2 zi3*|おい（兄弟の息子）
+外甥|wai4 sheng1|おい（姉妹の息子）
+姊夫|jie3 fu1|姉の夫
+妹夫|mei4 fu1|妹の夫
+親人|qin1 ren2|身内
+祖先|zu3 xian1|祖先
+好友|hao3 you3|親友
+隊友|dui4 you3|チームメイト
+學伴|xue2 ban4|学習パートナー
+筆友|bi3 you3|ペンフレンド
+戀人|lian4 ren2|恋人
+損友|sun3 you3|悪友
+新人|xin1 ren2|新人
+同仁|tong2 ren2|同僚（改まった言い方）
+店長|dian4 zhang3|店長
+郵差|you2 chai1|郵便配達員
+翻譯|fan1 yi4|翻訳者・翻訳する
+銀行員|yin2 hang2 yuan2|銀行員
+牙醫|ya2 yi1|歯医者
+藥劑師|yao4 ji4 shi1|薬剤師
+會計師|kuai4 ji4 shi1|会計士
+建築師|jian4 zhu2 shi1|建築家
+獸醫|shou4 yi1|獣医
+口譯|kou3 yi4|通訳
+半|ban4|半分・〜半
+單數|dan1 shu4|奇数・単数
+雙數|shuang1 shu4|偶数
+百分之|bai3 fen1 zhi1|〜パーセント
+小數點|xiao3 shu4 dian3|小数点
+上午|shang4 wu3|午前
+每年|mei3 nian2|毎年
+每週|mei3 zhou1|毎週
+上星期|shang4 xing1 qi2|先週
+下星期|xia4 xing1 qi2|来週
+半夜|ban4 ye4|真夜中
+將來|jiang1 lai2|将来
+未來|wei4 lai2|未来
+年底|nian2 di3|年末
+月初|yue4 chu1|月初め
+一輩子|yi1 bei4 zi3*|一生
+雨天|yu3 tian1|雨の日
+霧|wu4|霧
+閃電|shan3 dian4|いなずま
+季節|ji4 jie2|季節
+濕度|shi1 du4|湿度
+降雨機率|jiang4 yu3 ji1 lv4|降水確率
+熊|xiong2|クマ
+鹿|lu4|シカ
+鴨子|ya1 zi3*|アヒル・カモ
+鯊魚|sha1 yu2|サメ
+章魚|zhang1 yu2|タコ
+貓頭鷹|mao1 tou2 ying1|フクロウ
+蜘蛛|zhi1 zhu1|クモ
+鴿子|ge1 zi3*|ハト
+穿山甲|chuan1 shan1 jia3|センザンコウ
+黑面琵鷺|hei1 mian4 pi2 lu4|クロツラヘラサギ
+手臂|shou3 bi4|腕
+腰|yao1|腰
+屁股|pi4 gu3|おしり
+指甲|zhi3 jia3|つめ
+額頭|e2 tou2|おでこ
+腦|nao3|脳
+肝|gan1|肝臓
+肚子痛|du4 zi3* tong4|腹痛
+牙痛|ya2 tong4|歯痛
+頭暈|tou2 yun1|めまいがする
+喉嚨痛|hou2 long2 tong4|のどが痛い
+打噴嚏|da3 pen1 ti4|くしゃみをする
+疫苗|yi4 miao2|ワクチン
+副作用|fu4 zuo4 yong4|副作用
+開刀|kai1 dao1|手術する
+量體溫|liang2 ti3 wen1|体温を測る
+電風扇|dian4 feng1 shan4|扇風機
+電鍋|dian4 guo1|電鍋（台湾の炊飯器）
+窗簾|chuang1 lian2|カーテン
+地板|di4 ban3|床
+鏡子|jing4 zi3*|鏡
+插座|cha1 zuo4|コンセント
+微波爐|wei2 bo1 lu2|電子レンジ
+抽油煙機|chou1 you2 yan1 ji1|換気扇（レンジフード）
+短褲|duan3 ku4|半ズボン
+睡衣|shui4 yi1|パジャマ
+皮帶|pi2 dai4|ベルト
+太陽眼鏡|tai4 yang2 yan3 jing4|サングラス
+高跟鞋|gao1 gen1 xie2|ハイヒール
+手環|shou3 huan2|ブレスレット
+化妝品|hua4 zhuang1 pin3|化粧品
+金色|jin1 se4|金色
+銀色|yin2 se4|銀色
+深色|shen1 se4|濃い色
+淺色|qian3 se4|淡い色
+酒紅色|jiu3 hong2 se4|ワインレッド
+墨綠色|mo4 lv4 se4|深緑
+做飯|zuo4 fan4|ごはんを作る
+洗菜|xi3 cai4|野菜を洗う
+澆花|jiao1 hua1|花に水をやる
+摺衣服|zhe2 yi1 fu2*|服をたたむ
+鋪床|pu1 chuang2|ベッドを整える
+大掃除|da4 sao3 chu2|大掃除
+球場|qiu2 chang3|球場
+寺廟|si4 miao4|寺院
+政府|zheng4 fu3|政府
+法院|fa3 yuan4|裁判所
+角落|jiao3 luo4|すみ
+對街|dui4 jie1|通りの向かい側
+超商|chao1 shang1|コンビニ
+麵店|mian4 dian4|麺屋
+飲料店|yin3 liao4 dian4|ドリンク店
+小吃店|xiao3 chi1 dian4|軽食屋
+水果攤|shui3 guo3 tan1|果物の屋台
+雜貨店|za2 huo4 dian4|雑貨屋
+五金行|wu3 jin1 hang2|金物屋
+中藥行|zhong1 yao4 hang2|漢方薬局
+排球|pai2 qiu2|バレーボール
+桌球|zhuo1 qiu2|卓球
+健行|jian4 xing2|ハイキング
+滑雪|hua2 xue3|スキー
+太極拳|tai4 ji2 quan2|太極拳
+撞球|zhuang4 qiu2|ビリヤード
+討厭|tao3 yan4|嫌い
+可惜|ke3 xi2|残念・惜しい
+不安|bu4 an1|不安な
+孤單|gu1 dan1|ひとりぼっち
+滿足|man3 zu2|満足する
+尺|chi3|定規
+剪刀|jian3 dao1|はさみ
+鉛筆盒|qian1 bi3 he2|筆箱
+膠水|jiao1 shui3|のり
+教授|jiao4 shou4|教授
+地理|di4 li3|地理
+碩士|shuo4 shi4|修士
+博士|bo2 shi4|博士
+物理|wu4 li3|物理
+化學|hua4 xue2|化学
+打工|da3 gong1|アルバイトする
+休假|xiu1 jia4|休暇をとる
+退休|tui4 xiu1|定年退職する
+失業|shi1 ye4|失業する
+加薪|jia1 xin1|昇給する
+免費|mian3 fei4|無料
+花錢|hua1 qian2|お金を使う
+存錢|cun2 qian2|貯金する
+預算|yu4 suan4|予算
+存款|cun2 kuan3|預金
+貸款|dai4 kuan3|ローン
+出國|chu1 guo2|海外へ行く
+訂票|ding4 piao4|チケットを予約する
+行程|xing2 cheng2|旅程
+打卡|da3 ka3|（SNSで）チェックインする
+背包客|bei4 bao1 ke4|バックパッカー
+母親節|mu3 qin1 jie2|母の日
+父親節|fu4 qin1 jie2|父の日
+聖誕節|sheng4 dan4 jie2|クリスマス
+情人節|qing2 ren2 jie2|バレンタインデー
+七夕|qi1 xi4|七夕
+拜拜|bai4 bai4|お参りする
+中元節|zhong1 yuan2 jie2|中元節（お盆）
+普渡|pu3 du4|普渡（お盆の供養）
+廟會|miao4 hui4|お寺の祭り
+燙|tang4|（やけどするほど）熱い
+碗筷|wan3 kuai4|茶碗と箸
+外送|wai4 song4|デリバリー
+嫩|nen4|やわらかい（肉など）
+調味料|tiao2 wei4 liao4|調味料
+平板|ping2 ban3|タブレット
+網購|wang3 gou4|ネットショッピング
+搜尋|sou1 xun2|検索する
+社群|she4 qun2|SNS・コミュニティ
+直播|zhi2 bo1|ライブ配信
+雲端|yun2 duan1|クラウド
+大海|da4 hai3|海・大海
+沙漠|sha1 mo4|砂漠
+海洋|hai3 yang2|海洋
+河流|he2 liu2|河川
+自然|zi4 ran2|自然
+這個|zhe4 ge4|これ・この
+那個|na4 ge4|あれ・その
+不是|bu4 shi4|〜ではない
+例如|li4 ru2|たとえば
+另外|ling4 wai4|ほかに・それから
+總之|zong3 zhi1|要するに
+剛|gang1|〜したばかり
+先|xian1|先に
+果然|guo3 ran2|やっぱり
+恐怕|kong3 pa4|おそらく（心配）
+難怪|nan2 guai4|どうりで
+故意|gu4 yi4|わざと
+碗|wan3|〜杯（お椀）
+把|ba3|〜本（傘・いす）
+句|ju4|〜言・〜文
+座|zuo4|〜つ（山・建物）
+棵|ke1|〜本（木）
+封|feng1|〜通（手紙）
+首|shou3|〜曲（歌）
+段|duan4|〜区間・〜段落
+問|wen4|たずねる
+教|jiao1|教える
+選|xuan3|選ぶ
+收拾|shou1 shi2|片付ける
+建議|jian4 yi4|提案する
+提醒|ti2 xing3|注意をうながす
+安排|an1 pai2|手配する
+保持|bao3 chi2|保つ
+實用|shi2 yong4|実用的な
+大|da4|大きい
+小|xiao3|小さい
+多|duo1|多い
+少|shao3|少ない
+新|xin1|新しい
+舊|jiu4|古い
+快|kuai4|速い
+慢|man4|遅い（速度）
+粗|cu1|太い
+細|xi4|細い
+鬆|song1|ゆるい
+緊|jin3|きつい`;
+const ADDW3={"fruit:1": "梨子 桃子", "fruit:2": "藍莓 柳丁 枇杷", "fruit:3": "文旦 金桔 蔓越莓", "dish:1": "炒青菜 蛋花湯 排骨飯", "dish:2": "蚵仔煎 鍋燒意麵 蝦仁炒飯", "dish:3": "白斬雞 蔥爆牛肉 梅干扣肉", "snack:1": "臭豆腐 茶葉蛋", "snack:2": "蚵仔麵線 碗粿 割包", "snack:3": "豬血糕 筒仔米糕", "drink:1": "水 熱水 礦泉水", "drink:2": "大杯 中杯 檸檬汁 優酪乳", "drink:3": "全糖", "ingr:1": "米 豆腐", "ingr:2": "薑 醋 胡椒", "ingr:3": "麻油 沙茶醬 豆瓣醬", "sweet:1": "冰棒 果凍 甜甜圈", "sweet:2": "雪花冰 麻糬", "sweet:3": "牛軋糖", "trans:1": "摩托車", "trans:2": "車廂 售票機 時刻表 駕照", "trans:3": "微笑單車 讓座 罰單", "tw:2": "北投 陽明山 三峽 鶯歌", "tw:3": "礁溪 太平山", "tokyo:1": "東京巨蛋 迪士尼樂園 明治神宮", "country:1": "北韓", "country:2": "奧地利 丹麥 比利時 秘魯", "country:3": "智利 蒙古 緬甸 寮國", "family:1": "嬸嬸 嫂嫂", "family:2": "孫女 姪子 外甥 姊夫 妹夫 親人", "family:3": "祖先", "friend:1": "好友", "friend:2": "隊友 學伴 筆友", "friend:3": "戀人 損友", "work:2": "新人", "work:3": "同仁", "jobs:1": "店長 郵差", "jobs:2": "翻譯 銀行員 牙醫 藥劑師", "jobs:3": "會計師 建築師 獸醫 口譯", "number:1": "半", "number:2": "單數 雙數", "number:3": "百分之 小數點", "time:1": "上午 每年 每週 上星期 下星期", "time:2": "半夜 將來 未來", "time:3": "年底 月初 一輩子", "weather:1": "雨天", "weather:2": "霧 閃電 季節", "weather:3": "濕度 降雨機率", "animal:1": "熊 鹿 鴨子", "animal:2": "鯊魚 章魚 貓頭鷹 蜘蛛 鴿子", "animal:3": "穿山甲 黑面琵鷺", "bodyp:1": "手臂", "bodyp:2": "腰 屁股 指甲 額頭", "bodyp:3": "腦 肝", "health:1": "肚子痛 牙痛", "health:2": "頭暈 喉嚨痛 打噴嚏", "health:3": "疫苗 副作用 開刀 量體溫", "home:1": "電風扇 電鍋", "home:2": "窗簾 地板 鏡子 插座", "home:3": "微波爐 抽油煙機", "wear:1": "短褲", "wear:2": "睡衣 皮帶 太陽眼鏡", "wear:3": "高跟鞋 手環 化妝品", "color:1": "金色 銀色", "color:2": "深色 淺色", "color:3": "酒紅色 墨綠色", "chores:1": "做飯", "chores:2": "洗菜 澆花 摺衣服 鋪床", "chores:3": "大掃除", "place2:2": "球場 寺廟", "place2:3": "政府 法院", "dir:3": "角落 對街", "shops:1": "超商 麵店", "shops:2": "飲料店 小吃店 水果攤 雜貨店", "shops:3": "五金行 中藥行", "sport:1": "排球 桌球", "sport:2": "健行 滑雪", "sport:3": "太極拳 撞球", "feel:1": "討厭", "feel:2": "可惜 不安 孤單", "feel:3": "滿足", "study:1": "尺 剪刀", "study:2": "鉛筆盒 膠水 教授 地理", "study:3": "碩士 博士 物理 化學", "job:1": "打工", "job:2": "休假", "job:3": "退休 失業 加薪", "money:1": "免費 花錢", "money:2": "存錢 預算", "money:3": "存款 貸款", "trip:1": "出國", "trip:2": "訂票 行程 打卡", "trip:3": "背包客", "fest:1": "母親節 父親節 聖誕節 情人節", "fest:2": "七夕 拜拜", "fest:3": "中元節 普渡 廟會", "tastes:1": "燙", "tastes:2": "碗筷 外送", "tastes:3": "嫩 調味料", "net:2": "平板 網購 搜尋", "net:3": "社群 直播 雲端", "geo:1": "大海", "geo:2": "沙漠 海洋 河流 自然", "basicw:1": "這個 那個 不是", "basicw:3": "例如 另外 總之", "adv:2": "剛 先", "adv:3": "果然 恐怕 難怪 故意", "meas:1": "碗", "meas:2": "把 句", "meas:3": "座 棵 封 首 段", "verb:1": "問 教", "verb:2": "選 收拾", "verb:3": "建議 提醒 安排 保持", "adj:3": "實用", "opp:1": "大 小 多 少 新 舊 快 慢", "opp:3": "粗 細 鬆 緊"};
+const ADDW2={"sport:1": "歌", "time:2": "日期", "job:2": "活動", "adv:3": "永遠", "verb:1": "停 轉", "verb:2": "感謝 出生 影響 進步", "adj:1": "夠 大聲", "basicw:2": "聲音 關係 有空", "net:3": "政治"};for(const kt in ADDW2)ADDW[kt]=((ADDW[kt]||'')+' '+ADDW2[kt]).trim();for(const kt in ADDW3)ADDW[kt]=((ADDW[kt]||'')+' '+ADDW3[kt]).trim();
 for(const kt in ADDW){const [k,t]=kt.split(':');for(const c of CAT)for(const g of c.g)if(g[0]==k){if(LVX[k]){g[2]=g[2]+' | '+LVX[k];delete LVX[k]}const p=g[2].split('|').map(x=>x.trim());while(p.length<3)p.push('');p[t-1]=(p[t-1]+' '+ADDW[kt]).trim();while(p.length&&!p[p.length-1])p.pop();g[2]=p.join(' | ')}}
 CAT.forEach(c=>c.g.forEach(g=>{if(g[0]=='net')g[1]='スマホ・ネット・読み物'}));
 /* --- 単語の解析 --- */
@@ -2198,7 +2490,7 @@ const DICT={};
 const isH=c=>/[㐀-鿿]/.test(c);
 const parse=(r,keep)=>{const[h,p,j]=r.split('|');const sy=p.split(' ').map(x=>{const n=x.endsWith('*');x=x.replace('*','');return{b:x.slice(0,-1).replace('v','ü'),t:+x.slice(-1),n}});const w={h,ch:Array.from(h).filter(isH),sy,j};if(!keep)DICT[h]=DICT[h]||w;return w};
 LV.forEach((l,i)=>{l.k='lv'+(i+1);l.id=i+1;l.t=`Lv.${i+1} ${l.n}`;l.par='base';l.w=l.d.split('\n').map(r=>parse(r))});
-[EX,EX2,EX3,EX4,EX5,EX6,EX8,EX9].forEach(x=>x.split('\n').forEach(r=>parse(r)));
+[EX,EX2,EX3,EX4,EX5,EX6,EX8,EX9,EX10].forEach(x=>x.split('\n').forEach(r=>parse(r)));
 const GS=[];
 CAT.forEach(c=>{c.sets=c.g.map(([k,n,l,note])=>{if(LVX[k])l=l+' | '+LVX[k];const z={k:'g_'+k,t:n,col:c.col,par:'cat:'+c.k,note,sent:c.sent||c.talk,talk:c.talk,
  w:c.talk?l.split('\n').map(r=>{const i=r.indexOf('|');const w=parse(r.slice(i+1),1);w.sp=r.slice(0,i);return w}):c.sent?l.split('\n').map(r=>parse(r,1)):l.replace(/\|/g,' ').split(/\s+/).filter(Boolean).map(h=>DICT[h]).filter(Boolean)};if(!c.sent&&!c.talk&&l.includes('|')){z.levels=l.split('|').map(x=>x.trim().split(/\s+/).filter(Boolean).map(h=>DICT[h]).filter(Boolean))}GS.push(z);return z})});

@@ -1,6 +1,6 @@
 // 台湾華語 練習帳 — オフライン用サービスワーカー
 // アプリを更新したら VERSION の数字を1つ上げてください（古いキャッシュが入れ替わります）
-const VERSION = 'v11';
+const VERSION = 'v12';
 const APP = 'app-' + VERSION;
 const FONTS = 'fonts-v1';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './icon-192.png', './icon-512.png', './icon-180.png'];
